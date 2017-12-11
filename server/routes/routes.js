@@ -28,7 +28,7 @@ router.route('/insert')
     .then(function (data) {
       console.log('data',JSON.stringify(data));
         var hagopt = {
-          uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication',
+          uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&include=products',
           headers: {
               'User-Agent': 'Request-Promise'
           },
@@ -39,6 +39,10 @@ router.route('/insert')
             // console.log('hagsynd',JSON.stringify(hagsynd));
             dashboard['totalDisplayNumber'] = hagsynd['TotalResults'];
             console.log('dashboard["totalDisplayNumber"]: ',dashboard['totalDisplayNumber'] )
+            var data = hagsynd;
+            console.log('data: ',data);
+            res.json(data);
+
           })
           .catch(function (err) {
         // API call failed...
