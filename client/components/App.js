@@ -3,7 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 
+import Grid from './Grid';
 import Product from './Product';
+import SnapShot from './SnapShot';
+
 
 var querystring=require('querystring');
 export default class App extends React.Component {
@@ -58,6 +61,9 @@ render() {
                 </form>
               </div>
         <Product data={"hello"}/>
+        <SnapShot data={"hello"}/>
+        <Grid data={"hello"}/>
+
       </div>
     );
   }
