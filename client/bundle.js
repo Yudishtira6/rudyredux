@@ -32590,9 +32590,7 @@ class Add extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     // }
     __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/insert', querystring.stringify({
       clientName: e.state.clientName,
-      productId: e.state.productId,
-      month: e.state.month,
-      year: e.state.year
+      productId: e.state.productId
     }), {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
