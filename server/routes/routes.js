@@ -25,10 +25,11 @@ router.route('/getProductDetails')
     .then(function (data) {
       console.log('data',JSON.stringify(data));
       res.json(data);
+    })
     .catch(function (err) {
         // API call failed...
     });
-})
+});
 
 router.route('/insert')
 .post(function(req,res) {
@@ -95,8 +96,8 @@ router.route('/insert')
     .catch(function (err) {
         // API call failed...
     });
+});
 
-})
 router.route('/update')
 .post(function(req, res) {
  const doc = {
