@@ -17,7 +17,12 @@ router.route('/insert')
   var dashboard = {};
   var totalReviews = {};
   var options = {
+
+    // uri: 'https://api.github.com/users/Sahedeva/repos',
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+req.body.clientName+'&ApiVersion=5.4&filter=productid:'+req.body.productId+'&keyproperty=syndication&include=products',
+
     uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
+
     headers: {
         'User-Agent': 'Request-Promise'
     },
