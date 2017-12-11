@@ -42,7 +42,20 @@ console.log(this.state.reviews);
 console.log('running get reviews');
 let client=document.getElementById('client').value;
 let productId=document.getElementById('prodid').value;
-
+axios.post('/getProductDetails',
+  querystring.stringify({
+    clientName: client,
+    productId: productId
+  }), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  }).then(function(response) {
+    console.log("success!!");
+    var responseObj = JSON.stringify(response);
+    console.log(responseObj);
+    e.setState({image:"BUNNY"});
+});
   axios.post('/insert',
     querystring.stringify({
       clientName: client,
@@ -57,7 +70,8 @@ let productId=document.getElementById('prodid').value;
       console.log(responseObj);
       e.setState({reviews:response.data,
                   total:response.data.TotalResults,
-                  loading:false});
+                  loading:false,
+                  productId:productId});
   });
 
 
@@ -90,7 +104,7 @@ render() {
                 </form>
         <Product data={productData}/>
         <SnapShot loading={this.state.loading} data={snapShot}/>
-        <Grid data={"hello"}/>
+        <Grid productId={this.state.productId} data={this.state.reviews}/>
 
       </div>
     );

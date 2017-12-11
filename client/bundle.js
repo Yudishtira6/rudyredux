@@ -24088,7 +24088,19 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     console.log('running get reviews');
     let client = document.getElementById('client').value;
     let productId = document.getElementById('prodid').value;
-
+    __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/getProductDetails', querystring.stringify({
+      clientName: client,
+      productId: productId
+    }), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    }).then(function (response) {
+      console.log("success!!");
+      var responseObj = JSON.stringify(response);
+      console.log(responseObj);
+      e.setState({ image: "BUNNY" });
+    });
     __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
       clientName: client,
       productId: productId
@@ -24102,7 +24114,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       console.log(responseObj);
       e.setState({ reviews: response.data,
         total: response.data.TotalResults,
-        loading: false });
+        loading: false,
+        productId: productId });
     });
   }
 
@@ -29148,7 +29161,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Product__["a" /* default */], { data: productData }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__SnapShot__["a" /* default */], { loading: this.state.loading, data: snapShot }),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Grid__["a" /* default */], { data: "hello" })
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Grid__["a" /* default */], { productId: this.state.productId, data: this.state.reviews })
     );
   }
 }
@@ -30058,69 +30071,76 @@ module.exports = function spread(callback) {
 //WHOLE GRID OF DATA
 
 
-const Grid = ({ data }) => {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'div',
+const Grid = ({ productId, data }) => {
+  let Items;
+
+  if (data.Results) {
+    Items = data.Results.map(review => {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], { key: review.Id, productId: productId, data: review });
+    });
+  }
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'div',
+    null,
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'h1',
+      { id: 'displayableReviewsTitle' },
+      'Displayable Reviews'
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'table',
+      { className: 'tableMain', id: 'displayableReviews' },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'tbody',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'tr',
+          { className: 'tableHeader' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'th',
             null,
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                  'h1',
-                  { id: 'displayableReviewsTitle' },
-                  'Displayable Reviews'
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                  'table',
-                  { className: 'tableMain', id: 'displayableReviews' },
-                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'tbody',
-                        null,
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                              'tr',
-                              { className: 'tableHeader' },
-                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'th',
-                                    null,
-                                    'REVIEW ID'
-                              ),
-                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'th',
-                                    null,
-                                    'REVIEW TYPE'
-                              ),
-                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'th',
-                                    null,
-                                    'SOURCE CLIENT'
-                              ),
-                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'th',
-                                    null,
-                                    'SOURCE PRODUCT ID'
-                              ),
-                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'th',
-                                    null,
-                                    'RATING'
-                              ),
-                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'th',
-                                    null,
-                                    'STATUS'
-                              ),
-                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'th',
-                                    null,
-                                    'CONTENT CODES'
-                              ),
-                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'th',
-                                    null,
-                                    'SUBMISSION TIME'
-                              )
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], null)
-                  )
-            )
-      );
+            'REVIEW ID'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'th',
+            null,
+            'REVIEW TYPE'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'th',
+            null,
+            'SOURCE CLIENT'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'th',
+            null,
+            'SOURCE PRODUCT ID'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'th',
+            null,
+            'RATING'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'th',
+            null,
+            'STATUS'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'th',
+            null,
+            'CONTENT CODES'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'th',
+            null,
+            'SUBMISSION TIME'
+          )
+        ),
+        Items
+      )
+    )
+  );
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Grid);
@@ -30136,39 +30156,47 @@ const Grid = ({ data }) => {
 // ONE LINE of the Grid
 
 
-const GridLine = () => {
+const GridLine = ({ productId, data }) => {
+    console.log(data);
+    let syndicated = "Native";
+    if (data.IsSyndicated) {
+        syndicated = "Syndicated";
+    } else if (data.ProductId != productId) {
+        syndicated = "Family";
+    }
+
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "tr",
         { className: "hits" },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "td",
             null,
-            "108018941"
+            data.Id
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "td",
             null,
-            "Syndicated"
+            syndicated
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "td",
             null,
-            "carters"
+            data.SourceClient
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "td",
             null,
-            "v_126g781"
+            data.ProductId
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "td",
             null,
-            "5"
+            data.Rating
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "td",
             null,
-            "APPROVED"
+            data.ModerationStatus
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "td",
@@ -30178,7 +30206,7 @@ const GridLine = () => {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "td",
             null,
-            "2017-11-15T02:57:50.000Z"
+            data.SubmissionTime
         )
     );
 };
