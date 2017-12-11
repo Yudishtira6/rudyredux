@@ -25,6 +25,29 @@ router.route('/insert')
   rp(options)
     .then(function (data) {
       console.log('data',JSON.stringify(data));
+
+        var source = new Object ();
+        var family = [];
+        var syndication = [];
+      
+        var Array = [data.products]
+
+        for (i = 0; i <= Array.length; i++) { 
+              if ((data.products[i]['sources'][0]) === ('FAMILY')) {
+                source.family = family;
+                family.push(data.products[i]['client'])
+                family.push(data.products[i]['externalId'])
+              } else {
+                source.syndication = syndication;
+                syndication.push(data.products[i]['client'])
+                syndication.push(data.products[i]['externalId'])
+              }
+          } 
+ 
+
+        console.log('working')
+        console.log(source)
+
         var hagopt = {
           uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&include=products',
           headers: {
@@ -48,6 +71,7 @@ router.route('/insert')
     .catch(function (err) {
         // API call failed...
     });
+
 })
 router.route('/update')
 .post(function(req, res) {
