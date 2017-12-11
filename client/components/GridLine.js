@@ -2,10 +2,10 @@ import React from 'react';
 // ONE LINE of the Grid
 
 
-const GridLine =({data})=>{
+const GridLine =()=>{
 return(
-	
-        <tr class="hits">
+
+        <tr className="hits">
             <td>108018941</td>
             <td>Syndicated</td>
             <td>carters</td>
@@ -19,4 +19,4 @@ return(
       );
 }
 
-export default Grid;
+export default GridLine;

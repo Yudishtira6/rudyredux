@@ -1,0 +1,17 @@
+.app-title {
+  display: inline-block;
+}
+
+form {
+  display: inline-block;
+  margin-left: 2rem;
+}
+
+.product-name {
+  display: inline-block;
+}
+
+.product-photo {
+  height: 119px;
+  margin-top: 3rem;
+}
