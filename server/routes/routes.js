@@ -3,11 +3,9 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var rp = require('request-promise');
-
 router.get('/', function(req, res){
   res.render('index')
 });
-
 router.route('/insert')
 .post(function(req,res) {
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
@@ -42,19 +40,15 @@ router.route('/insert')
             var data = hagsynd;
             console.log('data: ',data);
             res.json(data);
-
           })
           .catch(function (err) {
         // API call failed...
           })
         })
-
     .catch(function (err) {
         // API call failed...
     });
 })
-
-
 router.route('/update')
 .post(function(req, res) {
  const doc = {
@@ -63,15 +57,12 @@ router.route('/update')
  };
  console.log(doc);
 });
-
 router.get('/delete', function(req, res){
  var id = req.query.id;
  console.log("id: ",id);
 });
-
 router.get('/getAll', function(req, res) {
  var data = [{clientName:"cvsPharmacy",productId:911321}];
  res.json(data)
 });
-
 module.exports = router;

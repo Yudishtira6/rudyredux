@@ -4,7 +4,7 @@ import React from 'react';
 import Loader from './loader';
 
 const SnapShot=({data, loading})=>{
-
+console.log('snapshot',loading);
 let snapShot=(
               <ul className="snapshot-container">
                 <li className="native">
