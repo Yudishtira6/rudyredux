@@ -24096,10 +24096,9 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         "Content-Type": "application/x-www-form-urlencoded"
       }
     }).then(function (response) {
-      console.log("success!!");
+      console.log("I RAN PRODUCT DETAILS!!");
       var responseObj = JSON.stringify(response);
       console.log(responseObj);
-      e.setState({ image: "BUNNY" });
     });
     __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
       clientName: client,

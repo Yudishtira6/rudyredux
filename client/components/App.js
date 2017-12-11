@@ -51,10 +51,10 @@ axios.post('/getProductDetails',
       "Content-Type": "application/x-www-form-urlencoded"
     }
   }).then(function(response) {
-    console.log("success!!");
+    console.log("I RAN PRODUCT DETAILS!!");
     var responseObj = JSON.stringify(response);
     console.log(responseObj);
-    e.setState({image:"BUNNY"});
+
 });
   axios.post('/insert',
     querystring.stringify({
