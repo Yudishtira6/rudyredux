@@ -5,7 +5,7 @@ import React from 'react';
 const Grid =({data})=>{
 return(
       <div>
-        <h1>{data}</h1>
+        <h1></h1>
       </div>
 
       );
