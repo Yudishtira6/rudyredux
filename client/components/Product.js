@@ -5,13 +5,14 @@ class Product extends React.Component {
         super(props);
 }
 render(){
-console.log(this.props);
+
 return(
         <div>
-          <h1>{this.props.data}</h1>
+          <img src={this.props.data.image}/>
+          <h3>{this.props.data.productName}</h3>
         </div>
       );
-}
+  }
 }
 
 export default Product;

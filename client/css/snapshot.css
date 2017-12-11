@@ -1,0 +1,104 @@
+.snapshot-header {
+  margin-left: 51px;
+  margin-bottom: 7px;
+  font-size: 25px;
+}
+
+.fa-camera {
+  margin-left: 8px;
+}
+
+.snapshot-container {
+  padding: 0;
+  list-style: none;
+  width: 93%;
+  margin: 0 auto;
+  border: 1px solid black;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background: #0d2a3c;
+  color: white;
+  box-shadow: -3px 3px 12px 0px black;
+}
+
+.snapshot-container>li {
+  display: inline-block;
+  text-align: center;
+  width: 25%;
+  box-sizing: border-box;
+  border-right: 1px solid white;
+  margin: 0 auto;
+  position: relative;
+}
+
+.snapshot-container>li:last-of-type {
+  border-right: none;
+}
+
+.snap-main {
+  border-bottom: 1px solid white;
+}
+
+.main-number {
+  font-size: 3rem;
+  margin-top: .5rem;
+  margin-bottom: 0;
+}
+
+.main-label {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.secondary-container {
+  display: inline-block;
+  width: 50%;
+  border-right: 1px solid white;
+  box-sizing: border-box;
+}
+
+.secondary-container:last-child {
+  border-right: none;
+  background-color: #962929;
+}
+
+.secondary-number {
+  margin-bottom: 0;
+}
+
+.secondary-label {
+  margin-top: 0;
+}
+
+.family-title {
+  margin-top: 27px;
+  margin-bottom: 5px;
+}
+
+.family-id {
+  margin-top: 12px;
+}
+
+.total-number {
+  font-size: 4rem;
+  margin: 0;
+  margin-top: 3rem;
+}
+
+.total-label {
+  font-size: 1.5rem;
+  margin-top: .5rem;
+  padding-bottom: -2rem;
+  margin-bottom: 0rem;
+  display: block;
+}
+
+.total-container {
+  margin-bottom: auto;
+  vertical-align: top;
+  margin-top: 3rem;
+}
+
+.fa-pulse {
+  line-height: 187px;
+}

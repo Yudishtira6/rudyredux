@@ -13,7 +13,7 @@ router.route('/insert')
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
   var options = {
     // uri: 'https://api.github.com/users/Sahedeva/repos',
-    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+req.body.clientName+'&ApiVersion=5.4&filter=productid:'+req.body.productId+'&keyproperty=syndication',
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+req.body.clientName+'&ApiVersion=5.4&filter=productid:'+req.body.productId+'&keyproperty=syndication&include=products',
     headers: {
         'User-Agent': 'Request-Promise'
     },
