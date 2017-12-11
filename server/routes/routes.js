@@ -3,9 +3,33 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var rp = require('request-promise');
+
 router.get('/', function(req, res){
   res.render('index')
 });
+
+router.route('/getProductDetails')
+.post(function(req,res) {
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var options = {
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+req.body.clientName+'&filter=id:'+req.body.productId,
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  console.log('options: ',options);
+  rp(options)
+    .then(function (data) {
+      console.log('data',JSON.stringify(data));
+      res.json(data);
+    .catch(function (err) {
+        // API call failed...
+    });
+})
+
 router.route('/insert')
 .post(function(req,res) {
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
