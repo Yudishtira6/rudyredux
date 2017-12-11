@@ -4,9 +4,17 @@ import React from 'react';
 
 const GridLine =({data})=>{
 return(
-      <div>
-        
-      </div>
+	
+        <tr class="hits">
+            <td>108018941</td>
+            <td>Syndicated</td>
+            <td>carters</td>
+            <td>v_126g781</td>
+            <td>5</td>
+            <td>APPROVED</td>
+            <td>HMP</td>
+            <td>2017-11-15T02:57:50.000Z</td>
+		</tr>
 
       );
 }

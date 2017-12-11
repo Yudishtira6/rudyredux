@@ -1,0 +1,33 @@
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #33bca5;
+	font-weight: bold;
+}
+
+h1 { font-size: 45px; margin-bottom: 35px; text-align: center; width: 100%; }
+h2 { font-size: 35px; }
+
+table { padding-bottom: 35px; }
+
+/* Main styling for tables */
+.tableMain {
+	width: 85%;
+	margin: 0 auto;
+}
+th, td {
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+	padding: 9px 0;
+}
+.tableHeader {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+/* "Hits" are the rows in the tables */
+.hits {
+	font-size: 14px;
+}
