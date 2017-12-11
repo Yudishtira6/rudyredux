@@ -8,9 +8,9 @@ return(
       <div>
         <h1 id="displayableReviewsTitle">Displayable Reviews</h1>
 
-        <table class="tableMain" id="displayableReviews">
+        <table className="tableMain" id="displayableReviews">
         	<tbody>
-        		<tr class="tableHeader">
+        		<tr className="tableHeader">
         			<th>REVIEW ID</th>
         			<th>REVIEW TYPE</th>
         			<th>SOURCE CLIENT</th>

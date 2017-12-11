@@ -24043,8 +24043,8 @@ const Routes = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Grid__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Product__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SnapShot__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Product__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SnapShot__ = __webpack_require__(106);
 //client/components/App.js
 
 
@@ -24054,7 +24054,7 @@ const Routes = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement
 
 
 
-var querystring = __webpack_require__(107);
+var querystring = __webpack_require__(108);
 class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   constructor() {
     super();
@@ -24088,7 +24088,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     console.log('running get reviews');
     let client = document.getElementById('client').value;
     let productId = document.getElementById('prodid').value;
-    var dataReviews = this.state.reviews;
+
     __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
       clientName: client,
       productId: productId
@@ -24101,11 +24101,16 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       var responseObj = JSON.stringify(response);
       console.log(responseObj);
       e.setState({ reviews: response.data,
-        total: response.data.TotalResults });
+        total: response.data.TotalResults,
+        loading: false });
     });
   }
 
   render() {
+    let productData = { image: this.state.image,
+      productName: this.state.productName
+
+    };
     let snapShot = { native: this.state.native,
       syndicated: this.state.syndicated,
       ratingOnly: this.state.ratingOnly,
@@ -24122,14 +24127,19 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       'div',
       null,
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'h1',
+        { className: 'app-title' },
+        'Narwhal'
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'form',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', id: 'client', name: 'client', placeholder: 'Client Name', list: 'clientList', autoComplete: 'off' }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', id: 'prodid', name: 'prodId', placeholder: 'Product ID' }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'h2',
-          { onClick: this.onClick },
-          'SUBMIT'
+          { className: 'submit', onClick: this.onClick },
+          'Execute'
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'datalist',
@@ -29136,7 +29146,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('option', { value: 'zyrtec' })
         )
       ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Product__["a" /* default */], { data: "hello" }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Product__["a" /* default */], { data: productData }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__SnapShot__["a" /* default */], { loading: this.state.loading, data: snapShot }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Grid__["a" /* default */], { data: "hello" })
     );
@@ -30042,26 +30052,141 @@ module.exports = function spread(callback) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__GridLine__ = __webpack_require__(104);
+
 
 //WHOLE GRID OF DATA
 
 
 const Grid = ({ data }) => {
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    "div",
-    null,
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      "h1",
-      { className: "title" },
-      "This IS THE GRIDDD"
-    )
-  );
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            null,
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'h1',
+                  { id: 'displayableReviewsTitle' },
+                  'Displayable Reviews'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'table',
+                  { className: 'tableMain', id: 'displayableReviews' },
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'tbody',
+                        null,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                              'tr',
+                              { className: 'tableHeader' },
+                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'th',
+                                    null,
+                                    'REVIEW ID'
+                              ),
+                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'th',
+                                    null,
+                                    'REVIEW TYPE'
+                              ),
+                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'th',
+                                    null,
+                                    'SOURCE CLIENT'
+                              ),
+                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'th',
+                                    null,
+                                    'SOURCE PRODUCT ID'
+                              ),
+                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'th',
+                                    null,
+                                    'RATING'
+                              ),
+                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'th',
+                                    null,
+                                    'STATUS'
+                              ),
+                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'th',
+                                    null,
+                                    'CONTENT CODES'
+                              ),
+                              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'th',
+                                    null,
+                                    'SUBMISSION TIME'
+                              )
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], null)
+                  )
+            )
+      );
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Grid);
 
 /***/ }),
 /* 104 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+// ONE LINE of the Grid
+
+
+const GridLine = () => {
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "tr",
+        { className: "hits" },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "td",
+            null,
+            "108018941"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "td",
+            null,
+            "Syndicated"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "td",
+            null,
+            "carters"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "td",
+            null,
+            "v_126g781"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "td",
+            null,
+            "5"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "td",
+            null,
+            "APPROVED"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "td",
+            null,
+            "HMP"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "td",
+            null,
+            "2017-11-15T02:57:50.000Z"
+        )
+    );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (GridLine);
+
+/***/ }),
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30076,12 +30201,12 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   render() {
 
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'div',
-      null,
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { src: this.props.data.image }),
+      "div",
+      { className: "product-info" },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", { className: "product-photo", src: this.props.data.image }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'h3',
-        null,
+        "h3",
+        { className: "product-name" },
         this.props.data.productName
       )
     );
@@ -30091,13 +30216,13 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 /* harmony default export */ __webpack_exports__["a"] = (Product);
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__loader__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__loader__ = __webpack_require__(107);
 
 
 
@@ -30292,7 +30417,7 @@ const SnapShot = ({ data, loading }) => {
 /* harmony default export */ __webpack_exports__["a"] = (SnapShot);
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30313,18 +30438,18 @@ const loader = () => {
 /* harmony default export */ __webpack_exports__["a"] = (loader);
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.decode = exports.parse = __webpack_require__(108);
-exports.encode = exports.stringify = __webpack_require__(109);
+exports.decode = exports.parse = __webpack_require__(109);
+exports.encode = exports.stringify = __webpack_require__(110);
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30415,7 +30540,7 @@ var isArray = Array.isArray || function (xs) {
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

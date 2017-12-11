@@ -7,9 +7,9 @@ class Product extends React.Component {
 render(){
 
 return(
-        <div>
-          <img src={this.props.data.image}/>
-          <h3>{this.props.data.productName}</h3>
+        <div className="product-info">
+          <img className="product-photo" src={this.props.data.image}/>
+          <h3 className="product-name">{this.props.data.productName}</h3>
         </div>
       );
   }
