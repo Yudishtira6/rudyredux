@@ -32598,6 +32598,8 @@ class Add extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         "Content-Type": "application/x-www-form-urlencoded"
       }
     }).then(function (response) {
+      var responseObj = JSON.stringify(response);
+      console.log("Response object: ", responseObj);
       e.setState({
         messageFromServer: response.data
       });

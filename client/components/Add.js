@@ -55,14 +55,14 @@ insertNewExpense(e) {
       axios.post('/insert',
         querystring.stringify({
           clientName: e.state.clientName,
-          productId: e.state.productId,
-          month: e.state.month,
-          year: e.state.year
+          productId: e.state.productId
         }), {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           }
         }).then(function(response) {
+          var responseObj = JSON.stringify(response);
+          console.log("Response object: ",responseObj);
         e.setState({
           messageFromServer: response.data
         });
