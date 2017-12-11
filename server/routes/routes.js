@@ -11,20 +11,45 @@ router.get('/', function(req, res){
 router.route('/insert')
 .post(function(req,res) {
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var sources = {};
+  var dashboard = {};
+  var totalReviews = {};
   var options = {
+
     // uri: 'https://api.github.com/users/Sahedeva/repos',
     uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+req.body.clientName+'&ApiVersion=5.4&filter=productid:'+req.body.productId+'&keyproperty=syndication&include=products',
+
+    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
+
     headers: {
         'User-Agent': 'Request-Promise'
     },
     json: true // Automatically parses the JSON string in the response
   };
   console.log('options: ',options);
-rp(options)
+  rp(options)
     .then(function (data) {
-      console.log('data',data);
-        res.json(data);
-    })
+      console.log('data',JSON.stringify(data));
+        var hagopt = {
+          uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication',
+          headers: {
+              'User-Agent': 'Request-Promise'
+          },
+          json: true // Automatically parses the JSON string in the response
+        };
+        rp(hagopt)
+          .then(function (hagsynd) {
+            // console.log('hagsynd',JSON.stringify(hagsynd));
+            dashboard['totalDisplayNumber'] = hagsynd['TotalResults'];
+            console.log('dashboard["totalDisplayNumber"]: ',dashboard['totalDisplayNumber'] )
+          })
+          .catch(function (err) {
+        // API call failed...
+          })
+        })
+
     .catch(function (err) {
         // API call failed...
     });
