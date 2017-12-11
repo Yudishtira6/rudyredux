@@ -3,9 +3,33 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var rp = require('request-promise');
+
 router.get('/', function(req, res){
   res.render('index')
 });
+
+router.route('/getProductDetails')
+.post(function(req,res) {
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var options = {
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+req.body.clientName+'&filter=id:'+req.body.productId,
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  console.log('options: ',options);
+  rp(options)
+    .then(function (data) {
+      console.log('data',JSON.stringify(data));
+      res.json(data);
+    .catch(function (err) {
+        // API call failed...
+    });
+})
+
 router.route('/insert')
 .post(function(req,res) {
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
@@ -25,8 +49,31 @@ router.route('/insert')
   rp(options)
     .then(function (data) {
       console.log('data',JSON.stringify(data));
+
+        var source = new Object ();
+        var family = [];
+        var syndication = [];
+      
+        var Array = [data.products]
+
+        for (i = 0; i <= Array.length; i++) { 
+              if ((data.products[i]['sources'][0]) === ('FAMILY')) {
+                source.family = family;
+                family.push(data.products[i]['client'])
+                family.push(data.products[i]['externalId'])
+              } else {
+                source.syndication = syndication;
+                syndication.push(data.products[i]['client'])
+                syndication.push(data.products[i]['externalId'])
+              }
+          } 
+ 
+
+        console.log('working')
+        console.log(source)
+
         var hagopt = {
-          uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication',
+          uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&include=products',
           headers: {
               'User-Agent': 'Request-Promise'
           },
@@ -48,6 +95,7 @@ router.route('/insert')
     .catch(function (err) {
         // API call failed...
     });
+
 })
 router.route('/update')
 .post(function(req, res) {
