@@ -48,7 +48,7 @@ getReviews(e){
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
 
-    if(client && productId){
+    if(client && productId && productId!=this.state.productId){
         this.setState({loading:true});
         axios.post('/getProductDetails',
           querystring.stringify({
@@ -59,11 +59,11 @@ getReviews(e){
               "Content-Type": "application/x-www-form-urlencoded"
             }
           }).then(function(response) {
-
-            e.setState({image:response.data.hagrid.Results[0].ImageUrl,
-                        productName:response.data.hagrid.Results[0].Name,
-                        familyIds:response.data.hagrid.Results[0].FamilyIds,
-                        productPageUrl:response.data.hagrid.Results[0].ProductPageUrl});
+            console.log(response);
+            e.setState({image:response.data.Results[0].ImageUrl,
+                        productName:response.data.Results[0].Name,
+                        familyIds:response.data.Results[0].FamilyIds,
+                        productPageUrl:response.data.Results[0].ProductPageUrl});
         });
           axios.post('/insert',
             querystring.stringify({
@@ -99,6 +99,7 @@ getReviews(e){
                           syndicated:syndicatedReviews.length,
                           native:nativeReviews.length,
                           family:familyReviews.length,
+                          productId:productId
                           });
               });
         }
