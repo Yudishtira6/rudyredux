@@ -2,7 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import $ from 'jquery';
 import Grid from './Grid';
 import Product from './Product';
 import SnapShot from './SnapShot';
