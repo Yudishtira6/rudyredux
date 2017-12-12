@@ -86,6 +86,7 @@ getReviews(e){
                 }else if(review.ProductId===productId){
                   nativeReviews.push(review);
                 }
+
               });
 
               e.setState({reviews:response.data.hagrid.Results,
