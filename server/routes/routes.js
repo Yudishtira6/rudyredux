@@ -82,7 +82,7 @@ router.route('/insert')
               source.syndication = syndication;
               source.family = family;
           }
- 
+
         console.log(syndication)
         console.log('working')
         console.log(source)
@@ -161,8 +161,7 @@ router.route('/insert')
               }
 
             }
-            console.log('timeout setting: ',4000+dashboard['totalDisplayNumber']);
-            setTimeout(myTimeout1, 4000+dashboard['totalDisplayNumber']);
+            setTimeout(myTimeout1, 2000)
             function myTimeout1() {
               console.log("waiting 2 seconds");
               console.log('finished for loop');
@@ -188,11 +187,11 @@ router.route('/insert')
               console.log('hagridTotalResults.length: ',hagridTotalResults.length);
               hagridTotalObj['Results']=hagridTotalResults;
               console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length)
-              var responseObj = {hagrid:hagridTotalObj,syndication:{a:"hi"},rejected:{b:"bye"},dashboard:{c:"brown"},family:{d:"cow"}};
-              res.json(responseObj);
-            
+              res.json(hagridTotalObj);
             }
-            
+
+
+
           })
           .catch(function (err) {
         // API call failed...

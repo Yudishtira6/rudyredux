@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-
+import $ from 'jquery';
 import Grid from './Grid';
 import Product from './Product';
 import SnapShot from './SnapShot';
@@ -22,12 +22,12 @@ constructor() {
                   displayingReviews:[],
                   image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
                   productName:"Fake Product Please enter information in the form above!",
-                  native:30,
-                  syndicated:20,
+                  native:0,
+                  syndicated:0,
                   ratingOnly:5,
                   stopped:10,
-                  family:30,
-                  total:65,
+                  family:0,
+                  total:0,
                   familyIds:[],
                   loading:false,
                   productPageUrl:'',
@@ -44,6 +44,7 @@ constructor() {
     }
 
 getReviews(e){
+
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
 
@@ -73,7 +74,7 @@ getReviews(e){
                 "Content-Type": "application/x-www-form-urlencoded"
               }
             }).then(function(response) {
-              console.log(response);
+                console.log(response);
                 var familyReviews=[];
                 var syndicatedReviews=[];
                 var nativeReviews=[];
@@ -85,7 +86,8 @@ getReviews(e){
                 }else if(review.ProductId===productId){
                   nativeReviews.push(review);
                 }
-              })
+              });
+
               e.setState({reviews:response.data.Results,
                           displayingReviews:response.data.Results,
                           total:response.data.TotalResults,
@@ -93,7 +95,11 @@ getReviews(e){
                           productId:productId,
                           familyReviews:familyReviews,
                           nativeReviews:nativeReviews,
-                          syndicatedReviews:syndicatedReviews});
+                          syndicatedReviews:syndicatedReviews,
+                          syndicated:syndicatedReviews.length,
+                          native:nativeReviews.length,
+                          family:familyReviews.length,
+                          });
               });
         }
 
@@ -121,10 +127,10 @@ render() {
 
   let snapShot={native:this.state.native,
                 syndicated:this.state.syndicated,
-                ratingOnly:this.state.ratingOnly,
+                ratingOnly:0,
                 stopped:this.state.stopped,
-                displayableSyndicated:this.state.syndicated-this.state.stopped,
-                family:this.state.total-this.state.native-this.state.syndicated,
+                displayableSyndicated:this.state.syndicated,
+                family:this.state.family,
                 total:this.state.total,
                 displayableNative:this.state.native-this.state.ratingOnly,
                 familyIds:this.state.familyIds,
