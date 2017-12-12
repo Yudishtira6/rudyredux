@@ -27,15 +27,17 @@ form {
 
 .product-info {
   border-top: 1px solid black;
+  margin-bottom: 40px;
 }
 
 .product-name {
   display: inline-block;
   margin-left: 1rem;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .product-photo {
-  height: 119px;
+  max-height: 100px;
+  max-width: 100px;
   margin-top: 3rem;
 }
