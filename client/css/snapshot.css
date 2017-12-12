@@ -1,6 +1,10 @@
 .snapshot-header {
   margin-bottom: 7px;
   font-size: 25px;
+  color: #003d4c;
+  font-weight: bold;
+  font-size: 36px;
+  text-align: center;
 }
 
 .fa-camera {
@@ -14,7 +18,7 @@
   border: 1px solid black;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  background: #0d2a3c;
+  background: #007c9a;
   color: white;
   box-shadow: -3px 3px 12px 0px black;
 }
@@ -58,7 +62,7 @@
 
 .secondary-container:last-child {
   border-right: none;
-  background-color: #962929;
+  background-color: #be3434;
 }
 
 .secondary-number {
@@ -80,7 +84,7 @@
 }
 
 .total-number {
-  font-size: 4rem;
+  font-size: 6rem;
   margin: 0;
   margin-top: 3rem;
 }
