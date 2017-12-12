@@ -8,7 +8,7 @@ let Items;
 
 if(data){
 Items=data.map((review)=>{
-  return <GridLine key={review.CID} productId={productId} data={review}/>
+  return <GridLine key={review.Id} productId={productId} data={review}/>
 });
 }
 return(

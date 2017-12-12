@@ -40028,7 +40028,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     let client = document.getElementById('client').value;
     let productId = document.getElementById('prodid').value;
 
-    if (client && productId) {
+    if (client && productId && productId != this.state.productId) {
       this.setState({ loading: true });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/getProductDetails', querystring.stringify({
         clientName: client,
@@ -40038,11 +40038,11 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
-
-        e.setState({ image: response.data.hagrid.Results[0].ImageUrl,
-          productName: response.data.hagrid.Results[0].Name,
-          familyIds: response.data.hagrid.Results[0].FamilyIds,
-          productPageUrl: response.data.hagrid.Results[0].ProductPageUrl });
+        console.log(response);
+        e.setState({ image: response.data.Results[0].ImageUrl,
+          productName: response.data.Results[0].Name,
+          familyIds: response.data.Results[0].FamilyIds,
+          productPageUrl: response.data.Results[0].ProductPageUrl });
       });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
         clientName: client,
@@ -40076,7 +40076,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           syndicatedReviews: syndicatedReviews,
           syndicated: syndicatedReviews.length,
           native: nativeReviews.length,
-          family: familyReviews.length
+          family: familyReviews.length,
+          productId: productId
         });
       });
     }
@@ -46061,7 +46062,7 @@ const Grid = ({ title, productId, data }) => {
 
   if (data) {
     Items = data.map(review => {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], { key: review.CID, productId: productId, data: review });
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], { key: review.Id, productId: productId, data: review });
     });
   }
   return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
