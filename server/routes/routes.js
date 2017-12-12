@@ -36,9 +36,19 @@ router.route('/insert')
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
   var clientName = req.body.clientName;
   var productId = req.body.productId;
+  var familyTotal = 0;
+  var syndTotal = 0;
+  var ratingsOnlyTotal = 0;
+  var syndRatOnly = 0;
+  var natRatOnly = 0;
+  var totalId = [];
+  var syndId = [];
   var sources = {};
   var dashboard = {};
   var totalReviews = {};
+  var hagridTotalObj = {};
+  var hagridTotalResults = [];
+  // Step 1 (Oracle call to get sources)
   var options = {
     uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
     headers: {
@@ -72,9 +82,9 @@ router.route('/insert')
 
         console.log('working')
         console.log(source)
-
-        var hagopt = {
-          uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&include=products',
+        // Step 2 (hagrid syndicated call)
+        let hagopt = {
+          uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&limit=100',
           headers: {
               'User-Agent': 'Request-Promise'
           },
@@ -85,9 +95,84 @@ router.route('/insert')
             // console.log('hagsynd',JSON.stringify(hagsynd));
             dashboard['totalDisplayNumber'] = hagsynd['TotalResults'];
             console.log('dashboard["totalDisplayNumber"]: ',dashboard['totalDisplayNumber'] )
-            var data = hagsynd;
-            console.log('data: ',data);
-            res.json(data);
+            // console.log('hagsynd: ',JSON.stringify(hagsynd));
+            hagridTotalObj = hagsynd;
+            hagridTotalResults = hagsynd['Results'];
+            console.log('hagridTotalResults[0]: ',hagridTotalResults[0]);
+            console.log('hagridTotalResults[0]["Id"]: ',hagridTotalResults[0]["Id"]);
+            console.log('hagridTotalResults.length is ', hagridTotalResults.length);
+            // need to march through the object - limit 100 is max
+            if(dashboard['totalDisplayNumber']<=100){
+              var len = hagridTotalResults.length;
+              console.log('len: ',len);
+              for (let i=0;i<len;i++){
+                totalId.push(results[i]["Id"]);
+                console.log('totalId: ',totalId);
+                if(results[i]["IsSyndicated"]){
+                  syndTotal++
+                  if(results[i]["IsRatingsOnly"]){
+                    syndRatOnly++
+                  }
+                }
+                if(results[i]["IsRatingsOnly"]){
+                  natRatOnly++
+                }
+              }
+              console.log('syndTotal: ',syndTotal);
+              console.log('syndRatOnly: ',syndRatOnly);
+              console.log('natRatOnly: ',natRatOnly);
+              console.log('totalId: ',totalId);
+              res.json(hagridTotalObj);
+            } else {
+              // more than 100 results - need to make more hagrid calls to complete
+              for(let i = 1; i < dashboard['totalDisplayNumber']/100;i++) {
+                console.log('Now will offset by ',i*100);
+                console.log('hagridTotalResults.length: ',hagridTotalResults.length);
+                let hagopt = {
+                  uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&limit=100&offset='+(i*100),
+                  headers: {
+                      'User-Agent': 'Request-Promise'
+                  },
+                  json: true // Automatically parses the JSON string in the response
+                };
+                // console.log('hagopt: ',hagopt);
+                rp(hagopt)
+                  .then(function (hagsynd) {
+                    console.log('hagsynd["Results"][0]["Id"]: ',hagsynd['Results'][0]["Id"]);
+                    console.log('hagridTotalResults.length is ', hagridTotalResults.length);
+                    console.log('hagsynd["Results"].length is ',hagsynd["Results"].length);
+                    hagridTotalResults.push.apply(hagridTotalResults, hagsynd['Results']);
+                  })
+                  .catch(function (err) {
+                    // API call failed...
+                });
+              }
+            }
+
+
+            var len = hagridTotalResults.length;
+            console.log('len: ',len);
+            for (let i=0;i<len;i++){
+              totalId.push(hagridTotalResults[i]["Id"]);
+              console.log('totalId: ',totalId);
+              if(hagridTotalResults[i]["IsSyndicated"]){
+                syndTotal++
+                if(hagridTotalResults[i]["IsRatingsOnly"]){
+                  syndRatOnly++
+                }
+              }
+              if(hagridTotalResults[i]["IsRatingsOnly"]){
+                natRatOnly++
+              }
+            }
+            console.log('syndTotal: ',syndTotal);
+            console.log('syndRatOnly: ',syndRatOnly);
+            console.log('natRatOnly: ',natRatOnly);
+            console.log('totalId: ',totalId);
+            console.log('hagridTotalResults.length: ',hagridTotalResults.length);
+            hagridTotalObj['Results']=hagridTotalResults;
+            console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length)
+            res.json(hagridTotalObj);
           })
           .catch(function (err) {
         // API call failed...
