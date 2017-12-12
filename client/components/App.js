@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-
+import $ from 'jquery';
 import Grid from './Grid';
 import Product from './Product';
 import SnapShot from './SnapShot';
@@ -22,12 +22,12 @@ constructor() {
                   displayingReviews:[],
                   image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
                   productName:"Fake Product Please enter information in the form above!",
-                  native:30,
-                  syndicated:20,
+                  native:0,
+                  syndicated:0,
                   ratingOnly:5,
                   stopped:10,
-                  family:30,
-                  total:65,
+                  family:0,
+                  total:0,
                   familyIds:[],
                   loading:false,
                   productPageUrl:'',
@@ -44,6 +44,26 @@ constructor() {
     }
 
 getReviews(e){
+  function loadPosts () {
+
+      var api = `http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName=${client}&keyProperty=syndication&filter=productid:${productId}&include=products&stats=reviews `;
+      var retrieve_more = function (offset) {
+          $.getJSON(api + "limit=100&offset=" + offset + "&",function(data) {
+              console.log(data);
+              $.each(data.Results, function(i, item) {
+
+              });
+
+              if (data.response.posts.length == 100) {
+                  retrieve_more(offset + 100);
+              }
+          });
+      };
+
+      retrieve_more(0);
+  }
+
+  loadPosts();
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
 
@@ -92,7 +112,11 @@ getReviews(e){
                           productId:productId,
                           familyReviews:familyReviews,
                           nativeReviews:nativeReviews,
-                          syndicatedReviews:syndicatedReviews});
+                          syndicatedReviews:syndicatedReviews,
+                          syndicated:syndicatedReviews.length,
+                          native:nativeReviews.length,
+                          family:familyReviews.length,
+                          });
               });
         }
 

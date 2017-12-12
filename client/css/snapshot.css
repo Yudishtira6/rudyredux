@@ -27,6 +27,7 @@
   border-right: 1px solid white;
   margin: 0 auto;
   position: relative;
+  cursor: pointer;
 }
 
 .snapshot-container>li:last-of-type {
