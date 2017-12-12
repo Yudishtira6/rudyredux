@@ -2,52 +2,69 @@ import React from 'react';
 
 
 import Loader from './loader';
+export default class SnapShot extends React.Component {
+constructor(props) {
+super(props);
+this.switchNative=this.switchNative.bind(this);
+this.switchFamily=this.switchFamily.bind(this);
+this.switchAll=this.switchAll.bind(this);
+this.switchSyndicated=this.switchSyndicated.bind(this);
+}
+switchNative(){
 
-const SnapShot=({data, loading})=>{
-let familyIds;
+this.props.display('native');
+}
+switchFamily(){
+this.props.display('family');
+}
+switchSyndicated(){
+this.props.display('syndicated');
+}
+switchAll(){
+this.props.display('all');
+}
+render(){
+let familyIds=<span className="familyids">No Family Information</span>;
 
-  if (data.familyIds.length>=1){
-  console.log('mapping families');
-   familyIds=data.familyIds.map((id)=>{
-      return  <span key={id} className="familyid">{id}</span>
-      });
-    }else{
-  familyIds=<span className="familyids">No Family Information</span>;
+  if (this.props.data.familyIds.length>=1){
+   familyIds=<span className="familyid">{this.props.data.familyIds[0]}</span>
+
     }
+
 let snapShot=(
               <ul className="snapshot-container">
-                <li className="native">
+                <li onClick={this.switchNative} className="native">
                   <div className="snap-main">
-                    <h2 className="main-number">{data.native}</h2>
+                    <h2 className="main-number">{this.props.data.native}</h2>
                     <h3 className="main-label">NATIVE</h3>
                   </div>
                   <div className="secondary-container">
-                    <h4 className="secondary-number">{data.displayableNative}</h4>
+                    <h4 className="secondary-number">{this.props.data.displayableNative}</h4>
                     <h4 className="secondary-label">Displayable Native Reviews</h4>
                   </div>
                   <div className="secondary-container">
-                    <h4 className="secondary-number">{data.ratingOnly}</h4>
+                    <h4 className="secondary-number">{this.props.data.ratingOnly}</h4>
                     <h4 className="secondary-label">Ratings Only Native Reviews</h4>
                   </div>
                 </li>
 
                 <li>
-                <div className="snap-main">
-                  <h2 className="main-number">{data.syndicated}</h2>
+                <div onClick={this.switchSyndicated} className="snap-main">
+                  <h2 className="main-number">{this.props.data.syndicated}</h2>
                   <h3 className="main-label">SYNDICATED</h3>
                 </div>
                 <div className="secondary-container">
-                  <h4 className="secondary-number">{data.displayableSyndicated}</h4>
+                  <h4 className="secondary-number">{this.props.data.displayableSyndicated}</h4>
                   <h4 className="secondary-label">Displayable Syndicated Reviews</h4>
                 </div>
                 <div className="secondary-container">
-                  <h4 className="secondary-number">{data.stopped}</h4>
+                  <h4 className="secondary-number">{this.props.data.stopped}</h4>
                   <h4 className="secondary-label">Blocked Syndicated Reviews</h4>
                 </div>
                 </li>
                 <li>
-                  <div className="snap-main">
-                    <h2 className="main-number">{data.family}</h2>
+                  <div onClick={this.switchFamily} className="snap-main">
+                    <h2 className="main-number">{this.props.data.family}</h2>
                     <h3 className="main-label">Family Reviews</h3>
                   </div>
                   <div className="family-information">
@@ -55,15 +72,15 @@ let snapShot=(
                     {familyIds}
                   </div>
                 </li>
-                <li className="total-container">
+                <li onClick={this.switchAll} className="total-container">
                   <div className="total-main">
-                    <h2 className="total-number">{data.total}</h2>
+                    <h2 className="total-number">{this.props.data.total}</h2>
                     <h3 className="total-label">Total Reviews Displaying</h3>
                   </div>
                 </li>
               </ul>
             );
-        if(loading){
+        if(this.props.loading){
         snapShot=(
                     <ul className="snapshot-container">
                       <li className="native">
@@ -88,6 +105,5 @@ let snapShot=(
             {snapShot}
           </div>
           );
+  }
 }
-
-export default SnapShot;

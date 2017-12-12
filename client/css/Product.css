@@ -1,11 +1,32 @@
 .app-title {
   display: inline-block;
+  margin-bottom: 0;
+}
+
+.logo {
+  width: 5%;
+}
+
+.title {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 1rem;
 }
 
 form {
   display: inline-block;
   margin-left: 2rem;
-  float: right
+  float: right;
+  margin-top: 3rem;
+}
+
+.sub-title {
+  margin-top: 0;
+  font-size: 19px;
+}
+
+.product-info {
+  border-top: 1px solid black;
 }
 
 .product-name {
