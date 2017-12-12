@@ -5,7 +5,7 @@ class Product extends React.Component {
         super(props);
 }
 render(){
-console.log(this.props.data);
+
 return(
         <div className="product-info">
           <img className="product-photo" src={this.props.data.image}/>

@@ -39998,6 +39998,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       reviews: [],
       syndicatedReviews: [],
       familyReviews: [],
+      nativeReviews: [],
+      displayingReviews: [],
       image: "https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
       productName: "Fake Product Please enter information in the form above!",
       native: 30,
@@ -40008,18 +40010,23 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       total: 65,
       familyIds: [],
       loading: false,
-      productPageUrl: ''
+      productPageUrl: '',
+      reviewFilter: "All Displayable Reviews"
 
     };
     this.onClick = this.onClick.bind(this);
     this.getReviews = this.getReviews.bind(this);
+    this.switchReviews = this.switchReviews.bind(this);
   }
+
   onClick(e) {
     this.getReviews(this);
   }
+
   getReviews(e) {
     let client = document.getElementById('client').value;
     let productId = document.getElementById('prodid').value;
+
     if (client && productId) {
       this.setState({ loading: true });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/getProductDetails', querystring.stringify({
@@ -40030,11 +40037,11 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
+
         e.setState({ image: response.data.Results[0].ImageUrl,
           productName: response.data.Results[0].Name,
           familyIds: response.data.Results[0].FamilyIds,
           productPageUrl: response.data.Results[0].ProductPageUrl });
-        console.log("PRODUCT DATA", response.data.Results[0].ProductPageUrl);
       });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
         clientName: client,
@@ -40044,14 +40051,38 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
-        console.log("success!!");
-        var responseObj = JSON.stringify(response);
-        console.log(responseObj);
-        e.setState({ reviews: response.data,
+        var familyReviews = [];
+        var syndicatedReviews = [];
+        var nativeReviews = [];
+        response.data.Results.filter(review => {
+          if (review.IsSyndicated) {
+            syndicatedReviews.push(review);
+          } else if (review.ProductId != productId && !review.IsSyndicated) {
+            familyReviews.push(review);
+          } else if (review.ProductId === productId) {
+            nativeReviews.push(review);
+          }
+        });
+        e.setState({ reviews: response.data.Results,
+          displayingReviews: response.data.Results,
           total: response.data.TotalResults,
           loading: false,
-          productId: productId });
+          productId: productId,
+          familyReviews: familyReviews,
+          nativeReviews: nativeReviews,
+          syndicatedReviews: syndicatedReviews });
       });
+    }
+  }
+  switchReviews(reviews) {
+    if (reviews === "native") {
+      this.setState({ displayingReviews: this.state.nativeReviews, reviewFilter: "Native Reviews" });
+    } else if (reviews === "syndicated") {
+      this.setState({ displayingReviews: this.state.syndicatedReviews, reviewFilter: "Syndicated Reviews" });
+    } else if (reviews === "all") {
+      this.setState({ displayingReviews: this.state.reviews, reviewFilter: "All Displayable Reviews" });
+    } else if (reviews === "family") {
+      this.setState({ displayingReviews: this.state.familyReviews, reviewFilter: "Family Reviews" });
     }
   }
 
@@ -40076,10 +40107,20 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'div',
       null,
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'logo', src: 'http://moziru.com/images/drawn-narwhal-kawaii-19.jpg' }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'h1',
-        { className: 'app-title' },
-        'Narwhal'
+        'div',
+        { className: 'title' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h1',
+          { className: 'app-title' },
+          'Narwhal'
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h2',
+          { className: 'sub-title' },
+          'The Unicorn of Review Data'
+        )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'form',
@@ -45097,8 +45138,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Product__["a" /* default */], { data: productData }),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__SnapShot__["a" /* default */], { loading: this.state.loading, data: snapShot }),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Grid__["a" /* default */], { productId: this.state.productId, data: this.state.reviews })
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__SnapShot__["a" /* default */], { display: this.switchReviews, loading: this.state.loading, data: snapShot }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Grid__["a" /* default */], { title: this.state.reviewFilter, productId: this.state.productId, data: this.state.displayingReviews })
     );
   }
 }
@@ -46008,11 +46049,11 @@ module.exports = function spread(callback) {
 //WHOLE GRID OF DATA
 
 
-const Grid = ({ productId, data }) => {
+const Grid = ({ title, productId, data }) => {
   let Items;
 
-  if (data.Results) {
-    Items = data.Results.map(review => {
+  if (data) {
+    Items = data.map(review => {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], { key: review.Id, productId: productId, data: review });
     });
   }
@@ -46022,7 +46063,7 @@ const Grid = ({ productId, data }) => {
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'h1',
       { id: 'displayableReviewsTitle' },
-      'Displayable Reviews'
+      title
     ),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'table',
@@ -46097,12 +46138,12 @@ const Grid = ({ productId, data }) => {
 
 const GridLine = ({ productId, data }) => {
     let color;
-    let syndicated = "Native";
+    let type = "Native";
     if (data.IsSyndicated) {
-        syndicated = "Syndicated";
+        type = "Syndicated";
         color = "blue";
     } else if (data.ProductId != productId) {
-        syndicated = "Family";
+        type = "Family";
         color = "yellow";
     }
     var date = __WEBPACK_IMPORTED_MODULE_1_moment___default()(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
@@ -46118,7 +46159,7 @@ const GridLine = ({ productId, data }) => {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'td',
             null,
-            syndicated
+            type
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'td',
@@ -46143,7 +46184,7 @@ const GridLine = ({ productId, data }) => {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'td',
             null,
-            'HMP'
+            'N/A'
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'td',
@@ -46455,7 +46496,7 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     super(props);
   }
   render() {
-    console.log(this.props.data);
+
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       "div",
       { className: "product-info" },
@@ -46486,208 +46527,225 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
 
 
+class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
+  constructor(props) {
+    super(props);
+    this.switchNative = this.switchNative.bind(this);
+    this.switchFamily = this.switchFamily.bind(this);
+    this.switchAll = this.switchAll.bind(this);
+    this.switchSyndicated = this.switchSyndicated.bind(this);
+  }
+  switchNative() {
 
-const SnapShot = ({ data, loading }) => {
-  let familyIds;
-
-  if (data.familyIds.length >= 1) {
-    console.log('mapping families');
-    familyIds = data.familyIds.map(id => {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'span',
-        { className: 'familyid' },
-        id
-      );
-    });
-  } else {
-    familyIds = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    this.props.display('native');
+  }
+  switchFamily() {
+    this.props.display('family');
+  }
+  switchSyndicated() {
+    this.props.display('syndicated');
+  }
+  switchAll() {
+    this.props.display('all');
+  }
+  render() {
+    let familyIds = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'span',
       { className: 'familyids' },
       'No Family Information'
     );
-  }
-  let snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    'ul',
-    { className: 'snapshot-container' },
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'li',
-      { className: 'native' },
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'snap-main' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { className: 'main-number' },
-          data.native
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h3',
-          { className: 'main-label' },
-          'NATIVE'
-        )
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'secondary-container' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'secondary-number' },
-          data.displayableNative
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'secondary-label' },
-          'Displayable Native Reviews'
-        )
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'secondary-container' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'secondary-number' },
-          data.ratingOnly
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'secondary-label' },
-          'Ratings Only Native Reviews'
-        )
-      )
-    ),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'li',
-      null,
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'snap-main' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { className: 'main-number' },
-          data.syndicated
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h3',
-          { className: 'main-label' },
-          'SYNDICATED'
-        )
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'secondary-container' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'secondary-number' },
-          data.displayableSyndicated
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'secondary-label' },
-          'Displayable Syndicated Reviews'
-        )
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'secondary-container' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'secondary-number' },
-          data.stopped
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'secondary-label' },
-          'Blocked Syndicated Reviews'
-        )
-      )
-    ),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'li',
-      null,
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'snap-main' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { className: 'main-number' },
-          data.family
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h3',
-          { className: 'main-label' },
-          'Family Reviews'
-        )
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'family-information' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h4',
-          { className: 'family-title' },
-          'Family ID'
-        ),
-        familyIds
-      )
-    ),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'li',
-      { className: 'total-container' },
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'total-main' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { className: 'total-number' },
-          data.total
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h3',
-          { className: 'total-label' },
-          'Total Reviews Displaying'
-        )
-      )
-    )
-  );
-  if (loading) {
-    snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+
+    if (this.props.data.familyIds.length >= 1) {
+      familyIds = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'span',
+        { className: 'familyid' },
+        this.props.data.familyIds[0]
+      );
+    }
+
+    let snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'ul',
       { className: 'snapshot-container' },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'li',
-        { className: 'native' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__loader__["a" /* default */], null)
+        { onClick: this.switchNative, className: 'native' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'snap-main' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h2',
+            { className: 'main-number' },
+            this.props.data.native
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h3',
+            { className: 'main-label' },
+            'NATIVE'
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'secondary-container' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-number' },
+            this.props.data.displayableNative
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-label' },
+            'Displayable Native Reviews'
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'secondary-container' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-number' },
+            this.props.data.ratingOnly
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-label' },
+            'Ratings Only Native Reviews'
+          )
+        )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'li',
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__loader__["a" /* default */], null)
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { onClick: this.switchSyndicated, className: 'snap-main' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h2',
+            { className: 'main-number' },
+            this.props.data.syndicated
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h3',
+            { className: 'main-label' },
+            'SYNDICATED'
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'secondary-container' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-number' },
+            this.props.data.displayableSyndicated
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-label' },
+            'Displayable Syndicated Reviews'
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'secondary-container' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-number' },
+            this.props.data.stopped
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-label' },
+            'Blocked Syndicated Reviews'
+          )
+        )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'li',
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__loader__["a" /* default */], null)
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { onClick: this.switchFamily, className: 'snap-main' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h2',
+            { className: 'main-number' },
+            this.props.data.family
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h3',
+            { className: 'main-label' },
+            'Family Reviews'
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'family-information' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'family-title' },
+            'Family ID'
+          ),
+          familyIds
+        )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'li',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__loader__["a" /* default */], null)
+        { onClick: this.switchAll, className: 'total-container' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'total-main' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h2',
+            { className: 'total-number' },
+            this.props.data.total
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h3',
+            { className: 'total-label' },
+            'Total Reviews Displaying'
+          )
+        )
       )
     );
+    if (this.props.loading) {
+      snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'ul',
+        { className: 'snapshot-container' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'li',
+          { className: 'native' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__loader__["a" /* default */], null)
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'li',
+          null,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__loader__["a" /* default */], null)
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'li',
+          null,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__loader__["a" /* default */], null)
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'li',
+          null,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__loader__["a" /* default */], null)
+        )
+      );
+    }
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'div',
+      null,
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'h3',
+        { className: 'snapshot-header' },
+        'Product SnapShot',
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-camera', 'aria-hidden': 'true' })
+      ),
+      snapShot
+    );
   }
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    'div',
-    null,
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'h3',
-      { className: 'snapshot-header' },
-      'Product SnapShot',
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-camera', 'aria-hidden': 'true' })
-    ),
-    snapShot
-  );
-};
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = SnapShot;
 
-/* harmony default export */ __webpack_exports__["a"] = (SnapShot);
 
 /***/ }),
 /* 228 */
