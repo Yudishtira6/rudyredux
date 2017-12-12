@@ -24097,9 +24097,9 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       }
     }).then(function (response) {
       console.log("I RAN PRODUCT DETAILS!!");
-      var responseObj = JSON.stringify(response);
-      this.setState({ image: response.data.ImageUrl,
-        productName: response.data.Name });
+      console.log("Product data response", response.data);
+      e.setState({ image: response.data.Results[0].ImageUrl,
+        productName: response.data.Results[0].Name });
     });
     __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
       clientName: client,
@@ -24124,6 +24124,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       productName: this.state.productName
 
     };
+    console.log("Product Data", productData);
     let snapShot = { native: this.state.native,
       syndicated: this.state.syndicated,
       ratingOnly: this.state.ratingOnly,
@@ -24135,7 +24136,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       familyInfo: this.state.familyIds
 
     };
-    console.log("Reviews state", this.state.reviews);
+
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'div',
       null,
@@ -24152,7 +24153,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'h2',
           { className: 'submit', onClick: this.onClick },
-          'Execute'
+          'Submit'
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'datalist',
@@ -30157,7 +30158,7 @@ const Grid = ({ productId, data }) => {
 
 
 const GridLine = ({ productId, data }) => {
-    console.log(data);
+
     let syndicated = "Native";
     if (data.IsSyndicated) {
         syndicated = "Syndicated";
@@ -30256,7 +30257,7 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
 
 const SnapShot = ({ data, loading }) => {
-  console.log('snapshot', loading);
+
   let snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
     'ul',
     { className: 'snapshot-container' },

@@ -3,7 +3,7 @@ import React from 'react';
 
 
 const GridLine =({productId, data})=>{
-console.log(data);
+
 let syndicated="Native";
 if(data.IsSyndicated){
 syndicated="Syndicated";
