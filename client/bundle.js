@@ -40066,8 +40066,6 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           } else if (review.ProductId === productId) {
             nativeReviews.push(review);
           }
-        }).catch(function (response) {
-          console.log(response);
         });
 
         e.setState({ reviews: response.data.Results,
@@ -56325,7 +56323,7 @@ const Grid = ({ title, productId, data }) => {
 
   if (data) {
     Items = data.map(review => {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], { key: review.Id, productId: productId, data: review });
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], { key: review.CID, productId: productId, data: review });
     });
   }
   return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
