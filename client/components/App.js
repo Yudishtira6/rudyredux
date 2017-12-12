@@ -44,26 +44,7 @@ constructor() {
     }
 
 getReviews(e){
-  function loadPosts () {
 
-      var api = `http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName=${client}&keyProperty=syndication&filter=productid:${productId}&include=products&stats=reviews `;
-      var retrieve_more = function (offset) {
-          $.getJSON(api + "limit=100&offset=" + offset + "&",function(data) {
-              console.log(data);
-              $.each(data.Results, function(i, item) {
-
-              });
-
-              if (data.response.posts.length == 100) {
-                  retrieve_more(offset + 100);
-              }
-          });
-      };
-
-      retrieve_more(0);
-  }
-
-  loadPosts();
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
 

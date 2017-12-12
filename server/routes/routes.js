@@ -157,7 +157,7 @@ router.route('/insert')
               }
 
             }
-            setTimeout(myTimeout1, 2000)
+            setTimeout(myTimeout1, 10000)
             function myTimeout1() {
               console.log("waiting 2 seconds");
               console.log('finished for loop');
@@ -185,9 +185,9 @@ router.route('/insert')
               console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length)
               res.json(hagridTotalObj);
             }
-            
-            
-            
+
+
+
           })
           .catch(function (err) {
         // API call failed...
