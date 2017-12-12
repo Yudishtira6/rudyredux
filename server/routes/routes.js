@@ -188,8 +188,9 @@ router.route('/insert')
               console.log('totalId.length: ',totalId.length);
               console.log('hagridTotalResults.length: ',hagridTotalResults.length);
               hagridTotalObj['Results']=hagridTotalResults;
-              console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length)
-              res.json(hagridTotalObj);
+              console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length);
+              var responseObj = {hagrid:hagridTotalObj, syndication:{a:"how"}, family: {b:"now"}, rejected: {c:"brown"}, dashboard: {d:"cow"}};
+              res.json(responseObj);
             }
 
 
