@@ -40054,6 +40054,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
+        console.log(response);
         var familyReviews = [];
         var syndicatedReviews = [];
         var nativeReviews = [];
@@ -40065,7 +40066,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           } else if (review.ProductId === productId) {
             nativeReviews.push(review);
           }
+        }).catch(function (response) {
+          console.log(response);
         });
+
         e.setState({ reviews: response.data.Results,
           displayingReviews: response.data.Results,
           total: response.data.TotalResults,
@@ -40101,10 +40105,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
     let snapShot = { native: this.state.native,
       syndicated: this.state.syndicated,
-      ratingOnly: this.state.ratingOnly,
+      ratingOnly: 0,
       stopped: this.state.stopped,
-      displayableSyndicated: this.state.syndicated - this.state.stopped,
-      family: this.state.total - this.state.native - this.state.syndicated,
+      displayableSyndicated: this.state.syndicated,
+      family: this.state.family,
       total: this.state.total,
       displayableNative: this.state.native - this.state.ratingOnly,
       familyIds: this.state.familyIds

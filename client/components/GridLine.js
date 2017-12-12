@@ -3,15 +3,15 @@ import React from 'react';
 import moment from 'moment';
 
 const GridLine =({productId, data})=>{
-let color;
-let type="Native";
-if(data.IsSyndicated){
-type="Syndicated";
-color="blue";
-}else if(data.ProductId!=productId){
-  type="Family";
-color="yellow"
-}
+    let color;
+    let type="Native";
+    if(data.IsSyndicated){
+    type="Syndicated";
+    color="blue";
+    }else if(data.ProductId!=productId){
+      type="Family";
+      color="yellow"
+    }
 var date=moment(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
 
 return(
