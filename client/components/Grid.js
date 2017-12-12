@@ -3,7 +3,14 @@ import GridLine from './GridLine';
 //WHOLE GRID OF DATA
 
 
-const Grid =({data})=>{
+const Grid =({productId, data})=>{
+let Items;
+
+if(data.Results){
+Items=data.Results.map((review)=>{
+  return <GridLine key={review.Id} productId={productId} data={review}/>
+});
+}
 return(
       <div>
         <h1 id="displayableReviewsTitle">Displayable Reviews</h1>
@@ -20,7 +27,7 @@ return(
                     <th>CONTENT CODES</th>
                     <th>SUBMISSION TIME</th>
                 </tr>
-                <GridLine/>
+                {Items}
 			</tbody>
 		</table>
       </div>

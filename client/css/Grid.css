@@ -10,6 +10,19 @@ h1, h2, h3, h4, h5, h6 {
 h1 { font-size: 45px; margin-bottom: 35px; text-align: center; width: 100%; }
 h2 { font-size: 35px; }*/
 
+#displayableReviewsTitle {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.blue {
+  background: yellow;
+}
+
+.yellow {
+  background: #fff2b1;
+}
+
 table {
   padding-bottom: 35px;
 }
@@ -17,7 +30,7 @@ table {
 /* Main styling for tables */
 
 .tableMain {
-  width: 85%;
+  width: 100%;
   margin: 0 auto;
 }
 

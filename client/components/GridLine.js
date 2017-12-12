@@ -1,19 +1,30 @@
 import React from 'react';
 // ONE LINE of the Grid
+import moment from 'moment';
 
+const GridLine =({productId, data})=>{
+let color;
+let syndicated="Native";
+if(data.IsSyndicated){
+syndicated="Syndicated";
+color="blue";
+}else if(data.ProductId!=productId){
+  syndicated="Family";
+color="yellow"
+}
+var date=moment(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
 
-const GridLine =()=>{
 return(
 
-        <tr className="hits">
-            <td>108018941</td>
-            <td>Syndicated</td>
-            <td>carters</td>
-            <td>v_126g781</td>
-            <td>5</td>
-            <td>APPROVED</td>
+        <tr className={color}>
+            <td>{data.Id}</td>
+            <td>{syndicated}</td>
+            <td>{data.SourceClient}</td>
+            <td>{data.ProductId}</td>
+            <td>{data.Rating}</td>
+            <td>{data.ModerationStatus}</td>
             <td>HMP</td>
-            <td>2017-11-15T02:57:50.000Z</td>
+            <td>{date}</td>
 		</tr>
 
       );

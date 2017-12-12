@@ -64,10 +64,10 @@ router.route('/insert')
         var source = new Object ();
         var family = [];
         var syndication = [];
-      
+
         var Array = [data.products]
 
-        for (i = 0; i <= Array.length; i++) { 
+        for (i = 0; i <= Array.length; i++) {
               if ((data.products[i]['sources'][0]) === ('FAMILY')) {
                 source.family = family;
                 family.push(data.products[i]['client'])
@@ -77,8 +77,8 @@ router.route('/insert')
                 syndication.push(data.products[i]['client'])
                 syndication.push(data.products[i]['externalId'])
               }
-          } 
- 
+          }
+
 
         console.log('working')
         console.log(source)

@@ -1,5 +1,4 @@
 .snapshot-header {
-  margin-left: 51px;
   margin-bottom: 7px;
   font-size: 25px;
 }
@@ -11,7 +10,6 @@
 .snapshot-container {
   padding: 0;
   list-style: none;
-  width: 93%;
   margin: 0 auto;
   border: 1px solid black;
   border-top-right-radius: 10px;
@@ -40,7 +38,7 @@
 }
 
 .main-number {
-  font-size: 3rem;
+  font-size: 4rem;
   margin-top: .5rem;
   margin-bottom: 0;
 }
@@ -68,10 +66,11 @@
 
 .secondary-label {
   margin-top: 0;
+  font-size: 13px;
 }
 
 .family-title {
-  margin-top: 27px;
+  margin-top: 16px;
   margin-bottom: 5px;
 }
 
@@ -94,7 +93,6 @@
 }
 
 .total-container {
-  margin-bottom: auto;
   vertical-align: top;
   margin-top: 3rem;
 }

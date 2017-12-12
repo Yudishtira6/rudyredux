@@ -4,7 +4,16 @@ import React from 'react';
 import Loader from './loader';
 
 const SnapShot=({data, loading})=>{
-console.log('snapshot',loading);
+let familyIds;
+
+if (data.familyIds.length>=1){
+console.log('mapping families');
+ familyIds=data.familyIds.map((id)=>{
+    return  <span className="familyid">{id}</span>
+    });
+}else{
+familyIds=<span className="familyids">No Family Information</span>;
+}
 let snapShot=(
               <ul className="snapshot-container">
                 <li className="native">
@@ -43,7 +52,7 @@ let snapShot=(
                   </div>
                   <div className="family-information">
                     <h4 className="family-title">Family ID</h4>
-                    <h4 className="family-id">{data.familyInfo}</h4>
+                    {familyIds}
                   </div>
                 </li>
                 <li className="total-container">
