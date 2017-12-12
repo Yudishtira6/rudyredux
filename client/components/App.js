@@ -31,54 +31,55 @@ constructor() {
                   productPageUrl:''
 
                  };
-this.onClick=this.onClick.bind(this);
-this.getReviews=this.getReviews.bind(this);
+    this.onClick=this.onClick.bind(this);
+    this.getReviews=this.getReviews.bind(this);
+    this.updateReviewsView=this.updateReviewsView.bind(this);
   }
-onClick(e){
-    this.getReviews(this);
-  }
-getReviews(e){
-let client=document.getElementById('client').value;
-let productId=document.getElementById('prodid').value;
-if(client && productId){
-this.setState({loading:true});
-axios.post('/getProductDetails',
-  querystring.stringify({
-    clientName: client,
-    productId: productId
-  }), {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
+
+  onClick(e){
+      this.getReviews(this);
     }
-  }).then(function(response) {
-    e.setState({image:response.data.Results[0].ImageUrl,
-                productName:response.data.Results[0].Name,
-                familyIds:response.data.Results[0].FamilyIds,
-                productPageUrl:response.data.Results[0].ProductPageUrl});
-console.log("PRODUCT DATA",response.data.Results[0].ProductPageUrl);
 
-});
-  axios.post('/insert',
-    querystring.stringify({
-      clientName: client,
-      productId: productId
-    }), {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      }
-    }).then(function(response) {
-      console.log("success!!");
-      var responseObj = JSON.stringify(response);
-      console.log(responseObj);
-      e.setState({reviews:response.data,
-                  total:response.data.TotalResults,
-                  loading:false,
-                  productId:productId});
-  });
-}
+getReviews(e){
+    let client=document.getElementById('client').value;
+    let productId=document.getElementById('prodid').value;
+
+    if(client && productId){
+        this.setState({loading:true});
+        axios.post('/getProductDetails',
+          querystring.stringify({
+            clientName: client,
+            productId: productId
+          }), {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          }).then(function(response) {
+            e.setState({image:response.data.Results[0].ImageUrl,
+                        productName:response.data.Results[0].Name,
+                        familyIds:response.data.Results[0].FamilyIds,
+                        productPageUrl:response.data.Results[0].ProductPageUrl});
+        });
+          axios.post('/insert',
+            querystring.stringify({
+              clientName: client,
+              productId: productId
+            }), {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              }
+            }).then(function(response) {
+              var responseObj = JSON.stringify(response);
+              e.setState({reviews:response.data,
+                          total:response.data.TotalResults,
+                          loading:false,
+                          productId:productId});
+              });
+        }
 
 
-}
+    }
+
 
 render() {
   let productData={image:this.state.image,
@@ -110,6 +111,6 @@ render() {
                 <SnapShot loading={this.state.loading} data={snapShot}/>
                 <Grid productId={this.state.productId} data={this.state.reviews}/>
               </div>
-    );
-  }
+            );
+    }
 }

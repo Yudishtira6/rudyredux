@@ -6,14 +6,14 @@ import Loader from './loader';
 const SnapShot=({data, loading})=>{
 let familyIds;
 
-if (data.familyIds.length>=1){
-console.log('mapping families');
- familyIds=data.familyIds.map((id)=>{
-    return  <span className="familyid">{id}</span>
-    });
-}else{
-familyIds=<span className="familyids">No Family Information</span>;
-}
+  if (data.familyIds.length>=1){
+  console.log('mapping families');
+   familyIds=data.familyIds.map((id)=>{
+      return  <span key={id} className="familyid">{id}</span>
+      });
+    }else{
+  familyIds=<span className="familyids">No Family Information</span>;
+    }
 let snapShot=(
               <ul className="snapshot-container">
                 <li className="native">

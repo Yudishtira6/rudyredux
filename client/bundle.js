@@ -40014,12 +40014,15 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     this.onClick = this.onClick.bind(this);
     this.getReviews = this.getReviews.bind(this);
   }
+
   onClick(e) {
     this.getReviews(this);
   }
+
   getReviews(e) {
     let client = document.getElementById('client').value;
     let productId = document.getElementById('prodid').value;
+
     if (client && productId) {
       this.setState({ loading: true });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/getProductDetails', querystring.stringify({
@@ -40034,7 +40037,6 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           productName: response.data.Results[0].Name,
           familyIds: response.data.Results[0].FamilyIds,
           productPageUrl: response.data.Results[0].ProductPageUrl });
-        console.log("PRODUCT DATA", response.data.Results[0].ProductPageUrl);
       });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
         clientName: client,
@@ -40044,9 +40046,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
-        console.log("success!!");
         var responseObj = JSON.stringify(response);
-        console.log(responseObj);
         e.setState({ reviews: response.data,
           total: response.data.TotalResults,
           loading: false,
@@ -46455,7 +46455,7 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     super(props);
   }
   render() {
-    console.log(this.props.data);
+
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       "div",
       { className: "product-info" },
@@ -46495,7 +46495,7 @@ const SnapShot = ({ data, loading }) => {
     familyIds = data.familyIds.map(id => {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'span',
-        { className: 'familyid' },
+        { key: id, className: 'familyid' },
         id
       );
     });

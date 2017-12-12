@@ -28,12 +28,10 @@ return(
                     <th>SUBMISSION TIME</th>
                 </tr>
                 {Items}
-			</tbody>
-		</table>
-      </div>
-
-
-      );
+			      </tbody>
+		      </table>
+        </div>
+        );
 }
 
 export default Grid;
