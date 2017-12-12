@@ -70,16 +70,25 @@ router.route('/insert')
 
         for (i = 0; i < len; i++) {
               if ((data.products[i]['sources'][0]) === ('FAMILY')) {
-                family.push((data.products[i]['client']), (data.products[i]['externalId']))
+                var innerFamily = [];
+                family.push(innerFamily)
+                innerFamily.push((data.products[i]['client']), (data.products[i]['externalId']))
               }
               else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC')) {
-                syndication.push((data.products[i]['client']), (data.products[i]['externalId']))
+                var innerSyndication = [];
+                syndication.push(innerSyndication)
+                innerSyndication.push((data.products[i]['client']), (data.products[i]['externalId']))
               }
               source.syndication = syndication;
               source.family = family;
           }
+<<<<<<< HEAD
 
         console.log(data.products)
+=======
+ 
+        console.log(syndication)
+>>>>>>> bd697f6d4f27ae82c95350a9950acb0302f65716
         console.log('working')
         console.log(source)
         // Step 2 (hagrid syndicated call)
@@ -157,7 +166,8 @@ router.route('/insert')
               }
 
             }
-            setTimeout(myTimeout1, 2000)
+            console.log('timeout setting: ',4000+dashboard['totalDisplayNumber']);
+            setTimeout(myTimeout1, 4000+dashboard['totalDisplayNumber']);
             function myTimeout1() {
               console.log("waiting 2 seconds");
               console.log('finished for loop');
@@ -183,11 +193,19 @@ router.route('/insert')
               console.log('hagridTotalResults.length: ',hagridTotalResults.length);
               hagridTotalObj['Results']=hagridTotalResults;
               console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length)
+<<<<<<< HEAD
               res.json(hagridTotalObj);
             }
 
 
 
+=======
+              var responseObj = {hagrid:hagridTotalObj,syndication:{a:"hi"},rejected:{b:"bye"},dashboard:{c:"brown"},family:{d:"cow"}};
+              res.json(responseObj);
+            
+            }
+            
+>>>>>>> bd697f6d4f27ae82c95350a9950acb0302f65716
           })
           .catch(function (err) {
         // API call failed...
