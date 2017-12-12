@@ -161,7 +161,8 @@ router.route('/insert')
               }
 
             }
-            setTimeout(myTimeout1, 2000)
+            console.log('timeout setting: ',4000+dashboard['totalDisplayNumber']);
+            setTimeout(myTimeout1, 4000+dashboard['totalDisplayNumber']);
             function myTimeout1() {
               console.log("waiting 2 seconds");
               console.log('finished for loop');
@@ -187,10 +188,10 @@ router.route('/insert')
               console.log('hagridTotalResults.length: ',hagridTotalResults.length);
               hagridTotalObj['Results']=hagridTotalResults;
               console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length)
-              res.json(hagridTotalObj);
+              var responseObj = {hagrid:hagridTotalObj,syndication:{a:"hi"},rejected:{b:"bye"},dashboard:{c:"brown"},family:{d:"cow"}};
+              res.json(responseObj);
+            
             }
-            
-            
             
           })
           .catch(function (err) {
