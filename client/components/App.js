@@ -26,8 +26,9 @@ constructor() {
                   stopped:10,
                   family:30,
                   total:65,
-                  familyIds:12345,
-                  loading:false
+                  familyIds:[],
+                  loading:false,
+                  productPageUrl:''
 
                  };
 this.onClick=this.onClick.bind(this);
@@ -37,10 +38,10 @@ onClick(e){
     this.getReviews(this);
   }
 getReviews(e){
-this.setState({loading:true});
-
 let client=document.getElementById('client').value;
 let productId=document.getElementById('prodid').value;
+if(client && productId){
+this.setState({loading:true});
 axios.post('/getProductDetails',
   querystring.stringify({
     clientName: client,
@@ -51,7 +52,10 @@ axios.post('/getProductDetails',
     }
   }).then(function(response) {
     e.setState({image:response.data.Results[0].ImageUrl,
-                   productName:response.data.Results[0].Name});
+                productName:response.data.Results[0].Name,
+                familyIds:response.data.Results[0].FamilyIds,
+                productPageUrl:response.data.Results[0].ProductPageUrl});
+console.log("PRODUCT DATA",response.data.Results[0].ProductPageUrl);
 
 });
   axios.post('/insert',
@@ -71,13 +75,15 @@ axios.post('/getProductDetails',
                   loading:false,
                   productId:productId});
   });
+}
 
 
 }
 
 render() {
   let productData={image:this.state.image,
-                   productName:this.state.productName
+                   productName:this.state.productName,
+                   productPageUrl:this.state.productPageUrl
                   }
 
   let snapShot={native:this.state.native,
@@ -88,7 +94,7 @@ render() {
                 family:this.state.total-this.state.native-this.state.syndicated,
                 total:this.state.total,
                 displayableNative:this.state.native-this.state.ratingOnly,
-                familyInfo:this.state.familyIds
+                familyIds:this.state.familyIds,
 
                 }
 
