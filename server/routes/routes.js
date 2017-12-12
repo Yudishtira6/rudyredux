@@ -161,7 +161,9 @@ router.route('/insert')
               }
 
             }
-            setTimeout(myTimeout1, 2000)
+            var timeDelay = 4000 + dashboard['totalDisplayNumber'];
+            console.log('timeDelay: ',timeDelay);
+            setTimeout(myTimeout1, timeDelay);
             function myTimeout1() {
               console.log("waiting 2 seconds");
               console.log('finished for loop');
