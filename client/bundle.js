@@ -40030,17 +40030,6 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
     if (client && productId) {
       this.setState({ loading: true });
-      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/ratings', querystring.stringify({
-        clientName: client,
-        productId: productId
-      }), {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      }).then(function (response) {
-
-        e.setState({ ratingsOnlyReviews: response.data.Results });
-      });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/getProductDetails', querystring.stringify({
         clientName: client,
         productId: productId
@@ -40050,10 +40039,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         }
       }).then(function (response) {
 
-        e.setState({ image: response.data.Results[0].ImageUrl,
-          productName: response.data.Results[0].Name,
-          familyIds: response.data.Results[0].FamilyIds,
-          productPageUrl: response.data.Results[0].ProductPageUrl });
+        e.setState({ image: response.data.hagrid.Results[0].ImageUrl,
+          productName: response.data.hagrid.Results[0].Name,
+          familyIds: response.data.hagrid.Results[0].FamilyIds,
+          productPageUrl: response.data.hagrid.Results[0].ProductPageUrl });
       });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
         clientName: client,
@@ -40067,7 +40056,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         var familyReviews = [];
         var syndicatedReviews = [];
         var nativeReviews = [];
-        response.data.Results.filter(review => {
+        response.data.hagrid.Results.filter(review => {
           if (review.IsSyndicated) {
             syndicatedReviews.push(review);
           } else if (review.ProductId != productId && !review.IsSyndicated) {
@@ -40077,9 +40066,9 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           }
         });
 
-        e.setState({ reviews: response.data.Results,
-          displayingReviews: response.data.Results,
-          total: response.data.TotalResults,
+        e.setState({ reviews: response.data.hagrid.Results,
+          displayingReviews: response.data.hagrid.Results,
+          total: response.data.hagrid.TotalResults,
           loading: false,
           productId: productId,
           familyReviews: familyReviews,
