@@ -19,11 +19,12 @@ constructor() {
                   familyReviews:[],
                   nativeReviews:[],
                   displayingReviews:[],
+                  ratingsOnlyReviews:[],
                   image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
                   productName:"Fake Product Please enter information in the form above!",
                   native:0,
                   syndicated:0,
-                  ratingOnly:5,
+                  ratingOnly:0,
                   stopped:10,
                   family:0,
                   total:0,
@@ -49,6 +50,18 @@ getReviews(e){
 
     if(client && productId){
         this.setState({loading:true});
+        axios.post('/ratings',
+          querystring.stringify({
+            clientName: client,
+            productId: productId
+          }), {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          }).then(function(response) {
+
+            e.setState({ratingsOnlyReviews:response.data.Results});
+        });
         axios.post('/getProductDetails',
           querystring.stringify({
             clientName: client,
@@ -126,7 +139,7 @@ render() {
 
   let snapShot={native:this.state.native,
                 syndicated:this.state.syndicated,
-                ratingOnly:0,
+                ratingOnly:this.state.ratingsOnlyReviews.length,
                 stopped:this.state.stopped,
                 displayableSyndicated:this.state.syndicated,
                 family:this.state.family,
