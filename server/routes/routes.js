@@ -70,16 +70,20 @@ router.route('/insert')
 
         for (i = 0; i < len; i++) {
               if ((data.products[i]['sources'][0]) === ('FAMILY')) {
-                family.push((data.products[i]['client']), (data.products[i]['externalId']))
+                var innerFamily = [];
+                family.push(innerFamily)
+                innerFamily.push((data.products[i]['client']), (data.products[i]['externalId']))
               }
               else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC')) {
-                syndication.push((data.products[i]['client']), (data.products[i]['externalId']))
+                var innerSyndication = [];
+                syndication.push(innerSyndication)
+                innerSyndication.push((data.products[i]['client']), (data.products[i]['externalId']))
               }
               source.syndication = syndication;
               source.family = family;
           }
  
-        console.log(data.products)
+        console.log(syndication)
         console.log('working')
         console.log(source)
         // Step 2 (hagrid syndicated call)
