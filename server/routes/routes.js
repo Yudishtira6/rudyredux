@@ -78,7 +78,7 @@ router.route('/insert')
               source.syndication = syndication;
               source.family = family;
           }
- 
+
         console.log(data.products)
         console.log('working')
         console.log(source)
@@ -157,7 +157,7 @@ router.route('/insert')
               }
 
             }
-            setTimeout(myTimeout1, 10000)
+            setTimeout(myTimeout1, 2000)
             function myTimeout1() {
               console.log("waiting 2 seconds");
               console.log('finished for loop');
