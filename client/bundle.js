@@ -24098,7 +24098,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     }).then(function (response) {
       console.log("I RAN PRODUCT DETAILS!!");
       var responseObj = JSON.stringify(response);
-      console.log(responseObj);
+      this.setState({ image: response.data.ImageUrl,
+        productName: response.data.Name });
     });
     __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
       clientName: client,

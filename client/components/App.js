@@ -53,7 +53,8 @@ axios.post('/getProductDetails',
   }).then(function(response) {
     console.log("I RAN PRODUCT DETAILS!!");
     var responseObj = JSON.stringify(response);
-    console.log(responseObj);
+    this.setState({image:response.data.ImageUrl,
+                   productName:response.data.Name});
 
 });
   axios.post('/insert',
