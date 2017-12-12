@@ -98,8 +98,8 @@ router.route('/insert')
             // console.log('hagsynd: ',JSON.stringify(hagsynd));
             hagridTotalObj = hagsynd;
             hagridTotalResults = hagsynd['Results'];
-            console.log('hagridTotalResults[0]: ',hagridTotalResults[0]);
-            console.log('hagridTotalResults[0]["Id"]: ',hagridTotalResults[0]["Id"]);
+            // console.log('hagridTotalResults[0]: ',hagridTotalResults[0]);
+            // console.log('hagridTotalResults[0]["Id"]: ',hagridTotalResults[0]["Id"]);
             console.log('hagridTotalResults.length is ', hagridTotalResults.length);
             // need to march through the object - limit 100 is max
             if(dashboard['totalDisplayNumber']<=100){
@@ -141,38 +141,53 @@ router.route('/insert')
                     console.log('hagsynd["Results"][0]["Id"]: ',hagsynd['Results'][0]["Id"]);
                     console.log('hagridTotalResults.length is ', hagridTotalResults.length);
                     console.log('hagsynd["Results"].length is ',hagsynd["Results"].length);
-                    hagridTotalResults.push.apply(hagridTotalResults, hagsynd['Results']);
+                    completeCall(hagsynd, i);
                   })
                   .catch(function (err) {
                     // API call failed...
                 });
               }
+
+              function completeCall(data, loopVal){
+                hagridTotalResults.push.apply(hagridTotalResults, data["Results"]);
+                console.log('hitting completeCall function, loopVal #',loopVal);
+                console.log('data["Results"].length: ',data["Results"].length);
+                console.log('hagridTotalResults.length is ', hagridTotalResults.length);
+                return;
+              }
+
             }
-
-
-            var len = hagridTotalResults.length;
-            console.log('len: ',len);
-            for (let i=0;i<len;i++){
-              totalId.push(hagridTotalResults[i]["Id"]);
-              console.log('totalId: ',totalId);
-              if(hagridTotalResults[i]["IsSyndicated"]){
-                syndTotal++
+            setTimeout(myTimeout1, 2000)
+            function myTimeout1() {
+              console.log("waiting 2 seconds");
+              console.log('finished for loop');
+              console.log('waiting for calls');
+              var len = hagridTotalResults.length;
+              console.log('len: ',len);
+              for (let i=0;i<len;i++){
+                totalId.push(hagridTotalResults[i]["Id"]);
+                if(hagridTotalResults[i]["IsSyndicated"]){
+                  syndTotal++
+                  if(hagridTotalResults[i]["IsRatingsOnly"]){
+                    syndRatOnly++
+                  }
+                }
                 if(hagridTotalResults[i]["IsRatingsOnly"]){
-                  syndRatOnly++
+                  natRatOnly++
                 }
               }
-              if(hagridTotalResults[i]["IsRatingsOnly"]){
-                natRatOnly++
-              }
+              console.log('syndTotal: ',syndTotal);
+              console.log('syndRatOnly: ',syndRatOnly);
+              console.log('natRatOnly: ',natRatOnly);
+              console.log('totalId.length: ',totalId.length);
+              console.log('hagridTotalResults.length: ',hagridTotalResults.length);
+              hagridTotalObj['Results']=hagridTotalResults;
+              console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length)
+              res.json(hagridTotalObj);
             }
-            console.log('syndTotal: ',syndTotal);
-            console.log('syndRatOnly: ',syndRatOnly);
-            console.log('natRatOnly: ',natRatOnly);
-            console.log('totalId: ',totalId);
-            console.log('hagridTotalResults.length: ',hagridTotalResults.length);
-            hagridTotalObj['Results']=hagridTotalResults;
-            console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length)
-            res.json(hagridTotalObj);
+            
+            
+            
           })
           .catch(function (err) {
         // API call failed...
