@@ -50,18 +50,6 @@ getReviews(e){
 
     if(client && productId){
         this.setState({loading:true});
-        axios.post('/ratings',
-          querystring.stringify({
-            clientName: client,
-            productId: productId
-          }), {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            }
-          }).then(function(response) {
-
-            e.setState({ratingsOnlyReviews:response.data.Results});
-        });
         axios.post('/getProductDetails',
           querystring.stringify({
             clientName: client,
