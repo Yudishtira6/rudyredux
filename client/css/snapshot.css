@@ -44,8 +44,14 @@
 
 .main-number {
   font-size: 4rem;
-  margin-top: .5rem;
+  padding-top: 1.5rem;
   margin-bottom: 0;
+  margin-top: 0;
+  transition: .3s ease-in-out;
+}
+
+.snap-main:hover {
+  background: #003860;
 }
 
 .main-label {
@@ -83,10 +89,19 @@
   margin-top: 12px;
 }
 
+.total-main {
+  padding-bottom: 26px;
+  transition: .3s ease-in-out;
+}
+
+.total-main:hover {
+  background: #003860;
+}
+
 .total-number {
   font-size: 6rem;
   margin: 0;
-  margin-top: 3rem;
+  padding-top: 4rem;
 }
 
 .total-label {
