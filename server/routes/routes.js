@@ -48,6 +48,7 @@ router.route('/insert')
   var totalReviews = {};
   var hagridTotalObj = {};
   var familyObj = {};
+  var syndObj = {};
   var hagridTotalResults = [];
   var source = new Object ();
   // Step 1 (Oracle call to get sources)
@@ -225,37 +226,85 @@ router.route('/insert')
                       // API call failed...
                   });
               }
-              var timeDelay = 4000 + dashboard['totalDisplayNumber'];
-            console.log('timeDelay: ',timeDelay);
-            setTimeout(myTimeout1, timeDelay);
-            function myTimeout1() {
-              console.log("waiting "+timeDelay+" milliseconds");
-              console.log('finished for loop');
-              console.log('waiting for calls');
-              var len = hagridTotalResults.length;
-              console.log('len: ',len);
-              for (let i=0;i<len;i++){
-                totalId.push(hagridTotalResults[i]["Id"]);
-                if(hagridTotalResults[i]["IsSyndicated"]){
-                  syndTotal++
+              // step 3 syndication path
+              for(let i = 0, len = source.syndication.length; i<len;i++){
+                console.log('outer family loop #',i);
+                console.log('source.syndication[i][0]: ',source.syndication[i][0]);
+                console.log('source.syndication[i][1]: ',source.syndication[i][1]);
+                let hagopt = {
+                  uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+source.syndication[i][0]+'&ApiVersion=5.4&filter=productid:'+source.syndication[i][1]+'&limit=100&excludeFamily=true',
+                  headers: {
+                      'User-Agent': 'Request-Promise'
+                  },
+                  json: true // Automatically parses the JSON string in the response
+                };
+                rp(hagopt)
+                  .then(function (hagsyn) {
+                    // console.log('hagsyn["TotalResults"]: ', hagsyn["TotalResults"]);
+                    console.log('first rp call for i = ',i);
+                    syndObj[source.syndication[i][1]] = hagsyn;
+                    // march over results
+                    for(let j = 1; j<hagsyn["TotalResults"]/100;j++){
+                      console.log('Inner synd loop #',j);
+                      var hagsynoffopt = {
+                        uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+source.syndication[i][0]+'&ApiVersion=5.4&filter=productid:'+source.syndication[i][1]+'&limit=100&excludeFamily=true&offset='+(j*100),
+                        headers: {
+                            'User-Agent': 'Request-Promise'
+                        },
+                        json: true // Automatically parses the JSON string in the response
+                      };
+                      console.log('hagsynoffopt: ',hagsynoffopt);
+                      rp(hagsynoffopt)
+                        .then(function (hagsynoffset) {
+                          console.log('hitting offset rp');
+                          console.log('i: ',i);
+                          console.log('hagsynoffset["Results"].length: ', hagsynoffset["Results"].length);
+                          console.log('syndObj[source.syndication[i][1]]["Results"].length: ', syndObj[source.syndication[i][1]]["Results"].length);
+                          syndObj[source.syndication[i][1]]['Results'].push.apply(syndObj[source.syndication[i][1]]['Results'], hagsynoffset["Results"]);
+                          console.log('hagsynoffset["Results"].length: ',hagsynoffset["Results"].length);
+                          console.log('syndObj[source.syndication[i][1]]["Results"].length: ', syndObj[source.syndication[i][1]]['Results'].length);
+
+                        })
+                        .catch(function (err) {
+                          // API call failed...
+                        });
+                    }
+                  })
+                  .catch(function (err) {
+                      // API call failed...
+                  });
+              }
+              var timeDelay = 8000 + dashboard['totalDisplayNumber'];
+              console.log('timeDelay: ',timeDelay);
+              setTimeout(myTimeout1, timeDelay);
+              function myTimeout1() {
+                console.log("waiting "+timeDelay+" milliseconds");
+                console.log('finished for loop');
+                console.log('waiting for calls');
+                var len = hagridTotalResults.length;
+                console.log('len: ',len);
+                for (let i=0;i<len;i++){
+                  totalId.push(hagridTotalResults[i]["Id"]);
+                  if(hagridTotalResults[i]["IsSyndicated"]){
+                    syndTotal++
+                    if(hagridTotalResults[i]["IsRatingsOnly"]){
+                      syndRatOnly++
+                    }
+                  }
                   if(hagridTotalResults[i]["IsRatingsOnly"]){
-                    syndRatOnly++
+                    natRatOnly++
                   }
                 }
-                if(hagridTotalResults[i]["IsRatingsOnly"]){
-                  natRatOnly++
-                }
+                console.log('syndTotal: ',syndTotal);
+                console.log('syndRatOnly: ',syndRatOnly);
+                console.log('natRatOnly: ',natRatOnly);
+                console.log('totalId.length: ',totalId.length);
+                console.log('hagridTotalResults.length: ',hagridTotalResults.length);
+                hagridTotalObj['Results']=hagridTotalResults;
+                console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length);
+                var responseObj = {hagrid:hagridTotalObj, syndObj, familyObj, rejected: {c:"brown"}, dashboard: {nativeReviews:0, syndicatedReviews:0, familyReviews:0, totalReviews:0, ratingsOnlyReviews:0, displayableNativeReviews:0, blockedSyndicatedReviews:0, displayableSyndicatedReviews:0}};
+                res.json(responseObj);
               }
-              console.log('syndTotal: ',syndTotal);
-              console.log('syndRatOnly: ',syndRatOnly);
-              console.log('natRatOnly: ',natRatOnly);
-              console.log('totalId.length: ',totalId.length);
-              console.log('hagridTotalResults.length: ',hagridTotalResults.length);
-              hagridTotalObj['Results']=hagridTotalResults;
-              console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length);
-              var responseObj = {hagrid:hagridTotalObj, syndication:{a:"how"}, familyObj, rejected: {c:"brown"}, dashboard: {nativeReviews:0, syndicatedReviews:0, familyReviews:0, totalReviews:0, ratingsOnlyReviews:0, displayableNativeReviews:0, blockedSyndicatedReviews:0, displayableSyndicatedReviews:0}};
-              res.json(responseObj);
-            }
           })
           .catch(function (err) {
         // API call failed...
