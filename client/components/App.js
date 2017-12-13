@@ -5,7 +5,7 @@ import axios from 'axios';
 import Grid from './Grid';
 import Product from './Product';
 import SnapShot from './SnapShot';
-
+import $ from 'jquery';
 
 var querystring=require('querystring');
 export default class App extends React.Component {
@@ -25,7 +25,7 @@ constructor() {
                   native:0,
                   syndicated:0,
                   ratingOnly:0,
-                  stopped:10,
+                  stopped:0,
                   family:0,
                   total:0,
                   familyIds:[],
@@ -50,6 +50,7 @@ getReviews(e){
 
     if(client && productId && productId!=this.state.productId){
         this.setState({loading:true});
+
         axios.post('/getProductDetails',
           querystring.stringify({
             clientName: client,
@@ -59,7 +60,7 @@ getReviews(e){
               "Content-Type": "application/x-www-form-urlencoded"
             }
           }).then(function(response) {
-            console.log(response);
+
             e.setState({image:response.data.Results[0].ImageUrl,
                         productName:response.data.Results[0].Name,
                         familyIds:response.data.Results[0].FamilyIds,
@@ -83,7 +84,7 @@ getReviews(e){
                   syndicatedReviews.push(review);
                 }else if(review.ProductId!=productId && !review.IsSyndicated){
                   familyReviews.push(review);
-                }else if(review.ProductId===productId){
+                }else if(review.ProductId===productId && !review.IsSyndicated){
                   nativeReviews.push(review);
                 }
 
@@ -122,6 +123,7 @@ if(reviews==="native"){
 
 
 render() {
+
   let productData={image:this.state.image,
                    productName:this.state.productName,
                    productPageUrl:this.state.productPageUrl
