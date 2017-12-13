@@ -48,6 +48,7 @@ router.route('/insert')
   var totalReviews = {};
   var hagridTotalObj = {};
   var hagridTotalResults = [];
+  var source = new Object ();
   // Step 1 (Oracle call to get sources)
   var options = {
     uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
@@ -61,7 +62,7 @@ router.route('/insert')
     .then(function (data) {
       console.log('data',JSON.stringify(data));
 
-        var source = new Object ();
+        
         var family = [];
         var syndication = [];
 
@@ -191,9 +192,7 @@ router.route('/insert')
               //End of Step 2
 
               //Step 3
-              console.log('Source: ',source);
-              console.log('Source["Family"][0]["innerFamily"][0]: ',Source["Family"][0]["innerFamily"][0]);
-              console.log('Source["Syndication"][0]["innerSyndication"][0]: ',Source["Syndication"][0]["innerSyndication"][0]);
+              console.log('Source: ', source);
               console.log('hagridTotalObj["Results"].length is ',hagridTotalObj["Results"].length);
               var responseObj = {hagrid:hagridTotalObj, syndication:{a:"how"}, family: {b:"now"}, rejected: {c:"brown"}, dashboard: {d:"cow"}};
               res.json(responseObj);
