@@ -83,7 +83,7 @@ getReviews(e){
                   syndicatedReviews.push(review);
                 }else if(review.ProductId!=productId && !review.IsSyndicated){
                   familyReviews.push(review);
-                }else if(review.ProductId===productId){
+                }else if(review.ProductId===productId && !review.IsSyndicated){
                   nativeReviews.push(review);
                 }
 
