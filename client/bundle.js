@@ -40001,7 +40001,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       displayingReviews: [],
       ratingsOnlyReviews: [],
       image: "https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
-      productName: "Fake Product Please enter information in the form above!",
+      productName: "Please enter information in the form above!",
       native: 0,
       syndicated: 0,
       ratingOnly: 0,
@@ -46594,7 +46594,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-label' },
-            'Displayable Native Reviews'
+            'Displayable Native'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46608,7 +46608,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-label' },
-            'Ratings Only Native Reviews'
+            'Ratings-only Native'
           )
         )
       ),
@@ -46640,7 +46640,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-label' },
-            'Displayable Syndicated Reviews'
+            'Displayable Syndicated'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46654,7 +46654,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-label' },
-            'Blocked Syndicated Reviews'
+            'Blocked Syndicated'
           )
         )
       ),
@@ -46672,7 +46672,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
             { className: 'main-label' },
-            'Family Reviews'
+            'FAMILY'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46700,7 +46700,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
             { className: 'total-label' },
-            'Total Reviews Displaying'
+            'TOTAL REVIEWS DISPLAYING'
           )
         )
       )
@@ -46737,7 +46737,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'h3',
         { className: 'snapshot-header' },
-        'Product SnapShot',
+        'Product Snapshot',
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-camera', 'aria-hidden': 'true' })
       ),
       snapShot
