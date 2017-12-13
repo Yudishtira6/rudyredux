@@ -1,6 +1,10 @@
 .snapshot-header {
-  margin-bottom: 7px;
+  margin-bottom: 2rem;
   font-size: 25px;
+  color: #003d4c;
+  font-weight: bold;
+  font-size: 36px;
+  text-align: center;
 }
 
 .fa-camera {
@@ -14,7 +18,7 @@
   border: 1px solid black;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  background: #0d2a3c;
+  background: #007c9a;
   color: white;
   box-shadow: -3px 3px 12px 0px black;
 }
@@ -40,8 +44,14 @@
 
 .main-number {
   font-size: 4rem;
-  margin-top: .5rem;
+  padding-top: .5rem;
   margin-bottom: 0;
+  margin-top: 0;
+  transition: .3s ease-in-out;
+}
+
+.snap-main:hover {
+  background: #003860;
 }
 
 .main-label {
@@ -58,11 +68,12 @@
 
 .secondary-container:last-child {
   border-right: none;
-  background-color: #962929;
+  background-color: #be3434;
 }
 
 .secondary-number {
   margin-bottom: 0;
+  margin-top: 25px;
 }
 
 .secondary-label {
@@ -79,10 +90,20 @@
   margin-top: 12px;
 }
 
+.total-main {
+  padding-bottom: 26px;
+  transition: .3s ease-in-out;
+}
+
+.total-main:hover {
+  background: #003860;
+}
+
 .total-number {
-  font-size: 4rem;
+  font-size: 6rem;
   margin: 0;
-  margin-top: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
 }
 
 .total-label {

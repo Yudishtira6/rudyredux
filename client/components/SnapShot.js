@@ -24,12 +24,11 @@ switchAll(){
 this.props.display('all');
 }
 render(){
-let familyIds=<span className="familyids">No Family Information</span>;
+let familyIds=0;
 
   if (this.props.data.familyIds.length>=1){
-   familyIds=<span className="familyid">{this.props.data.familyIds[0]}</span>
-
-    }
+   familyIds=this.props.data.familyIds.length;
+}
 
 let snapShot=(
               <ul className="snapshot-container">
@@ -40,11 +39,11 @@ let snapShot=(
                   </div>
                   <div className="secondary-container">
                     <h4 className="secondary-number">{this.props.data.displayableNative}</h4>
-                    <h4 className="secondary-label">Displayable Native Reviews</h4>
+                    <h4 className="secondary-label">Displayable Native</h4>
                   </div>
                   <div className="secondary-container">
                     <h4 className="secondary-number">{this.props.data.ratingOnly}</h4>
-                    <h4 className="secondary-label">Ratings Only Native Reviews</h4>
+                    <h4 className="secondary-label">Ratings-only Native</h4>
                   </div>
                 </li>
 
@@ -55,27 +54,27 @@ let snapShot=(
                 </div>
                 <div className="secondary-container">
                   <h4 className="secondary-number">{this.props.data.displayableSyndicated}</h4>
-                  <h4 className="secondary-label">Displayable Syndicated Reviews</h4>
+                  <h4 className="secondary-label">Displayable Syndicated</h4>
                 </div>
                 <div className="secondary-container">
                   <h4 className="secondary-number">{this.props.data.stopped}</h4>
-                  <h4 className="secondary-label">Blocked Syndicated Reviews</h4>
+                  <h4 className="secondary-label">Blocked Syndicated</h4>
                 </div>
                 </li>
                 <li>
                   <div onClick={this.switchFamily} className="snap-main">
                     <h2 className="main-number">{this.props.data.family}</h2>
-                    <h3 className="main-label">Family Reviews</h3>
+                    <h3 className="main-label">FAMILY</h3>
                   </div>
                   <div className="family-information">
-                    <h4 className="family-title">Family ID</h4>
+                    <h4 className="family-title">Family IDs</h4>
                     {familyIds}
                   </div>
                 </li>
                 <li onClick={this.switchAll} className="total-container">
                   <div className="total-main">
                     <h2 className="total-number">{this.props.data.total}</h2>
-                    <h3 className="total-label">Total Reviews Displaying</h3>
+                    <h3 className="total-label">TOTAL REVIEWS DISPLAYING</h3>
                   </div>
                 </li>
               </ul>
@@ -101,7 +100,7 @@ let snapShot=(
                           );
           }
   return( <div>
-            <h3 className="snapshot-header">Product SnapShot<i className="fa fa-camera" aria-hidden="true"></i></h3>
+            <h3 className="snapshot-header">Product Snapshot<i className="fa fa-camera" aria-hidden="true"></i></h3>
             {snapShot}
           </div>
           );

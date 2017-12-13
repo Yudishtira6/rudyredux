@@ -2,11 +2,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import $ from 'jquery';
 import Grid from './Grid';
 import Product from './Product';
 import SnapShot from './SnapShot';
-
+import $ from 'jquery';
 
 var querystring=require('querystring');
 export default class App extends React.Component {
@@ -20,12 +19,13 @@ constructor() {
                   familyReviews:[],
                   nativeReviews:[],
                   displayingReviews:[],
+                  ratingsOnlyReviews:[],
                   image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
-                  productName:"Fake Product Please enter information in the form above!",
+                  productName:"Please enter information in the form above!",
                   native:0,
                   syndicated:0,
-                  ratingOnly:5,
-                  stopped:10,
+                  ratingOnly:0,
+                  stopped:0,
                   family:0,
                   total:0,
                   familyIds:[],
@@ -48,8 +48,9 @@ getReviews(e){
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
 
-    if(client && productId){
+    if(client && productId && productId!=this.state.productId){
         this.setState({loading:true});
+
         axios.post('/getProductDetails',
           querystring.stringify({
             clientName: client,
@@ -78,19 +79,20 @@ getReviews(e){
                 var familyReviews=[];
                 var syndicatedReviews=[];
                 var nativeReviews=[];
-              response.data.Results.filter((review)=>{
+              response.data.hagrid.Results.filter((review)=>{
                 if(review.IsSyndicated){
                   syndicatedReviews.push(review);
                 }else if(review.ProductId!=productId && !review.IsSyndicated){
                   familyReviews.push(review);
-                }else if(review.ProductId===productId){
+                }else if(review.ProductId===productId && !review.IsSyndicated){
                   nativeReviews.push(review);
                 }
+
               });
 
-              e.setState({reviews:response.data.Results,
-                          displayingReviews:response.data.Results,
-                          total:response.data.TotalResults,
+              e.setState({reviews:response.data.hagrid.Results,
+                          displayingReviews:response.data.hagrid.Results,
+                          total:response.data.hagrid.TotalResults,
                           loading:false,
                           productId:productId,
                           familyReviews:familyReviews,
@@ -99,6 +101,7 @@ getReviews(e){
                           syndicated:syndicatedReviews.length,
                           native:nativeReviews.length,
                           family:familyReviews.length,
+                          productId:productId
                           });
               });
         }
@@ -120,6 +123,7 @@ if(reviews==="native"){
 
 
 render() {
+
   let productData={image:this.state.image,
                    productName:this.state.productName,
                    productPageUrl:this.state.productPageUrl
@@ -127,7 +131,7 @@ render() {
 
   let snapShot={native:this.state.native,
                 syndicated:this.state.syndicated,
-                ratingOnly:0,
+                ratingOnly:this.state.ratingsOnlyReviews.length,
                 stopped:this.state.stopped,
                 displayableSyndicated:this.state.syndicated,
                 family:this.state.family,

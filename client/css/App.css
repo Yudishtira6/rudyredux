@@ -4,6 +4,8 @@
 }
 
 .submit {
+  background-color: #F19D44;
+  color: #fff;
   display: inline-block;
   border: 1px solid black;
   border-radius: 10px;
@@ -11,4 +13,11 @@
   font-size: 16px;
   padding: 3px 15px;
   cursor: pointer;
+  width: 110px;
+  text-align: center;
+}
+
+.submit:hover {
+	background-color: #EE7E08;
+    transition-duration: 0.3s;
 }

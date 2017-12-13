@@ -1,7 +1,8 @@
-/*body {
+body {
 	font-family: 'Roboto', sans-serif;
 }
 
+/*
 h1, h2, h3, h4, h5, h6 {
 	color: #33bca5;
 	font-weight: bold;
@@ -12,7 +13,9 @@ h2 { font-size: 35px; }*/
 
 #displayableReviewsTitle {
   text-align: center;
-  margin-top: 4rem;
+  margin: 6rem 0 2rem 0;
+  color: #003d4c;
+  font-weight: bold;
 }
 
 .blue {
@@ -33,6 +36,7 @@ table {
 .tableMain {
   width: 100%;
   margin: 0 auto;
+  margin-bottom: 60px;
 }
 
 th, td {
