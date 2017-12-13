@@ -46557,18 +46557,10 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     this.props.display('all');
   }
   render() {
-    let familyIds = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'span',
-      { className: 'familyids' },
-      'No Family Information'
-    );
+    let familyIds = 0;
 
     if (this.props.data.familyIds.length >= 1) {
-      familyIds = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'span',
-        { className: 'familyid' },
-        this.props.data.familyIds[0]
-      );
+      familyIds = this.props.data.familyIds.length;
     }
 
     let snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46689,7 +46681,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'family-title' },
-            'Family ID'
+            'Family IDs'
           ),
           familyIds
         )

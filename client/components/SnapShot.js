@@ -24,12 +24,11 @@ switchAll(){
 this.props.display('all');
 }
 render(){
-let familyIds=<span className="familyids">No Family Information</span>;
+let familyIds=0;
 
   if (this.props.data.familyIds.length>=1){
-   familyIds=<span className="familyid">{this.props.data.familyIds[0]}</span>
-
-    }
+   familyIds=this.props.data.familyIds.length;
+}
 
 let snapShot=(
               <ul className="snapshot-container">
@@ -68,7 +67,7 @@ let snapShot=(
                     <h3 className="main-label">Family Reviews</h3>
                   </div>
                   <div className="family-information">
-                    <h4 className="family-title">Family ID</h4>
+                    <h4 className="family-title">Family IDs</h4>
                     {familyIds}
                   </div>
                 </li>
