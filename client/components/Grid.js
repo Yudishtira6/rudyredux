@@ -5,7 +5,7 @@ import GridLine from './GridLine';
 
 const Grid =({title, productId, data})=>{
 let Items;
-
+console.log(data);
 if(data){
 Items=data.map((review)=>{
   return <GridLine key={review.Id} productId={productId} data={review}/>

@@ -1,5 +1,5 @@
 body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: rgb(245, 247, 248);
 }
 
@@ -28,8 +28,16 @@ h2 { font-size: 35px; }*/
   background: #fff2b1;
 }
 
+.red {
+  background: #be3534;
+}
+
 table {
   padding-bottom: 35px;
+}
+
+.highlight {
+  color: white;
 }
 
 /* Main styling for tables */
