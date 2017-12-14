@@ -4,20 +4,29 @@
 }
 
 .submit {
-  background-color: #F19D44;
+  background-color: #388800;
   color: #fff;
   display: inline-block;
-  border: 1px solid black;
-  border-radius: 10px;
-  margin-left: 1rem;
+  border: 1px solid #388800;
+  border-radius: 4px;
   font-size: 16px;
-  padding: 3px 15px;
+  padding: 12px 15px;
   cursor: pointer;
   width: 110px;
   text-align: center;
 }
 
 .submit:hover {
-	background-color: #EE7E08;
+	background-color: #296300;
     transition-duration: 0.3s;
 }
+
+
+/* Styling input text boxes to match portal look & feel */
+#client, #prodid {
+  color: #333;
+  padding-left: 8px;
+  height: 45px;
+  margin-right: 15px;
+}
+
