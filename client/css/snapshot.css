@@ -1,7 +1,7 @@
 .snapshot-header {
   margin-bottom: 2rem;
   font-size: 25px;
-  color: #003d4c;
+  color: #444;
   font-weight: bold;
   font-size: 36px;
   text-align: center;
@@ -16,11 +16,10 @@
   list-style: none;
   margin: 0 auto;
   border: 1px solid black;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  background: #007c9a;
-  color: white;
-  box-shadow: -3px 3px 12px 0px black;
+  /*border-top-right-radius: 10px;
+  border-top-left-radius: 10px;*/
+  color: #444;
+  /*box-shadow: -3px 3px 12px 0px black;*/
 }
 
 .snapshot-container>li {
@@ -28,10 +27,12 @@
   text-align: center;
   width: 25%;
   box-sizing: border-box;
-  border-right: 1px solid white;
+  border-right: 1px solid #888;
   margin: 0 auto;
   position: relative;
   cursor: pointer;
+  /*background-color: #e5f3f7;*/
+  background: #e5f3f7;
 }
 
 .snapshot-container>li:last-of-type {
@@ -39,7 +40,7 @@
 }
 
 .snap-main {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #888;
 }
 
 .main-number {
@@ -51,7 +52,7 @@
 }
 
 .snap-main:hover {
-  background: #003860;
+  background: #E0E5E6;
 }
 
 .main-label {
@@ -68,7 +69,8 @@
 
 .secondary-container:last-child {
   border-right: none;
-  background-color: #be3434;
+  background-color: #ab3900;
+  color: #fff;
 }
 
 .secondary-number {
@@ -96,7 +98,7 @@
 }
 
 .total-main:hover {
-  background: #003860;
+  background: #E0E5E6;
 }
 
 .total-number {
