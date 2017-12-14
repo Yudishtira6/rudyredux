@@ -9,6 +9,7 @@ this.switchNative=this.switchNative.bind(this);
 this.switchFamily=this.switchFamily.bind(this);
 this.switchAll=this.switchAll.bind(this);
 this.switchSyndicated=this.switchSyndicated.bind(this);
+this.switchBlocked=this.switchBlocked.bind(this);
 }
 switchNative(){
 
@@ -23,13 +24,17 @@ this.props.display('syndicated');
 switchAll(){
 this.props.display('all');
 }
+switchBlocked(){
+this.props.display('blocked');
+}
 render(){
 let familyIds=0;
 
   if (this.props.data.familyIds.length>=1){
    familyIds=this.props.data.familyIds.length;
 }
-
+let totalSyndicated=this.props.data.syndicated + this.props.data.stopped;
+let totalNative=this.props.data.displayableNative + this.props.data.ratingOnly;
 let snapShot=(
               <ul className="snapshot-container">
                 <li onClick={this.switchNative} className="native">
@@ -38,8 +43,8 @@ let snapShot=(
                     <h3 className="main-label">NATIVE</h3>
                   </div>
                   <div className="secondary-container">
-                    <h4 className="secondary-number">{this.props.data.displayableNative}</h4>
-                    <h4 className="secondary-label">Displayable Native</h4>
+                    <h4 className="secondary-number">{totalNative}</h4>
+                    <h4 className="secondary-label">Total Native</h4>
                   </div>
                   <div className="secondary-container">
                     <h4 className="secondary-number">{this.props.data.ratingOnly}</h4>
@@ -53,10 +58,10 @@ let snapShot=(
                   <h3 className="main-label">SYNDICATED</h3>
                 </div>
                 <div className="secondary-container">
-                  <h4 className="secondary-number">{this.props.data.displayableSyndicated}</h4>
-                  <h4 className="secondary-label">Displayable Syndicated</h4>
+                  <h4 className="secondary-number">{totalSyndicated}</h4>
+                  <h4 className="secondary-label">Total Syndicated</h4>
                 </div>
-                <div className="secondary-container">
+                <div className="secondary-container" onClick={this.switchBlocked}>
                   <h4 className="secondary-number">{this.props.data.stopped}</h4>
                   <h4 className="secondary-label">Blocked Syndicated</h4>
                 </div>

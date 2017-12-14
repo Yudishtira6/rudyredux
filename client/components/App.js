@@ -12,14 +12,15 @@ export default class App extends React.Component {
 constructor() {
     super();
     this.state = {
-                  client:"cabelas",
-                  productId:"973880",
+                  client:"",
+                  productId:"",
                   reviews:[],
                   syndicatedReviews:[],
                   familyReviews:[],
                   nativeReviews:[],
                   displayingReviews:[],
                   ratingsOnlyReviews:[],
+                  blockedReviews:[],
                   image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
                   productName:"Please enter information in the form above!",
                   native:0,
@@ -75,21 +76,22 @@ getReviews(e){
                 "Content-Type": "application/x-www-form-urlencoded"
               }
             }).then(function(response) {
-                console.log(response);
+                console.log(response,"Product ID",productId);
                 var familyReviews=[];
                 var syndicatedReviews=[];
                 var nativeReviews=[];
-              response.data.hagrid.Results.filter((review)=>{
-                if(review.IsSyndicated){
-                  syndicatedReviews.push(review);
-                }else if(review.ProductId!=productId && !review.IsSyndicated){
-                  familyReviews.push(review);
-                }else if(review.ProductId===productId && !review.IsSyndicated){
-                  nativeReviews.push(review);
-                }
 
-              });
+                response.data.hagrid.Results.filter((review)=>{
+                  console.log(review.ProductId.toLowerCase(),productId.toLowerCase());
+                  if(review.IsSyndicated){
+                    syndicatedReviews.push(review);
+                  }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
+                    familyReviews.push(review);
+                  }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
+                    nativeReviews.push(review);
+                  }
 
+                });
               e.setState({reviews:response.data.hagrid.Results,
                           displayingReviews:response.data.hagrid.Results,
                           total:response.data.hagrid.TotalResults,
@@ -101,7 +103,7 @@ getReviews(e){
                           syndicated:syndicatedReviews.length,
                           native:nativeReviews.length,
                           family:familyReviews.length,
-                          productId:productId
+                          productId:productId.toLowerCase()
                           });
               });
         }
@@ -110,19 +112,22 @@ getReviews(e){
     }
 switchReviews(reviews){
 if(reviews==="native"){
-  this.setState({displayingReviews:this.state.nativeReviews,reviewFilter:"Native Reviews"})
+  this.setState({displayingReviews:this.state.nativeReviews,reviewFilter:"Native Reviews"});
   }else if(reviews==="syndicated"){
-  this.setState({displayingReviews:this.state.syndicatedReviews, reviewFilter:"Syndicated Reviews"})
+  this.setState({displayingReviews:this.state.syndicatedReviews, reviewFilter:"Syndicated Reviews"});
 
   }else if(reviews==="all"){
   this.setState({displayingReviews:this.state.reviews, reviewFilter:"All Displayable Reviews"});
   }else if(reviews==="family"){
-  this.setState({displayingReviews:this.state.familyReviews, reviewFilter:"Family Reviews"})
+  this.setState({displayingReviews:this.state.familyReviews, reviewFilter:"Family Reviews"});
+  }else if(reviews="blocked"){
+  this.setState({displayingReviews:this.state.blockedReviews, reviewFilter:"Blocked Syndicated Reviews"});
   }
 }
 
 
 render() {
+console.log("BLOCKED",this.state.blockedReviews);
 
   let productData={image:this.state.image,
                    productName:this.state.productName,
@@ -132,7 +137,7 @@ render() {
   let snapShot={native:this.state.native,
                 syndicated:this.state.syndicated,
                 ratingOnly:this.state.ratingsOnlyReviews.length,
-                stopped:this.state.stopped,
+                stopped:this.state.blockedReviews.length,
                 displayableSyndicated:this.state.syndicated,
                 family:this.state.family,
                 total:this.state.total,
