@@ -3,6 +3,10 @@ body {
   background-color: rgb(245, 247, 248);
 }
 
+a {
+  color: #0084ab !important;
+}
+
 /*
 h1, h2, h3, h4, h5, h6 {
 	color: #33bca5;
@@ -16,20 +20,22 @@ h2 { font-size: 35px; }*/
   text-align: center;
   margin: 6rem 0 2rem 0;
   color: #444;
-  font-weight: bold;
 }
 
 .blue {
   background: #d9edf7;
+  height: 5rem;
   ;
 }
 
 .yellow {
   background: #fff2b1;
+  height: 5rem;
 }
 
 .red {
   background: #be3534;
+  height: 5rem;
 }
 
 table {

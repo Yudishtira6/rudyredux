@@ -46610,7 +46610,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
             { className: 'main-label' },
-            'NATIVE'
+            'NATIVE REVIEWS'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46656,7 +46656,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
             { className: 'main-label' },
-            'SYNDICATED'
+            'SYNDICATED REVIEWS'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46702,7 +46702,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
             { className: 'main-label' },
-            'FAMILY'
+            'FAMILY REVIEWS'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

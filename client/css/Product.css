@@ -1,6 +1,7 @@
 .app-title {
   display: inline-block;
   margin-bottom: 0;
+  color: #444;
 }
 
 .logo {
@@ -23,10 +24,11 @@ form {
 .sub-title {
   margin-top: 0;
   font-size: 19px;
+  color: #444;
 }
 
 .product-info {
-  border-top: 1px solid black;
+  border-top: 1px solid #444;
   margin-bottom: 40px;
 }
 

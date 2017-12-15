@@ -40,7 +40,7 @@ let snapShot=(
                 <li onClick={this.switchNative} className="native">
                   <div className="snap-main">
                     <h2 className="main-number">{this.props.data.native}</h2>
-                    <h3 className="main-label">NATIVE</h3>
+                    <h3 className="main-label">NATIVE REVIEWS</h3>
                   </div>
                   <div className="secondary-container">
                     <h4 className="secondary-number">{totalNative}</h4>
@@ -55,7 +55,7 @@ let snapShot=(
                 <li>
                 <div onClick={this.switchSyndicated} className="snap-main">
                   <h2 className="main-number">{this.props.data.syndicated}</h2>
-                  <h3 className="main-label">SYNDICATED</h3>
+                  <h3 className="main-label">SYNDICATED REVIEWS</h3>
                 </div>
                 <div className="secondary-container">
                   <h4 className="secondary-number">{totalSyndicated}</h4>
@@ -69,7 +69,7 @@ let snapShot=(
                 <li>
                   <div onClick={this.switchFamily} className="snap-main">
                     <h2 className="main-number">{this.props.data.family}</h2>
-                    <h3 className="main-label">FAMILY</h3>
+                    <h3 className="main-label">FAMILY REVIEWS</h3>
                   </div>
                   <div className="family-information">
                     <h4 className="family-title">Family IDs</h4>
