@@ -28,7 +28,7 @@ return(
             <h3 className="product-details">Product ID: {this.props.data.productId}</h3>
             <h3 className="product-details">Family IDs: {familyIds}</h3>
             <h3 className="product-details">Syndication Sources: {sourceClient}</h3>
-            <h3 className="product-details">Matching Strategies</h3>
+            <h3 className="product-details">Matching Strategies: </h3>
           </div>
         </div>
       );
