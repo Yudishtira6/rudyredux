@@ -4,6 +4,7 @@
   color: #444;
   font-weight: bold;
   font-size: 30px;
+
 }
 
 .fa-camera {
@@ -14,11 +15,11 @@
   padding: 0;
   list-style: none;
   margin: 0 auto;
-  border: 1px solid black;
+  border: 1px solid #0084ab;
   /*border-top-right-radius: 10px;
   border-top-left-radius: 10px;*/
-  color: #444;
-  /*box-shadow: -3px 3px 12px 0px black;*/
+  color: #0084ab;
+  box-shadow: -3px 3px 12px 0px #888;
 }
 
 .snapshot-container>li {
@@ -26,12 +27,11 @@
   text-align: center;
   width: 25%;
   box-sizing: border-box;
-  border-right: 1px solid #888;
+  border-right: 1px solid #0084ab;
   margin: 0 auto;
   position: relative;
   cursor: pointer;
-  /*background-color: #e5f3f7;*/
-  background: #e5f3f7;
+  background: rgb(245, 247, 248);
 }
 
 .snapshot-container>li:last-of-type {
@@ -39,7 +39,8 @@
 }
 
 .snap-main {
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid #0084ab;
+  transition: .3s ease-in-out;
 }
 
 .main-number {
@@ -51,7 +52,7 @@
 }
 
 .snap-main:hover {
-  background: #E0E5E6;
+  background: #e5f3f7;
 }
 
 .main-label {
@@ -97,7 +98,7 @@
 }
 
 .total-main:hover {
-  background: #E0E5E6;
+  background: #e5f3f7;
 }
 
 .total-number {
