@@ -28,5 +28,7 @@
   padding-left: 8px;
   height: 45px;
   margin-right: 15px;
+  border-radius: 5px;
+  border: 1px solid #aaa;
 }
 
