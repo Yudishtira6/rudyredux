@@ -40005,7 +40005,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       ratingsOnlyReviews: [],
       blockedReviews: [],
       image: "https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
-      productName: "Please enter information in the form above!",
+      productName: "Product name",
       native: 0,
       syndicated: 0,
       ratingOnly: 0,
@@ -46596,7 +46596,7 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h3",
           { className: "product-details" },
-          "Matching Strategies"
+          "Matching Strategies: "
         )
       )
     );
@@ -46766,13 +46766,13 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           { className: 'family-information' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
-            { className: 'family-title' },
-            'Family IDs'
+            { classname: 'secondary-number' },
+            familyIds
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
-            null,
-            familyIds
+            { className: 'secondary-label' },
+            'Families'
           )
         )
       ),

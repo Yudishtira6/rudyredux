@@ -72,8 +72,8 @@ let snapShot=(
                     <h3 className="main-label">FAMILY REVIEWS</h3>
                   </div>
                   <div className="family-information">
-                    <h4 className="family-title">Family IDs</h4>
-                    <h4>{familyIds}</h4>
+                    <h4 classname="secondary-number">{familyIds}</h4>
+                    <h4 className="secondary-label">Families</h4>
                   </div>
                 </li>
                 <li onClick={this.switchAll} className="total-container">
