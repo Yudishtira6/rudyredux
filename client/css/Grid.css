@@ -13,7 +13,7 @@ h1 { font-size: 45px; margin-bottom: 35px; text-align: center; width: 100%; }
 h2 { font-size: 35px; }*/
 
 #displayableReviewsTitle {
-  text-align: center;
+  font-size: 30px;
   margin: 6rem 0 2rem 0;
   color: #444;
   font-weight: bold;

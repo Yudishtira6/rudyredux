@@ -73,7 +73,7 @@ let snapShot=(
                   </div>
                   <div className="family-information">
                     <h4 className="family-title">Family IDs</h4>
-                    {familyIds}
+                    <h4>{familyIds}</h4>
                   </div>
                 </li>
                 <li onClick={this.switchAll} className="total-container">

@@ -61,11 +61,13 @@ getReviews(e){
               "Content-Type": "application/x-www-form-urlencoded"
             }
           }).then(function(response) {
-
+            console.log("response for product",response);
             e.setState({image:response.data.Results[0].ImageUrl,
+                        productId:response.data.Results[0].Id,
                         productName:response.data.Results[0].Name,
                         familyIds:response.data.Results[0].FamilyIds,
-                        productPageUrl:response.data.Results[0].ProductPageUrl});
+                        productPageUrl:response.data.Results[0].ProductPageUrl,
+                        });
         });
           axios.post('/insert',
             querystring.stringify({
@@ -76,13 +78,14 @@ getReviews(e){
                 "Content-Type": "application/x-www-form-urlencoded"
               }
             }).then(function(response) {
-                console.log(response,"Product ID",productId);
+                console.log("data returned by backend", response);
                 var familyReviews=[];
                 var syndicatedReviews=[];
                 var nativeReviews=[];
+                var sourceClient=[];
 
                 response.data.hagrid.Results.filter((review)=>{
-                  console.log(review.ProductId.toLowerCase(),productId.toLowerCase());
+                  console.log("CLIENTS",review.SourceClient.toLowerCase());
                   if(review.IsSyndicated){
                     syndicatedReviews.push(review);
                   }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
@@ -90,20 +93,26 @@ getReviews(e){
                   }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
                     nativeReviews.push(review);
                   }
+                  if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
+                    if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
+                      sourceClient.push(review.SourceClient.toLowerCase());
+                    }
+
+                  }
 
                 });
+                console.log("PUSHED CLIENTS",sourceClient)
               e.setState({reviews:response.data.hagrid.Results,
                           displayingReviews:response.data.hagrid.Results,
                           total:response.data.hagrid.TotalResults,
                           loading:false,
-                          productId:productId,
                           familyReviews:familyReviews,
                           nativeReviews:nativeReviews,
                           syndicatedReviews:syndicatedReviews,
                           syndicated:syndicatedReviews.length,
                           native:nativeReviews.length,
                           family:familyReviews.length,
-                          productId:productId.toLowerCase()
+                          sourceClient:sourceClient,
                           });
               });
         }
@@ -127,11 +136,13 @@ if(reviews==="native"){
 
 
 render() {
-console.log("BLOCKED",this.state.blockedReviews);
 
   let productData={image:this.state.image,
                    productName:this.state.productName,
-                   productPageUrl:this.state.productPageUrl
+                   productId:this.state.productId,
+                   productPageUrl:this.state.productPageUrl,
+                   familyIds:this.state.familyIds,
+                   sourceClient:this.state.sourceClient
                   }
 
   let snapShot={native:this.state.native,

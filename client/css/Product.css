@@ -20,6 +20,10 @@ form {
   margin-top: 1.5rem;
 }
 
+.product-title {
+  margin-bottom: 3rem;
+}
+
 .sub-title {
   margin-top: 0;
   font-size: 19px;
@@ -28,6 +32,8 @@ form {
 .product-info {
   border-top: 1px solid black;
   margin-bottom: 40px;
+  border-bottom: 1px solid black;
+  padding-bottom: 2rem;
 }
 
 .product-name {
@@ -39,5 +45,15 @@ form {
 .product-photo {
   max-height: 100px;
   max-width: 100px;
-  margin-top: 3rem;
+  vertical-align: top;
+}
+
+.product-details {
+  font-size: 16px;
+  margin: 0;
+}
+
+.product-information {
+  display: inline-block;
+  margin-left: 2rem;
 }

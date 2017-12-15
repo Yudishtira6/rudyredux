@@ -3,8 +3,7 @@
   font-size: 25px;
   color: #444;
   font-weight: bold;
-  font-size: 36px;
-  text-align: center;
+  font-size: 30px;
 }
 
 .fa-camera {
@@ -84,7 +83,7 @@
 }
 
 .family-title {
-  margin-top: 16px;
+  margin-top: 11px;
   margin-bottom: 5px;
 }
 
@@ -93,7 +92,7 @@
 }
 
 .total-main {
-  padding-bottom: 26px;
+  padding-bottom: 35px;
   transition: .3s ease-in-out;
 }
 
@@ -104,14 +103,13 @@
 .total-number {
   font-size: 6rem;
   margin: 0;
-  padding-top: 2rem;
-  padding-bottom: 1rem;
+  padding-top: 23px;
+  padding-bottom: 0rem;
 }
 
 .total-label {
   font-size: 1.5rem;
   margin-top: .5rem;
-  padding-bottom: -2rem;
   margin-bottom: 0rem;
   display: block;
 }

@@ -7,7 +7,7 @@ const GridLine =({productId, data})=>{
     let type="Native";
     let codes="N/A";
     let reason;
-console.log("DATA FOR GRID",data,"CONTENT",data.contentCodes);
+
 if(data.contentCodes){
 codes=data.contentCodes.filter((code)=>{
   if(code==="PC"|| code==="RET"){
