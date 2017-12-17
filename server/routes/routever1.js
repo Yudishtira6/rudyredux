@@ -5,7 +5,13 @@ var bodyParser = require('body-parser');
 var rp = require('request-promise');
 var jsonfiletest = require("../../sample.json");
 console.log('jsonfiletest: ',jsonfiletest);
+const fs = require('fs');
 
+fs.readFile('../../sampleswitchtest.json', (err, data) => {  
+    if (err) throw err;
+    let switchfiletest = JSON.parse(data);
+    console.log('switchfiletest: ',switchfiletest);
+}
 // var switchfiletest = require("../../sampleswitchtest.json");
 // console.log('switchfiletest: ',switchfiletest);
 
