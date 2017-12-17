@@ -39995,16 +39995,17 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   constructor() {
     super();
     this.state = {
-      client: "cabelas",
-      productId: "973880",
+      client: "",
+      productId: "",
       reviews: [],
       syndicatedReviews: [],
       familyReviews: [],
       nativeReviews: [],
       displayingReviews: [],
       ratingsOnlyReviews: [],
+      blockedReviews: [],
       image: "https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
-      productName: "Please enter information in the form above!",
+      productName: "Product name",
       native: 0,
       syndicated: 0,
       ratingOnly: 0,
@@ -40042,11 +40043,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
-
+        console.log("response for product", response);
         e.setState({ image: response.data.Results[0].ImageUrl,
+          productId: response.data.Results[0].Id,
           productName: response.data.Results[0].Name,
           familyIds: response.data.Results[0].FamilyIds,
-          productPageUrl: response.data.Results[0].ProductPageUrl });
+          productPageUrl: response.data.Results[0].ProductPageUrl
+        });
       });
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
         clientName: client,
@@ -40056,32 +40059,39 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
-        console.log(response);
+        console.log("data returned by backend", response);
         var familyReviews = [];
         var syndicatedReviews = [];
         var nativeReviews = [];
+        var sourceClient = [];
+
         response.data.hagrid.Results.filter(review => {
+          console.log("CLIENTS", review.SourceClient.toLowerCase());
           if (review.IsSyndicated) {
             syndicatedReviews.push(review);
-          } else if (review.ProductId != productId && !review.IsSyndicated) {
+          } else if (review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated) {
             familyReviews.push(review);
-          } else if (review.ProductId === productId && !review.IsSyndicated) {
+          } else if (review.ProductId.toLowerCase() === productId.toLowerCase() && review.SourceClient === client && !review.IsSyndicated) {
             nativeReviews.push(review);
           }
+          if (review.SourceClient.toLowerCase() != client.toLowerCase()) {
+            if (sourceClient.indexOf(review.SourceClient.toLowerCase()) == -1) {
+              sourceClient.push(review.SourceClient.toLowerCase());
+            }
+          }
         });
-
+        console.log("PUSHED CLIENTS", sourceClient);
         e.setState({ reviews: response.data.hagrid.Results,
           displayingReviews: response.data.hagrid.Results,
           total: response.data.hagrid.TotalResults,
           loading: false,
-          productId: productId,
           familyReviews: familyReviews,
           nativeReviews: nativeReviews,
           syndicatedReviews: syndicatedReviews,
           syndicated: syndicatedReviews.length,
           native: nativeReviews.length,
           family: familyReviews.length,
-          productId: productId
+          sourceClient: sourceClient
         });
       });
     }
@@ -40095,6 +40105,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       this.setState({ displayingReviews: this.state.reviews, reviewFilter: "All Displayable Reviews" });
     } else if (reviews === "family") {
       this.setState({ displayingReviews: this.state.familyReviews, reviewFilter: "Family Reviews" });
+    } else if (reviews = "blocked") {
+      this.setState({ displayingReviews: this.state.blockedReviews, reviewFilter: "Blocked Syndicated Reviews" });
     }
   }
 
@@ -40102,13 +40114,16 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
     let productData = { image: this.state.image,
       productName: this.state.productName,
-      productPageUrl: this.state.productPageUrl
+      productId: this.state.productId,
+      productPageUrl: this.state.productPageUrl,
+      familyIds: this.state.familyIds,
+      sourceClient: this.state.sourceClient
     };
 
     let snapShot = { native: this.state.native,
       syndicated: this.state.syndicated,
       ratingOnly: this.state.ratingsOnlyReviews.length,
-      stopped: this.state.stopped,
+      stopped: this.state.blockedReviews.length,
       displayableSyndicated: this.state.syndicated,
       family: this.state.family,
       total: this.state.total,
@@ -46066,6 +46081,7 @@ const Grid = ({ title, productId, data }) => {
   let Items;
 
   if (data) {
+    console.log(data);
     Items = data.map(review => {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], { key: review.Id, productId: productId, data: review });
     });
@@ -46150,61 +46166,76 @@ const Grid = ({ title, productId, data }) => {
 
 
 const GridLine = ({ productId, data }) => {
-    let color;
-    let type = "Native";
-    if (data.IsSyndicated) {
-        type = "Syndicated";
-        color = "blue";
-    } else if (data.ProductId != productId) {
-        type = "Family";
-        color = "yellow";
-    }
-    var date = __WEBPACK_IMPORTED_MODULE_1_moment___default()(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
+  let color;
+  let type = "Native";
+  let codes = "N/A";
+  let reason;
 
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'tr',
-        { className: color },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.Id
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            type
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.SourceClient
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.ProductId
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.Rating
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.ModerationStatus
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            'N/A'
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            date
-        )
-    );
+  if (data.contentCodes) {
+    codes = data.contentCodes.filter(code => {
+      if (code === "PC" || code === "RET") {
+        return code;
+      }
+    });
+  }
+
+  if (data.IsSyndicated && !data.blocked) {
+    type = "Syndicated";
+    color = "blue";
+  } else if (data.ProductId.toLowerCase() != productId.toLowerCase()) {
+    type = "Family";
+    color = "yellow";
+  } else if (data.blocked) {
+    type = "blocked";
+    color = "red";
+    reason = "highlight";
+  }
+  var date = __WEBPACK_IMPORTED_MODULE_1_moment___default()(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
+
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'tr',
+    { className: color },
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'td',
+      null,
+      data.Id
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'td',
+      null,
+      type
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'td',
+      null,
+      data.SourceClient
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'td',
+      null,
+      data.ProductId
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'td',
+      null,
+      data.Rating
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'td',
+      null,
+      data.ModerationStatus
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'td',
+      { className: reason },
+      codes
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'td',
+      null,
+      date
+    )
+  );
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (GridLine);
@@ -46509,18 +46540,63 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     super(props);
   }
   render() {
+    console.log("product data", this.props.data);
+    let familyIds;
+    let sourceClient;
+    if (this.props.data.familyIds) {
+      familyIds = this.props.data.familyIds.map(id => {
+        return id;
+      });
+    }
+    if (this.props.data.sourceClient) {
+      sourceClient = this.props.data.sourceClient.map(client => {
+        return client;
+      });
+    }
 
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       "div",
       { className: "product-info" },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "h2",
+        { className: "product-title" },
+        "Product Information"
+      ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", { className: "product-photo", src: this.props.data.image }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "h3",
-        { className: "product-name" },
+        "div",
+        { className: "product-information" },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "a",
-          { href: this.props.data.productPageUrl, target: "_blank" },
-          this.props.data.productName
+          "h3",
+          { className: "product-details" },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "a",
+            { href: this.props.data.productPageUrl, target: "_blank" },
+            this.props.data.productName
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "h3",
+          { className: "product-details" },
+          "Product ID: ",
+          this.props.data.productId
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "h3",
+          { className: "product-details" },
+          "Family IDs: ",
+          familyIds
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "h3",
+          { className: "product-details" },
+          "Syndication Sources: ",
+          sourceClient
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "h3",
+          { className: "product-details" },
+          "Matching Strategies: "
         )
       )
     );
@@ -46547,6 +46623,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     this.switchFamily = this.switchFamily.bind(this);
     this.switchAll = this.switchAll.bind(this);
     this.switchSyndicated = this.switchSyndicated.bind(this);
+    this.switchBlocked = this.switchBlocked.bind(this);
   }
   switchNative() {
 
@@ -46561,13 +46638,17 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   switchAll() {
     this.props.display('all');
   }
+  switchBlocked() {
+    this.props.display('blocked');
+  }
   render() {
     let familyIds = 0;
 
     if (this.props.data.familyIds.length >= 1) {
       familyIds = this.props.data.familyIds.length;
     }
-
+    let totalSyndicated = this.props.data.syndicated + this.props.data.stopped;
+    let totalNative = this.props.data.displayableNative + this.props.data.ratingOnly;
     let snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'ul',
       { className: 'snapshot-container' },
@@ -46585,7 +46666,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
             { className: 'main-label' },
-            'NATIVE'
+            'NATIVE REVIEWS'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46594,12 +46675,12 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-number' },
-            this.props.data.displayableNative
+            totalNative
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-label' },
-            'Displayable Native'
+            'Total Native'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46631,7 +46712,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
             { className: 'main-label' },
-            'SYNDICATED'
+            'SYNDICATED REVIEWS'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46640,17 +46721,17 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-number' },
-            this.props.data.displayableSyndicated
+            totalSyndicated
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-label' },
-            'Displayable Syndicated'
+            'Total Syndicated'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
-          { className: 'secondary-container' },
+          { className: 'secondary-container', onClick: this.switchBlocked },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-number' },
@@ -46677,7 +46758,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
             { className: 'main-label' },
-            'FAMILY'
+            'FAMILY REVIEWS'
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -46685,10 +46766,14 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           { className: 'family-information' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
-            { className: 'family-title' },
-            'Family IDs'
+            { classname: 'secondary-number' },
+            familyIds
           ),
-          familyIds
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h4',
+            { className: 'secondary-label' },
+            'Families'
+          )
         )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

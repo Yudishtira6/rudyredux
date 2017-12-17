@@ -7,6 +7,7 @@ const Grid =({title, productId, data})=>{
 let Items;
 
 if(data){
+console.log(data);
 Items=data.map((review)=>{
   return <GridLine key={review.Id} productId={productId} data={review}/>
 });

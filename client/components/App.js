@@ -12,16 +12,17 @@ export default class App extends React.Component {
 constructor() {
     super();
     this.state = {
-                  client:"cabelas",
-                  productId:"973880",
+                  client:"",
+                  productId:"",
                   reviews:[],
                   syndicatedReviews:[],
                   familyReviews:[],
                   nativeReviews:[],
                   displayingReviews:[],
                   ratingsOnlyReviews:[],
+                  blockedReviews:[],
                   image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
-                  productName:"Please enter information in the form above!",
+                  productName:"Product name",
                   native:0,
                   syndicated:0,
                   ratingOnly:0,
@@ -60,11 +61,13 @@ getReviews(e){
               "Content-Type": "application/x-www-form-urlencoded"
             }
           }).then(function(response) {
-
+            console.log("response for product",response);
             e.setState({image:response.data.Results[0].ImageUrl,
+                        productId:response.data.Results[0].Id,
                         productName:response.data.Results[0].Name,
                         familyIds:response.data.Results[0].FamilyIds,
-                        productPageUrl:response.data.Results[0].ProductPageUrl});
+                        productPageUrl:response.data.Results[0].ProductPageUrl,
+                        });
         });
           axios.post('/insert',
             querystring.stringify({
@@ -75,33 +78,41 @@ getReviews(e){
                 "Content-Type": "application/x-www-form-urlencoded"
               }
             }).then(function(response) {
-                console.log(response);
+                console.log("data returned by backend", response);
                 var familyReviews=[];
                 var syndicatedReviews=[];
                 var nativeReviews=[];
-              response.data.hagrid.Results.filter((review)=>{
-                if(review.IsSyndicated){
-                  syndicatedReviews.push(review);
-                }else if(review.ProductId!=productId && !review.IsSyndicated){
-                  familyReviews.push(review);
-                }else if(review.ProductId===productId && !review.IsSyndicated){
-                  nativeReviews.push(review);
-                }
+                var sourceClient=[];
 
-              });
+                response.data.hagrid.Results.filter((review)=>{
+                  console.log("CLIENTS",review.SourceClient.toLowerCase());
+                  if(review.IsSyndicated){
+                    syndicatedReviews.push(review);
+                  }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
+                    familyReviews.push(review);
+                  }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
+                    nativeReviews.push(review);
+                  }
+                  if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
+                    if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
+                      sourceClient.push(review.SourceClient.toLowerCase());
+                    }
 
+                  }
+
+                });
+                console.log("PUSHED CLIENTS",sourceClient)
               e.setState({reviews:response.data.hagrid.Results,
                           displayingReviews:response.data.hagrid.Results,
                           total:response.data.hagrid.TotalResults,
                           loading:false,
-                          productId:productId,
                           familyReviews:familyReviews,
                           nativeReviews:nativeReviews,
                           syndicatedReviews:syndicatedReviews,
                           syndicated:syndicatedReviews.length,
                           native:nativeReviews.length,
                           family:familyReviews.length,
-                          productId:productId
+                          sourceClient:sourceClient,
                           });
               });
         }
@@ -110,14 +121,16 @@ getReviews(e){
     }
 switchReviews(reviews){
 if(reviews==="native"){
-  this.setState({displayingReviews:this.state.nativeReviews,reviewFilter:"Native Reviews"})
+  this.setState({displayingReviews:this.state.nativeReviews,reviewFilter:"Native Reviews"});
   }else if(reviews==="syndicated"){
-  this.setState({displayingReviews:this.state.syndicatedReviews, reviewFilter:"Syndicated Reviews"})
+  this.setState({displayingReviews:this.state.syndicatedReviews, reviewFilter:"Syndicated Reviews"});
 
   }else if(reviews==="all"){
   this.setState({displayingReviews:this.state.reviews, reviewFilter:"All Displayable Reviews"});
   }else if(reviews==="family"){
-  this.setState({displayingReviews:this.state.familyReviews, reviewFilter:"Family Reviews"})
+  this.setState({displayingReviews:this.state.familyReviews, reviewFilter:"Family Reviews"});
+  }else if(reviews="blocked"){
+  this.setState({displayingReviews:this.state.blockedReviews, reviewFilter:"Blocked Syndicated Reviews"});
   }
 }
 
@@ -126,13 +139,16 @@ render() {
 
   let productData={image:this.state.image,
                    productName:this.state.productName,
-                   productPageUrl:this.state.productPageUrl
+                   productId:this.state.productId,
+                   productPageUrl:this.state.productPageUrl,
+                   familyIds:this.state.familyIds,
+                   sourceClient:this.state.sourceClient
                   }
 
   let snapShot={native:this.state.native,
                 syndicated:this.state.syndicated,
                 ratingOnly:this.state.ratingsOnlyReviews.length,
-                stopped:this.state.stopped,
+                stopped:this.state.blockedReviews.length,
                 displayableSyndicated:this.state.syndicated,
                 family:this.state.family,
                 total:this.state.total,

@@ -1,10 +1,9 @@
 .snapshot-header {
   margin-bottom: 2rem;
   font-size: 25px;
-  color: #003d4c;
-  font-weight: bold;
-  font-size: 36px;
-  text-align: center;
+  color: #444;
+  font-size: 30px;
+
 }
 
 .fa-camera {
@@ -15,12 +14,11 @@
   padding: 0;
   list-style: none;
   margin: 0 auto;
-  border: 1px solid black;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  background: #007c9a;
-  color: white;
-  box-shadow: -3px 3px 12px 0px black;
+  border: 1px solid #0084ab;
+  /*border-top-right-radius: 10px;
+  border-top-left-radius: 10px;*/
+  color: #0084ab;
+  box-shadow: -3px 3px 12px 0px #888;
 }
 
 .snapshot-container>li {
@@ -28,10 +26,11 @@
   text-align: center;
   width: 25%;
   box-sizing: border-box;
-  border-right: 1px solid white;
+  border-right: 1px solid #0084ab;
   margin: 0 auto;
   position: relative;
   cursor: pointer;
+  background: rgb(245, 247, 248);
 }
 
 .snapshot-container>li:last-of-type {
@@ -39,7 +38,8 @@
 }
 
 .snap-main {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #0084ab;
+  transition: .3s ease-in-out;
 }
 
 .main-number {
@@ -51,7 +51,7 @@
 }
 
 .snap-main:hover {
-  background: #003860;
+  background: #e5f3f7;
 }
 
 .main-label {
@@ -68,7 +68,8 @@
 
 .secondary-container:last-child {
   border-right: none;
-  background-color: #be3434;
+  background-color: #ab3900;
+  color: #fff;
 }
 
 .secondary-number {
@@ -82,7 +83,7 @@
 }
 
 .family-title {
-  margin-top: 16px;
+  margin-top: 11px;
   margin-bottom: 5px;
 }
 
@@ -91,25 +92,24 @@
 }
 
 .total-main {
-  padding-bottom: 26px;
+  padding-bottom: 35px;
   transition: .3s ease-in-out;
 }
 
 .total-main:hover {
-  background: #003860;
+  background: #e5f3f7;
 }
 
 .total-number {
   font-size: 6rem;
   margin: 0;
-  padding-top: 2rem;
-  padding-bottom: 1rem;
+  padding-top: 23px;
+  padding-bottom: 0rem;
 }
 
 .total-label {
   font-size: 1.5rem;
   margin-top: .5rem;
-  padding-bottom: -2rem;
   margin-bottom: 0rem;
   display: block;
 }

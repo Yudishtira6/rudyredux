@@ -5,12 +5,27 @@ import moment from 'moment';
 const GridLine =({productId, data})=>{
     let color;
     let type="Native";
-    if(data.IsSyndicated){
+    let codes="N/A";
+    let reason;
+
+if(data.contentCodes){
+codes=data.contentCodes.filter((code)=>{
+  if(code==="PC"|| code==="RET"){
+    return code;
+    }
+  });
+}
+
+    if(data.IsSyndicated && !data.blocked){
     type="Syndicated";
     color="blue";
-    }else if(data.ProductId!=productId){
+    }else if(data.ProductId.toLowerCase() != productId.toLowerCase()){
       type="Family";
-      color="yellow"
+      color="yellow";
+    }else if(data.blocked){
+      type="blocked";
+      color="red";
+      reason="highlight";
     }
 var date=moment(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
 
@@ -23,7 +38,7 @@ return(
             <td>{data.ProductId}</td>
             <td>{data.Rating}</td>
             <td>{data.ModerationStatus}</td>
-            <td>N/A</td>
+            <td className={reason}>{codes}</td>
             <td>{date}</td>
 		</tr>
 

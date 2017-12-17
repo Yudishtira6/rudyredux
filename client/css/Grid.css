@@ -1,5 +1,10 @@
 body {
-	font-family: 'Roboto', sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: rgb(245, 247, 248);
+}
+
+a {
+  color: #0084ab !important;
 }
 
 /*
@@ -12,23 +17,33 @@ h1 { font-size: 45px; margin-bottom: 35px; text-align: center; width: 100%; }
 h2 { font-size: 35px; }*/
 
 #displayableReviewsTitle {
-  text-align: center;
+  font-size: 30px;
   margin: 6rem 0 2rem 0;
-  color: #003d4c;
-  font-weight: bold;
+  color: #444;
 }
 
 .blue {
   background: #d9edf7;
+  height: 5rem;
   ;
 }
 
 .yellow {
   background: #fff2b1;
+  height: 5rem;
+}
+
+.red {
+  background: #be3534;
+  height: 5rem;
 }
 
 table {
   padding-bottom: 35px;
+}
+
+.highlight {
+  color: white;
 }
 
 /* Main styling for tables */
