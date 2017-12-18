@@ -8,6 +8,7 @@ let Items;
 
 if(data){
 console.log(data);
+//loop through data and build out grid
 Items=data.map((review)=>{
   return <GridLine key={review.Id} productId={productId} data={review}/>
 });

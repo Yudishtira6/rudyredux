@@ -53,6 +53,12 @@ form {
 .product-details {
   font-size: 16px;
   margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.product-details>li {
+  display: inline-block;
 }
 
 .product-information {

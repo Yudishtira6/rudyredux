@@ -39981,7 +39981,8 @@ const Routes = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SnapShot__ = __webpack_require__(227);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery__ = __webpack_require__(229);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_jquery__);
-//client/components/App.js
+
+
 
 
 
@@ -40018,23 +40019,24 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       reviewFilter: "All Displayable Reviews"
 
     };
+    //bind this to each function
     this.onClick = this.onClick.bind(this);
     this.getReviews = this.getReviews.bind(this);
     this.switchReviews = this.switchReviews.bind(this);
   }
-
+  //bind this so that I may set state.
   onClick(e) {
     this.getReviews(this);
   }
-
+  //get all reviews from backend
   getReviews(e) {
 
     let client = document.getElementById('client').value;
     let productId = document.getElementById('prodid').value;
-
+    //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
     if (client && productId && productId != this.state.productId) {
       this.setState({ loading: true });
-
+      //call to get product data from backend.
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/getProductDetails', querystring.stringify({
         clientName: client,
         productId: productId
@@ -40043,6 +40045,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
+        //set state for product details.
         console.log("response for product", response);
         e.setState({ image: response.data.Results[0].ImageUrl,
           productId: response.data.Results[0].Id,
@@ -40051,6 +40054,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           productPageUrl: response.data.Results[0].ProductPageUrl
         });
       });
+      //call to get review data from backend
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/insert', querystring.stringify({
         clientName: client,
         productId: productId
@@ -40064,7 +40068,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         var syndicatedReviews = [];
         var nativeReviews = [];
         var sourceClient = [];
-
+        //loop through all reviews and filter reviews out to correct buckets.
         response.data.hagrid.Results.filter(review => {
           console.log("CLIENTS", review.SourceClient.toLowerCase());
           if (review.IsSyndicated) {
@@ -40074,6 +40078,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           } else if (review.ProductId.toLowerCase() === productId.toLowerCase() && review.SourceClient === client && !review.IsSyndicated) {
             nativeReviews.push(review);
           }
+          //collect source client data.
           if (review.SourceClient.toLowerCase() != client.toLowerCase()) {
             if (sourceClient.indexOf(review.SourceClient.toLowerCase()) == -1) {
               sourceClient.push(review.SourceClient.toLowerCase());
@@ -40081,6 +40086,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           }
         });
         console.log("PUSHED CLIENTS", sourceClient);
+        //set state of looped buckets.
         e.setState({ reviews: response.data.hagrid.Results,
           displayingReviews: response.data.hagrid.Results,
           total: response.data.hagrid.TotalResults,
@@ -40096,6 +40102,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       });
     }
   }
+
+  //logic to filter reviews in snapshot
   switchReviews(reviews) {
     if (reviews === "native") {
       this.setState({ displayingReviews: this.state.nativeReviews, reviewFilter: "Native Reviews" });
@@ -40111,7 +40119,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   }
 
   render() {
-
+    //data to send to components
     let productData = { image: this.state.image,
       productName: this.state.productName,
       productId: this.state.productId,
@@ -46082,6 +46090,7 @@ const Grid = ({ title, productId, data }) => {
 
   if (data) {
     console.log(data);
+    //loop through data and build out grid
     Items = data.map(review => {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__GridLine__["a" /* default */], { key: review.Id, productId: productId, data: review });
     });
@@ -46166,6 +46175,7 @@ const Grid = ({ title, productId, data }) => {
 
 
 const GridLine = ({ productId, data }) => {
+  // set css classes dynamically depending on what type of review.
   let color;
   let type = "Native";
   let codes = "N/A";
@@ -46545,12 +46555,20 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     let sourceClient;
     if (this.props.data.familyIds) {
       familyIds = this.props.data.familyIds.map(id => {
-        return id;
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "li",
+          null,
+          id
+        );
       });
     }
     if (this.props.data.sourceClient) {
       sourceClient = this.props.data.sourceClient.map(client => {
-        return client;
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "li",
+          null,
+          client
+        );
       });
     }
 
@@ -46582,15 +46600,25 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           this.props.data.productId
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "h3",
+          "ul",
           { className: "product-details" },
-          "Family IDs: ",
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "li",
+            null,
+            "Family IDs:"
+          ),
+          " ",
           familyIds
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "h3",
+          "ul",
           { className: "product-details" },
-          "Syndication Sources: ",
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "li",
+            null,
+            "Syndication Sources:"
+          ),
+          " ",
           sourceClient
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

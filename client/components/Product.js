@@ -10,12 +10,12 @@ let familyIds;
 let sourceClient;
   if(this.props.data.familyIds){
     familyIds=this.props.data.familyIds.map((id)=>{
-    return id;
+    return <li>{id}</li>;
   });
 }
   if(this.props.data.sourceClient){
     sourceClient=this.props.data.sourceClient.map((client)=>{
-    return client;
+    return <li>{client}</li>;
   });
 }
 
@@ -26,8 +26,8 @@ return(
           <div className="product-information">
             <h3 className="product-details"><a href={this.props.data.productPageUrl} target="_blank">{this.props.data.productName}</a></h3>
             <h3 className="product-details">Product ID: {this.props.data.productId}</h3>
-            <h3 className="product-details">Family IDs: {familyIds}</h3>
-            <h3 className="product-details">Syndication Sources: {sourceClient}</h3>
+            <ul className="product-details"><li>Family IDs:</li> {familyIds}</ul>
+            <ul className="product-details"><li>Syndication Sources:</li> {sourceClient}</ul>
             <h3 className="product-details">Matching Strategies</h3>
           </div>
         </div>
