@@ -23,7 +23,7 @@ constructor() {
                   ratingsOnlyReviews:[],
                   blockedReviews:[],
                   image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
-                  productName:"Please enter information in the form above!",
+                  productName:"Product name",
                   native:0,
                   syndicated:0,
                   ratingOnly:0,
