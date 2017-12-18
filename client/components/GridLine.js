@@ -8,13 +8,22 @@ const GridLine =({productId, data})=>{
     let type="Native";
     let codes="N/A";
     let reason;
+console.log("data for Grid",data);
 
-if(data.contentCodes){
-codes=data.contentCodes.filter((code)=>{
-  if(code==="PC"|| code==="RET"){
-    return code;
-    }
-  });
+if(data.Content){
+  if(data.Content=="PC"){
+    codes="Promotions/Coupon References";
+}else if(data.Content==="RET"){
+    codes="Specific Retailer Reference";
+}else if(data.Content==="PRI"){
+  codes="Specific Price Reference";
+}else if(data.Content==="STP"){
+  codes="Stop Syndication (Multi-Reason)";
+}
+
+  reason="highlight";
+  type="blocked";
+  color="red";
 }
 
     if(data.IsSyndicated && !data.blocked){
@@ -23,10 +32,6 @@ codes=data.contentCodes.filter((code)=>{
     }else if(data.ProductId.toLowerCase() != productId.toLowerCase()){
       type="Family";
       color="yellow";
-    }else if(data.blocked){
-      type="blocked";
-      color="red";
-      reason="highlight";
     }
 var date=moment(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
 

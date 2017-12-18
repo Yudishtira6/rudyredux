@@ -40007,12 +40007,14 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       blockedReviews: [],
       image: "https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
       productName: "Product name",
-      native: 0,
-      syndicated: 0,
-      ratingOnly: 0,
-      stopped: 0,
-      family: 0,
-      total: 0,
+      snapNative: 0,
+      snapSyndicated: 0,
+      snapRatingOnly: 0,
+      snapStopped: 0,
+      snapFamily: 0,
+      snapTotal: 0,
+      snapDisplayableSyndicated: 0,
+      snapDisplayableNative: 0,
       familyIds: [],
       loading: false,
       productPageUrl: '',
@@ -40089,14 +40091,20 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         //set state of looped buckets.
         e.setState({ reviews: response.data.hagrid.Results,
           displayingReviews: response.data.hagrid.Results,
-          total: response.data.hagrid.TotalResults,
+          snapTotal: response.data.dashboard.totalReviews,
           loading: false,
           familyReviews: familyReviews,
           nativeReviews: nativeReviews,
           syndicatedReviews: syndicatedReviews,
-          syndicated: syndicatedReviews.length,
-          native: nativeReviews.length,
-          family: familyReviews.length,
+          blockedReviews: response.data.rejected.Results,
+          snapSyndicated: response.data.dashboard.syndicatedReviews,
+          snapNative: response.data.dashboard.nativeReviews,
+          snapFamily: response.data.dashboard.familyReviews,
+          snapRatingOnlyReviews: response.data.dashboard.ratingsOnlyReviews,
+          snapStopped: response.data.dashboard.blockedSyndicatedReviews,
+          snapDisplayableSyndicated: response.data.dashboard.displayableSyndicatedReviews,
+          snapDisplayableNative: response.data.dashboard.displayableNativeReviews,
+
           sourceClient: sourceClient
         });
       });
@@ -40128,14 +40136,14 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       sourceClient: this.state.sourceClient
     };
 
-    let snapShot = { native: this.state.native,
-      syndicated: this.state.syndicated,
-      ratingOnly: this.state.ratingsOnlyReviews.length,
-      stopped: this.state.blockedReviews.length,
-      displayableSyndicated: this.state.syndicated,
-      family: this.state.family,
-      total: this.state.total,
-      displayableNative: this.state.native - this.state.ratingOnly,
+    let snapShot = { native: this.state.snapNative,
+      syndicated: this.state.snapSyndicated,
+      ratingOnly: this.state.snapRatingOnly,
+      stopped: this.state.snapStopped,
+      displayableSyndicated: this.state.snapDisplayableSyndicated,
+      family: this.state.snapFamily,
+      total: this.state.snapTotal,
+      displayableNative: this.state.snapDisplayableNative,
       familyIds: this.state.familyIds
 
     };
@@ -46145,7 +46153,7 @@ const Grid = ({ title, productId, data }) => {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'th',
             null,
-            'CONTENT CODES'
+            'REASON BLOCKED'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'th',
@@ -46180,13 +46188,22 @@ const GridLine = ({ productId, data }) => {
   let type = "Native";
   let codes = "N/A";
   let reason;
+  console.log("data for Grid", data);
 
-  if (data.contentCodes) {
-    codes = data.contentCodes.filter(code => {
-      if (code === "PC" || code === "RET") {
-        return code;
-      }
-    });
+  if (data.Content) {
+    if (data.Content == "PC") {
+      codes = "Promotions/Coupon References";
+    } else if (data.Content === "RET") {
+      codes = "Specific Retailer Reference";
+    } else if (data.Content === "PRI") {
+      codes = "Specific Price Reference";
+    } else if (data.Content === "STP") {
+      codes = "Stop Syndication (Multi-Reason)";
+    }
+
+    reason = "highlight";
+    type = "blocked";
+    color = "red";
   }
 
   if (data.IsSyndicated && !data.blocked) {
@@ -46195,10 +46212,6 @@ const GridLine = ({ productId, data }) => {
   } else if (data.ProductId.toLowerCase() != productId.toLowerCase()) {
     type = "Family";
     color = "yellow";
-  } else if (data.blocked) {
-    type = "blocked";
-    color = "red";
-    reason = "highlight";
   }
   var date = __WEBPACK_IMPORTED_MODULE_1_moment___default()(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
 
@@ -46624,7 +46637,7 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h3",
           { className: "product-details" },
-          "Matching Strategies: "
+          "Matching Strategies"
         )
       )
     );
@@ -46675,8 +46688,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     if (this.props.data.familyIds.length >= 1) {
       familyIds = this.props.data.familyIds.length;
     }
-    let totalSyndicated = this.props.data.syndicated + this.props.data.stopped;
-    let totalNative = this.props.data.displayableNative + this.props.data.ratingOnly;
+    console.log("snapshot DATA", this.props.data);
     let snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'ul',
       { className: 'snapshot-container' },
@@ -46689,7 +46701,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h2',
             { className: 'main-number' },
-            this.props.data.native
+            this.props.data.displayableNative
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
@@ -46703,7 +46715,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-number' },
-            totalNative
+            this.props.data.native
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
@@ -46735,7 +46747,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h2',
             { className: 'main-number' },
-            this.props.data.syndicated
+            this.props.data.displayableSyndicated
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h3',
@@ -46749,7 +46761,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
             { className: 'secondary-number' },
-            totalSyndicated
+            this.props.data.syndicated
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
@@ -46794,13 +46806,13 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           { className: 'family-information' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
-            { classname: 'secondary-number' },
-            familyIds
+            { className: 'family-title' },
+            'Family IDs'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h4',
-            { className: 'secondary-label' },
-            'Families'
+            null,
+            familyIds
           )
         )
       ),

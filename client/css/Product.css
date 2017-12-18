@@ -32,9 +32,9 @@ form {
 }
 
 .product-info {
-  border-top: 1px solid #444;
+  border-top: 1px solid #d6d6d6;
   margin-bottom: 40px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #d6d6d6;
   padding-bottom: 2rem;
 }
 

@@ -33,17 +33,16 @@ export default class SnapShot extends React.Component {
       if (this.props.data.familyIds.length>=1){
        familyIds=this.props.data.familyIds.length;
       }
-    let totalSyndicated=this.props.data.syndicated + this.props.data.stopped;
-    let totalNative=this.props.data.displayableNative + this.props.data.ratingOnly;
+    console.log("snapshot DATA", this.props.data);
     let snapShot=(
                   <ul className="snapshot-container">
                     <li onClick={this.switchNative} className="native">
                       <div className="snap-main">
-                        <h2 className="main-number">{this.props.data.native}</h2>
+                        <h2 className="main-number">{this.props.data.displayableNative}</h2>
                         <h3 className="main-label">NATIVE REVIEWS</h3>
                       </div>
                       <div className="secondary-container">
-                        <h4 className="secondary-number">{totalNative}</h4>
+                        <h4 className="secondary-number">{this.props.data.native}</h4>
                         <h4 className="secondary-label">Total Native</h4>
                       </div>
                       <div className="secondary-container">
@@ -54,11 +53,11 @@ export default class SnapShot extends React.Component {
 
                     <li>
                     <div onClick={this.switchSyndicated} className="snap-main">
-                      <h2 className="main-number">{this.props.data.syndicated}</h2>
+                      <h2 className="main-number">{this.props.data.displayableSyndicated}</h2>
                       <h3 className="main-label">SYNDICATED REVIEWS</h3>
                     </div>
                     <div className="secondary-container">
-                      <h4 className="secondary-number">{totalSyndicated}</h4>
+                      <h4 className="secondary-number">{this.props.data.syndicated}</h4>
                       <h4 className="secondary-label">Total Syndicated</h4>
                     </div>
                     <div className="secondary-container" onClick={this.switchBlocked}>
