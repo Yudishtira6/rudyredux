@@ -1,7 +1,8 @@
-//client/components/App.js
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+
 import Grid from './Grid';
 import Product from './Product';
 import SnapShot from './SnapShot';
@@ -23,35 +24,38 @@ constructor() {
                   blockedReviews:[],
                   image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
                   productName:"Product name",
-                  native:0,
-                  syndicated:0,
-                  ratingOnly:0,
-                  stopped:0,
-                  family:0,
-                  total:0,
+                  snapNative:0,
+                  snapSyndicated:0,
+                  snapRatingOnly:0,
+                  snapStopped:0,
+                  snapFamily:0,
+                  snapTotal:0,
+                  snapDisplayableSyndicated:0,
+                  snapDisplayableNative:0,
                   familyIds:[],
                   loading:false,
                   productPageUrl:'',
                   reviewFilter:"All Displayable Reviews"
 
                  };
+//bind this to each function
     this.onClick=this.onClick.bind(this);
     this.getReviews=this.getReviews.bind(this);
     this.switchReviews=this.switchReviews.bind(this);
   }
-
+//bind this so that I may set state.
   onClick(e){
       this.getReviews(this);
     }
-
+//get all reviews from backend
 getReviews(e){
 
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
-
+//initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
     if(client && productId && productId!=this.state.productId){
         this.setState({loading:true});
-
+//call to get product data from backend.
         axios.post('/getProductDetails',
           querystring.stringify({
             clientName: client,
@@ -61,6 +65,7 @@ getReviews(e){
               "Content-Type": "application/x-www-form-urlencoded"
             }
           }).then(function(response) {
+//set state for product details.
             console.log("response for product",response);
             e.setState({image:response.data.Results[0].ImageUrl,
                         productId:response.data.Results[0].Id,
@@ -69,6 +74,7 @@ getReviews(e){
                         productPageUrl:response.data.Results[0].ProductPageUrl,
                         });
         });
+//call to get review data from backend
           axios.post('/insert',
             querystring.stringify({
               clientName: client,
@@ -83,7 +89,7 @@ getReviews(e){
                 var syndicatedReviews=[];
                 var nativeReviews=[];
                 var sourceClient=[];
-
+//loop through all reviews and filter reviews out to correct buckets.
                 response.data.hagrid.Results.filter((review)=>{
                   console.log("CLIENTS",review.SourceClient.toLowerCase());
                   if(review.IsSyndicated){
@@ -93,6 +99,7 @@ getReviews(e){
                   }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
                     nativeReviews.push(review);
                   }
+//collect source client data.
                   if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
                     if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
                       sourceClient.push(review.SourceClient.toLowerCase());
@@ -102,16 +109,23 @@ getReviews(e){
 
                 });
                 console.log("PUSHED CLIENTS",sourceClient)
+//set state of looped buckets.
               e.setState({reviews:response.data.hagrid.Results,
                           displayingReviews:response.data.hagrid.Results,
-                          total:response.data.hagrid.TotalResults,
+                          snapTotal:response.data.dashboard.totalReviews,
                           loading:false,
                           familyReviews:familyReviews,
                           nativeReviews:nativeReviews,
                           syndicatedReviews:syndicatedReviews,
-                          syndicated:syndicatedReviews.length,
-                          native:nativeReviews.length,
-                          family:familyReviews.length,
+                          blockedReviews:response.data.rejected.Results,
+                          snapSyndicated:response.data.dashboard.syndicatedReviews,
+                          snapNative:response.data.dashboard.nativeReviews,
+                          snapFamily:response.data.dashboard.familyReviews,
+                          snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
+                          snapStopped:response.data.dashboard.blockedSyndicatedReviews,
+                          snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
+                          snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
+
                           sourceClient:sourceClient,
                           });
               });
@@ -119,6 +133,8 @@ getReviews(e){
 
 
     }
+
+//logic to filter reviews in snapshot
 switchReviews(reviews){
 if(reviews==="native"){
   this.setState({displayingReviews:this.state.nativeReviews,reviewFilter:"Native Reviews"});
@@ -136,7 +152,7 @@ if(reviews==="native"){
 
 
 render() {
-
+//data to send to components
   let productData={image:this.state.image,
                    productName:this.state.productName,
                    productId:this.state.productId,
@@ -145,14 +161,14 @@ render() {
                    sourceClient:this.state.sourceClient
                   }
 
-  let snapShot={native:this.state.native,
-                syndicated:this.state.syndicated,
-                ratingOnly:this.state.ratingsOnlyReviews.length,
-                stopped:this.state.blockedReviews.length,
-                displayableSyndicated:this.state.syndicated,
-                family:this.state.family,
-                total:this.state.total,
-                displayableNative:this.state.native-this.state.ratingOnly,
+  let snapShot={native:this.state.snapNative,
+                syndicated:this.state.snapSyndicated,
+                ratingOnly:this.state.snapRatingOnly,
+                stopped:this.state.snapStopped,
+                displayableSyndicated:this.state.snapDisplayableSyndicated,
+                family:this.state.snapFamily,
+                total:this.state.snapTotal,
+                displayableNative:this.state.snapDisplayableNative,
                 familyIds:this.state.familyIds,
 
                 }

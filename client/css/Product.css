@@ -32,9 +32,9 @@ form {
 }
 
 .product-info {
-  border-top: 1px solid #444;
+  border-top: 1px solid #d6d6d6;
   margin-bottom: 40px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #d6d6d6;
   padding-bottom: 2rem;
 }
 
@@ -53,6 +53,12 @@ form {
 .product-details {
   font-size: 16px;
   margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.product-details>li {
+  display: inline-block;
 }
 
 .product-information {
