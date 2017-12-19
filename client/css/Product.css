@@ -35,14 +35,16 @@ form {
   opacity: 1;
   margin-bottom: 20px;
   padding-bottom: 2rem;
-  width: 60%;
+  display: inline-block;
+  width: 100%;
   margin-left: 2rem;
   transition: .3s ease;
 }
 
 .syndication-info {
   opacity: 1;
-  width: 60%;
+  width: 100%;
+  overflow-x: scroll;
   transition: opacity .3s ease-in-out;
 }
 
@@ -75,8 +77,10 @@ form {
 }
 
 .information-title {
-  color: #0084ab;
-  display: inline-block;
+  <<<<<<< HEAD margin-bottom: 2rem;
+  font-size: 20px;
+  =======color: #0084ab;
+  >>>>>>>33b30ec7d74a547f8e0537f243369d45ece8746a display: inline-block;
   border: 1px solid #0084ab;
   border-radius: 0.5rem;
   padding: 1rem;
