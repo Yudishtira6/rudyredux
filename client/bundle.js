@@ -40017,6 +40017,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       snapDisplayableNative: 0,
       familyIds: [],
       loading: false,
+      clientError: '',
+      prodError: '',
       productPageUrl: '',
       activeTab: "product",
       reviewFilter: "All Displayable Reviews",
@@ -40053,6 +40055,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         //set state for product details.
         console.log("response for product", response);
         e.setState({ image: response.data.Results[0].ImageUrl,
+          clientError: '',
+          prodError: '',
           productId: response.data.Results[0].Id,
           productName: response.data.Results[0].Name,
           familyIds: response.data.Results[0].FamilyIds,
@@ -40111,6 +40115,12 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           sourceClient: sourceClient
         });
       });
+    } else if (!client && !productId) {
+      this.setState({ clientError: "empty", prodError: "empty" });
+    } else if (!productId && client) {
+      this.setState({ prodError: "empty", clientError: '' });
+    } else if (!client && productId) {
+      this.setState({ clientError: "empty", prodError: '' });
     }
   }
 
@@ -40133,6 +40143,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   }
 
   render() {
+
     //data to send to components
     let productData = { image: this.state.image,
       productName: this.state.productName,
@@ -40155,7 +40166,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       familyIds: this.state.familyIds
 
     };
-
+    let clientFilledOut;
+    let prodFilledOut;
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'div',
       null,
@@ -40177,8 +40189,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'form',
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', id: 'client', name: 'client', placeholder: 'Client Name', list: 'clientList', autoComplete: 'off' }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', id: 'prodid', name: 'prodId', placeholder: 'Product ID' }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: this.state.clientError, type: 'text', id: 'client', name: 'client', placeholder: 'Client Name', list: 'clientList', autoComplete: 'off' }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: this.state.prodError, type: 'text', id: 'prodid', name: 'prodId', placeholder: 'Product ID' }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'h2',
           { className: 'submit', onClick: this.onClick },

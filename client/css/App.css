@@ -17,12 +17,12 @@
 }
 
 .submit:hover {
-	background-color: #296300;
-    transition-duration: 0.3s;
+  background-color: #296300;
+  transition-duration: 0.3s;
 }
 
-
 /* Styling input text boxes to match portal look & feel */
+
 #client, #prodid {
   color: #333;
   padding-left: 8px;
@@ -32,3 +32,6 @@
   border: 1px solid #aaa;
 }
 
+.empty {
+  border: 1px solid red !important;
+}
