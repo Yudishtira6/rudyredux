@@ -31,8 +31,10 @@ class Product extends React.Component {
     }
     let productInfo=(
                       <div className='info'>
-                        <h2 onClick={this.switchTabProduct} className="information-title active">Product Information</h2>
-                        <h2 onClick={this.switchTabSyndicated} className="information-title">Source Information</h2>
+                        <div className='product-buttons'>
+                          <h2 onClick={this.switchTabProduct} className="information-title active">Product Information</h2>
+                          <h2 onClick={this.switchTabSyndicated} className="information-title">Source Information</h2>
+                        </div>
                         <div className="product-info">
                           <img className="product-photo" src={this.props.data.image}/>
                           <div className="product-information">

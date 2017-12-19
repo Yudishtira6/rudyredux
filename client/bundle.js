@@ -46620,14 +46620,18 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       'div',
       { className: 'info' },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'h2',
-        { onClick: this.switchTabProduct, className: 'information-title active' },
-        'Product Information'
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'h2',
-        { onClick: this.switchTabSyndicated, className: 'information-title' },
-        'Source Information'
+        'div',
+        { className: 'product-buttons' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h2',
+          { onClick: this.switchTabProduct, className: 'information-title active' },
+          'Product Information'
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h2',
+          { onClick: this.switchTabSyndicated, className: 'information-title' },
+          'Source Information'
+        )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
