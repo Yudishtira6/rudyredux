@@ -33,16 +33,14 @@ form {
 
 .product-info {
   opacity: 1;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   padding-bottom: 2rem;
-  display: inline-block;
   width: 60%;
   margin-left: 2rem;
   transition: .3s ease;
 }
 
 .syndication-info {
-  display: inline-block;
   opacity: 1;
   width: 60%;
   transition: opacity .3s ease-in-out;
@@ -77,21 +75,24 @@ form {
 }
 
 .information-title {
-  margin-bottom: 2rem;
+  color: #0084ab;
   display: inline-block;
-  border: 1px solid grey;
+  border: 1px solid #0084ab;
+  border-radius: 0.5rem;
   padding: 1rem;
   margin-top: 0;
   cursor: pointer;
 }
 
 .info {
-  border: 1px solid #d6d6d6;
+  border-top: 1px solid #d6d6d6;
+  margin-top: 0.75rem;
 }
 
 .active {
   background: #e5f3f7;
-  ;
+  color: #0084ab;
+  margin: 2.5rem 1rem;
   transition: .3s ease-in-out;
 }
 
@@ -115,4 +116,8 @@ form {
 
 .stp-code {
   margin-right: 6px;
+}
+
+.product-buttons {
+  text-align: center;
 }
