@@ -13,19 +13,20 @@ export default class SnapShot extends React.Component {
     }
     switchNative(){
 
-    this.props.display('native');
+    this.props.display('native','product');
     }
     switchFamily(){
-    this.props.display('family');
+    this.props.display('family','product');
     }
     switchSyndicated(){
-    this.props.display('syndicated');
+    this.props.display('syndicated','syndicated');
+
     }
     switchAll(){
-    this.props.display('all');
+    this.props.display('all','product');
     }
     switchBlocked(){
-    this.props.display('blocked');
+    this.props.display('blocked','syndicated');
     }
     render(){
     let familyIds=0;

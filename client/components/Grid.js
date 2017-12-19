@@ -26,7 +26,7 @@ return(
                     <th>SOURCE PRODUCT ID</th>
                     <th>RATING</th>
                     <th>STATUS</th>
-                    <th>REASON BLOCKED</th>
+                    <th>BLOCKING REASON</th>
                     <th>SUBMISSION TIME</th>
                 </tr>
                 {Items}
