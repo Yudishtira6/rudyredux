@@ -32,10 +32,20 @@ form {
 }
 
 .product-info {
-  border-top: 1px solid #d6d6d6;
+  opacity: 1;
   margin-bottom: 40px;
-  border-bottom: 1px solid #d6d6d6;
   padding-bottom: 2rem;
+  display: inline-block;
+  width: 60%;
+  margin-left: 2rem;
+  transition: .3s ease;
+}
+
+.syndication-info {
+  display: inline-block;
+  opacity: 1;
+  width: 60%;
+  transition: opacity .3s ease-in-out;
 }
 
 .product-name {
@@ -64,4 +74,45 @@ form {
 .product-information {
   display: inline-block;
   margin-left: 2rem;
+}
+
+.information-title {
+  margin-bottom: 2rem;
+  display: inline-block;
+  border: 1px solid grey;
+  padding: 1rem;
+  margin-top: 0;
+  cursor: pointer;
+}
+
+.info {
+  border: 1px solid #d6d6d6;
+}
+
+.active {
+  background: #e5f3f7;
+  ;
+  transition: .3s ease-in-out;
+}
+
+/*source data*/
+
+.source-data {
+  display: inline-block;
+  width: 28%;
+  margin-left: 2rem;
+  margin-bottom: 3rem;
+}
+
+.source-image {
+  width: 18rem;
+}
+
+.source-data h3 {
+  font-size: 16px;
+  margin: 6px;
+}
+
+.stp-code {
+  margin-right: 6px;
 }
