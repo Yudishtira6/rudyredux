@@ -139,10 +139,13 @@ getReviews(e){
                           });
               });
         }else if(!client && !productId){
+          alert('Please fill out the form before submitting');
           this.setState({clientError:"empty", prodError:"empty"});
         }else if(!productId && client){
+          alert('Please enter a Product ID');
           this.setState({prodError:"empty",clientError:''});
         }else if(!client && productId){
+          alert('Please enter a client name');
           this.setState({clientError:"empty",prodError:''});
         }
 

@@ -61,8 +61,10 @@ class Product extends React.Component {
     if(this.props.data.activeTab==='syndicated'){
     productInfo=(
                   <div className='info'>
-                    <h2 onClick={this.switchTabProduct} className="information-title">Product Information</h2>
-                    <h2 onClick={this.switchTabSyndicated} className="information-title active">Source Information</h2>
+                    <div className='product-buttons'>
+                      <h2 onClick={this.switchTabProduct} className="information-title">Product Information</h2>
+                      <h2 onClick={this.switchTabSyndicated} className="information-title active">Source Information</h2>
+                    </div>
                     <div className="product-info hide">
                       <img className="product-photo" src={this.props.data.image}/>
                       <div className="product-information">

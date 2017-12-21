@@ -77,15 +77,15 @@ form {
 }
 
 .information-title {
-  <<<<<<< HEAD margin-bottom: 2rem;
+  margin-bottom: 2rem;
   font-size: 20px;
-  =======color: #0084ab;
-  >>>>>>>33b30ec7d74a547f8e0537f243369d45ece8746a display: inline-block;
+  color: #0084ab;
   border: 1px solid #0084ab;
   border-radius: 0.5rem;
   padding: 1rem;
   margin-top: 0;
   cursor: pointer;
+  display: inline-block;
 }
 
 .info {
@@ -96,7 +96,6 @@ form {
 .active {
   background: #e5f3f7;
   color: #0084ab;
-  margin: 2.5rem 1rem;
   transition: .3s ease-in-out;
 }
 
@@ -123,5 +122,5 @@ form {
 }
 
 .product-buttons {
-  text-align: center;
+  margin-top: 1rem;
 }
