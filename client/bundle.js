@@ -40116,10 +40116,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         });
       });
     } else if (!client && !productId) {
+      alert('Please fill out the form before submitting');
       this.setState({ clientError: "empty", prodError: "empty" });
     } else if (!productId && client) {
+      alert('Please enter a Product ID');
       this.setState({ prodError: "empty", clientError: '' });
     } else if (!client && productId) {
+      alert('Please enter a client name');
       this.setState({ clientError: "empty", prodError: '' });
     }
   }
@@ -46710,14 +46713,18 @@ class Product extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         'div',
         { className: 'info' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { onClick: this.switchTabProduct, className: 'information-title' },
-          'Product Information'
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { onClick: this.switchTabSyndicated, className: 'information-title active' },
-          'Source Information'
+          'div',
+          { className: 'product-buttons' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h2',
+            { onClick: this.switchTabProduct, className: 'information-title' },
+            'Product Information'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h2',
+            { onClick: this.switchTabSyndicated, className: 'information-title active' },
+            'Source Information'
+          )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
