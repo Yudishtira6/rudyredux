@@ -40033,6 +40033,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     this.getReviews = this.getReviews.bind(this);
     this.switchReviews = this.switchReviews.bind(this);
     this.switchTabs = this.switchTabs.bind(this);
+    this.checkForm = this.checkForm.bind(this);
     // this.paginationClick=this.paginationClick.bind(this);
   }
   //bind this so that I may set state.
@@ -40134,15 +40135,21 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           sourceClient: sourceClient
         });
       });
-    } else if (!client && !productId) {
+    }
+  }
+  checkForm() {
+    let client = document.getElementById('client').value;
+    let productId = document.getElementById('prodid').value;
+    if (!client && !productId) {
       this.setState({ clientError: "empty", prodError: "empty" });
     } else if (!productId && client) {
       this.setState({ prodError: "empty", clientError: '' });
     } else if (!client && productId) {
       this.setState({ clientError: "empty", prodError: '' });
+    } else {
+      this.setState({ clientError: '', prodError: '' });
     }
   }
-
   //logic to filter reviews in snapshot
   switchReviews(reviews, activeTab) {
     switch (reviews) {
@@ -40213,8 +40220,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'form',
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: this.state.clientError, type: 'text', id: 'client', name: 'client', placeholder: 'Client Name', list: 'clientList', autoComplete: 'off' }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: this.state.prodError, type: 'text', id: 'prodid', name: 'prodId', placeholder: 'Product ID' }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: this.state.clientError, onKeyUp: this.checkForm, type: 'text', id: 'client', name: 'client', placeholder: 'Client Name', list: 'clientList', autoComplete: 'off' }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: this.state.prodError, onKeyUp: this.checkForm, type: 'text', id: 'prodid', name: 'prodId', placeholder: 'Product ID' }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'h2',
           { className: 'submit', onClick: this.onClick },
