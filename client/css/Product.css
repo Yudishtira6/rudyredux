@@ -33,18 +33,16 @@ form {
 
 .product-info {
   opacity: 1;
-  margin-bottom: 20px;
-  padding-bottom: 2rem;
-  display: inline-block;
-  width: 100%;
+  width: 85%;
   margin-left: 2rem;
+  position: absolute;
   transition: .3s ease;
 }
 
 .syndication-info {
   opacity: 1;
   width: 100%;
-  overflow-x: scroll;
+  position: absolute;
   transition: opacity .3s ease-in-out;
 }
 
@@ -77,13 +75,12 @@ form {
 }
 
 .information-title {
-  <<<<<<< HEAD margin-bottom: 2rem;
   font-size: 20px;
-  =======color: #0084ab;
-  >>>>>>>33b30ec7d74a547f8e0537f243369d45ece8746a display: inline-block;
+  color: #0084ab;
+  display: inline-block;
   border: 1px solid #0084ab;
-  border-radius: 0.5rem;
   padding: 1rem;
+  margin-bottom: 0;
   margin-top: 0;
   cursor: pointer;
 }
@@ -96,15 +93,16 @@ form {
 .active {
   background: #e5f3f7;
   color: #0084ab;
-  margin: 2.5rem 1rem;
-  transition: .3s ease-in-out;
+  transition: scale .6s ease-in-out;
+  transform: scale(1.1);
+  border-bottom: none;
 }
 
 /*source data*/
 
 .source-data {
   display: inline-block;
-  width: 28%;
+  width: 13%;
   margin-left: 2rem;
   margin-bottom: 3rem;
 }
@@ -122,6 +120,25 @@ form {
   margin-right: 6px;
 }
 
+.slide {
+  margin-left: 42rem;
+  transition: .3s ease-in-out;
+  position: absolute;
+  opacity: 0;
+}
+
 .product-buttons {
-  text-align: center;
+  border-bottom: 1px solid black;
+  padding-bottom: 0;
+  margin-bottom: 2rem;
+  padding-left: 1rem;
+  margin-top: 3rem;
+}
+
+.active:first-of-type {
+  box-shadow: 1px -1px 0.5px 0px #00000040;
+}
+
+.active:last-of-type {
+  box-shadow: -0.5px 0px 0.5px #00000040;
 }

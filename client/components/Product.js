@@ -17,6 +17,7 @@ class Product extends React.Component {
     render(){
 
     console.log("product data",this.props.data);
+    let sourceData=<p className="no-data">No Source Data Found</p>;
     let familyIds;
     let sourceClient;
       if(this.props.data.familyIds){
@@ -28,6 +29,11 @@ class Product extends React.Component {
         sourceClient=this.props.data.sourceClient.map((client)=>{
         return <li>{client}</li>;
       });
+    }
+    if(this.props.sourceData){
+    sourceData=this.props.sourceData.map((source)=>{
+          return (<SourceData data={source}/>);
+        });
     }
     let productInfo=(
                       <div className='info'>
@@ -45,25 +51,21 @@ class Product extends React.Component {
                             <h3 className="product-details">Matching Strategies</h3>
                           </div>
                         </div>
-                        <div className="syndication-info hide">
-                          <h2> SYNDICATED STUFF HERE</h2>
+                        <div className="syndication-info slide">
+                          {sourceData}
                         </div>
                       </div>
 
                       );
-    let sourceData=<p className="no-data">No Source Data Found</p>;
 
-    if(this.props.sourceData){
-    sourceData=this.props.sourceData.map((source)=>{
-          return (<SourceData data={source}/>);
-        });
-    }
     if(this.props.data.activeTab==='syndicated'){
     productInfo=(
                   <div className='info'>
-                    <h2 onClick={this.switchTabProduct} className="information-title">Product Information</h2>
-                    <h2 onClick={this.switchTabSyndicated} className="information-title active">Source Information</h2>
-                    <div className="product-info hide">
+                    <div className='product-buttons'>
+                      <h2 onClick={this.switchTabProduct} className="information-title">Product Information</h2>
+                      <h2 onClick={this.switchTabSyndicated} className="information-title active">Source Information</h2>
+                    </div>
+                    <div className="product-info slide">
                       <img className="product-photo" src={this.props.data.image}/>
                       <div className="product-information">
                         <h3 className="product-details"><a href={this.props.data.productPageUrl} target="_blank">{this.props.data.productName}</a></h3>

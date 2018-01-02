@@ -8,19 +8,22 @@ const GridLine =({productId, data})=>{
     let type="Native";
     let codes="N/A";
     let reason;
-console.log("data for Grid",data);
+
 
 if(data.Content){
-  if(data.Content=="PC"){
-    codes="Promotions/Coupon References";
-}else if(data.Content==="RET"){
-    codes="Specific Retailer Reference";
-}else if(data.Content==="PRI"){
-  codes="Specific Price Reference";
-}else if(data.Content==="STP"){
-  codes="Stop Syndication (Multi-Reason)";
-}
-
+  switch(data.Content) {
+      case "PC":
+          codes="Promotions/Coupon References";
+          break;
+      case "RET":
+          codes="Specific Retailer Reference";
+          break;
+       case "STP":
+           codes="Stop Syndication (Multi-Reason)";
+           break;
+      default:
+          codes="N/A";
+  }
   reason="highlight";
   type="blocked";
   color="red";
@@ -46,9 +49,9 @@ return(
             <td>{data.ModerationStatus}</td>
             <td className={reason}>{codes}</td>
             <td>{date}</td>
-		</tr>
+		      </tr>
 
-      );
-}
+          );
+  }
 
 export default GridLine;

@@ -1,5 +1,9 @@
+body {
+  overflow-x: hidden;
+}
+
 #root {
-  width: 85%;
+  max-width: 170rem;
   margin: 0 auto;
 }
 
