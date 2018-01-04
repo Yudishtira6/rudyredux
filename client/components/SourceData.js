@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SourceData=({data})=>{
+const SourceData=({ data })=>{
     return(
             <div className="source-data">
               <img className="source-image" src={data.attributionLogo}/>

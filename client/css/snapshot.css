@@ -44,6 +44,11 @@
   transition: .3s ease-in-out;
 }
 
+.family-information {
+  padding-top: 10px;
+  padding-bottom: 9px;
+}
+
 .main-number {
   font-size: 4rem;
   padding-top: .5rem;
@@ -85,8 +90,12 @@
 }
 
 .family-title {
-  margin-top: 11px;
-  margin-bottom: 5px;
+  padding-top: 11px;
+  margin: 0;
+}
+
+.emptyh4 {
+  margin: 0;
 }
 
 .family-id {

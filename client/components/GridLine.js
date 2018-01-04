@@ -2,7 +2,7 @@ import React from 'react';
 // ONE LINE of the Grid
 import moment from 'moment';
 
-const GridLine =({productId, data})=>{
+const GridLine =({productId, data, clicked})=>{
 // set css classes dynamically depending on what type of review.
     let color;
     let type="Native";

@@ -5,6 +5,8 @@ body {
 #root {
   max-width: 170rem;
   margin: 0 auto;
+  min-width: 122rem;
+  width: 93%;
 }
 
 .submit {
@@ -38,4 +40,8 @@ body {
 
 .empty {
   border: 1px solid red !important;
+}
+
+input {
+  outline: none;
 }

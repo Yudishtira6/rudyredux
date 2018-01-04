@@ -40,7 +40,7 @@ export default class SnapShot extends React.Component {
                     <li onClick={this.switchNative} className="native">
                       <div className="snap-main">
                         <h2 className="main-number">{this.props.data.displayableNative}</h2>
-                        <h3 className="main-label">NATIVE REVIEWS</h3>
+                        <h3 className="main-label">DISPLAYED NATIVE REVIEWS</h3>
                       </div>
                       <div className="secondary-container">
                         <h4 className="secondary-number">{this.props.data.native}</h4>
@@ -55,7 +55,7 @@ export default class SnapShot extends React.Component {
                     <li>
                     <div onClick={this.switchSyndicated} className="snap-main">
                       <h2 className="main-number">{this.props.data.displayableSyndicated}</h2>
-                      <h3 className="main-label">SYNDICATED REVIEWS</h3>
+                      <h3 className="main-label">DISPLAYED SYNDICATED REVIEWS</h3>
                     </div>
                     <div className="secondary-container">
                       <h4 className="secondary-number">{this.props.data.syndicated}</h4>
@@ -69,17 +69,17 @@ export default class SnapShot extends React.Component {
                     <li>
                       <div onClick={this.switchFamily} className="snap-main">
                         <h2 className="main-number">{this.props.data.family}</h2>
-                        <h3 className="main-label">FAMILY REVIEWS</h3>
+                        <h3 className="main-label">DISPLAYED FAMILY REVIEWS</h3>
                       </div>
                       <div className="family-information">
-                        <h4 className="family-title">Family IDs</h4>
-                        <h4>{familyIds}</h4>
+                        <h4 className="family-title">Member of {familyIds} Families </h4>
+                        <h4 className="emptyh4">&nbsp;</h4>
                       </div>
                     </li>
                     <li onClick={this.switchAll} className="total-container">
                       <div className="total-main">
                         <h2 className="total-number">{this.props.data.total}</h2>
-                        <h3 className="total-label">TOTAL REVIEWS DISPLAYING</h3>
+                        <h3 className="total-label">DISPLAYED TOTAL REVIEWS</h3>
                       </div>
                     </li>
                   </ul>
@@ -105,7 +105,7 @@ export default class SnapShot extends React.Component {
                       );
               }
       return( <div>
-                <h3 className="snapshot-header">Product Snapshot<i className="fa fa-camera" aria-hidden="true"></i></h3>
+                <h3 className="snapshot-header">Product Snapshot</h3>
                 {snapShot}
               </div>
               );

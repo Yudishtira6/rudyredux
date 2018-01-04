@@ -22,7 +22,7 @@ class Product extends React.Component {
     let sourceClient;
       if(this.props.data.familyIds){
         familyIds=this.props.data.familyIds.map((id)=>{
-        return <li>{id}</li>;
+        return <li key={id}>{id}</li>;
       });
     }
       if(this.props.data.sourceClient){
@@ -32,7 +32,7 @@ class Product extends React.Component {
     }
     if(this.props.sourceData){
     sourceData=this.props.sourceData.map((source)=>{
-          return (<SourceData data={source}/>);
+          return (<SourceData key={source.key} data={source}/>);
         });
     }
     let productInfo=(
@@ -48,7 +48,6 @@ class Product extends React.Component {
                             <h3 className="product-details">Product ID: {this.props.data.productId}</h3>
                             <ul className="product-details"><li>Family IDs:</li> {familyIds}</ul>
                             <ul className="product-details"><li>Syndication Sources:</li> {sourceClient}</ul>
-                            <h3 className="product-details">Matching Strategies</h3>
                           </div>
                         </div>
                         <div className="syndication-info slide">
@@ -72,7 +71,6 @@ class Product extends React.Component {
                         <h3 className="product-details">Product ID: {this.props.data.productId}</h3>
                         <ul className="product-details"><li>Family IDs:</li> {familyIds}</ul>
                         <ul className="product-details"><li>Syndication Sources:</li> {sourceClient}</ul>
-                        <h3 className="product-details">Matching Strategies</h3>
                       </div>
                     </div>
                     <div className="syndication-info">

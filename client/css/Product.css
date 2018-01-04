@@ -37,6 +37,7 @@ form {
   margin-left: 2rem;
   position: absolute;
   transition: .3s ease;
+  top: 22rem;
 }
 
 .syndication-info {
@@ -83,6 +84,7 @@ form {
   margin-bottom: 0;
   margin-top: 0;
   cursor: pointer;
+  margin-left: 1rem;
   display: inline-block;
 }
 
@@ -109,7 +111,7 @@ form {
 }
 
 .source-image {
-  width: 18rem;
+  width: 15rem;
 }
 
 .source-data h3 {
