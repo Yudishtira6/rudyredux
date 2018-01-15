@@ -50349,6 +50349,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     this.onClick = this.onClick.bind(this);
     this.checkForm = this.checkForm.bind(this);
     this.paginationClick = this.paginationClick.bind(this);
+    this.getSourceData = this.getSourceData.bind(this);
   }
   //bind this so that I may set state.
   onClick(e) {
@@ -50369,16 +50370,51 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     //api call to change page!
     console.log("current page number", e);
   }
-  //get all reviews from backend
 
+  getSourceData() {
+
+    __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/sourceforrealFam', {
+      source: this.state.source
+    }).then(function (response) {
+      //set state for product details.
+      console.log("Family call was successful!!", response.data);
+    }).catch(function (error) {
+      console.log('error: ', error);
+    });
+
+    __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/sourceforrealSyn', {
+      source: this.state.source
+    }).then(function (response) {
+      //set state for product details.
+      console.log("Syndication call was successful!!", response.data);
+    }).catch(function (error) {
+      console.log('error: ', error);
+    });
+  }
+
+  //get all reviews from backend
   getReviews(e) {
+    __WEBPACK_IMPORTED_MODULE_2_axios___default.a.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
     let client = document.getElementById('client').value;
     let productId = document.getElementById('prodid').value;
     this.checkForm();
     //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
-    if (client && productId && productId != this.state.productId) {
+    if (client && productId && productId !== this.state.productId) {
       this.setState({ loading: true });
-      //call to get product data from backend.
+      //START DRAKES CODE FOR FRONTEND*********************>
+      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/oracle', {
+        clientName: client,
+        productId: productId
+      }).then(function (response) {
+        console.log("oracle call was successful", response.data);
+        e.setState({ source: response.data }, e.getSourceData);
+      }).catch(function (error) {
+        console.log('error: ', error);
+      });
+
+      //END DRAKES CODE FRO FRONTEND ***************************>>>>
+
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/getProductDetails', __WEBPACK_IMPORTED_MODULE_3_querystring___default.a.stringify({
         clientName: client,
         productId: productId
@@ -50413,22 +50449,22 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         var syndicatedReviews = [];
         var nativeReviews = [];
         var sourceClient = [];
-        //loop through all reviews and filter reviews out to correct buckets.
-        response.data.hagrid.Results.filter(review => {
-          if (review.IsSyndicated) {
-            syndicatedReviews.push(review);
-          } else if (review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated) {
-            familyReviews.push(review);
-          } else if (review.ProductId.toLowerCase() === productId.toLowerCase() && review.SourceClient === client && !review.IsSyndicated) {
-            nativeReviews.push(review);
-          }
-          //collect source client data.
-          if (review.SourceClient.toLowerCase() != client.toLowerCase()) {
-            if (sourceClient.indexOf(review.SourceClient.toLowerCase()) == -1) {
-              sourceClient.push(review.SourceClient.toLowerCase());
-            }
-          }
-        });
+        // //loop through all reviews and filter reviews out to correct buckets.
+        //                 response.data.hagrid.Results.filter((review)=>{
+        //                   if(review.IsSyndicated){
+        //                     syndicatedReviews.push(review);
+        //                   }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
+        //                     familyReviews.push(review);
+        //                   }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
+        //                     nativeReviews.push(review);
+        //                   }
+        // //collect source client data.
+        //                   if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
+        //                     if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
+        //                       sourceClient.push(review.SourceClient.toLowerCase());
+        //                     }
+        //                   }
+        //                 });
         //set state of looped buckets.
         e.setState({ reviews: response.data.hagrid.Results,
           displayableReviews: response.data.hagrid.Results,
@@ -56651,17 +56687,60 @@ var objectKeys = Object.keys || function (obj) {
 class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      clicked: false,
+      reviewText: '',
+      reviewId: ''
+    };
     this.handlePage = this.handlePage.bind(this);
+    this.clickHandler = this.clickHandler.bind(this);
+    this.closeReview = this.closeReview.bind(this);
   }
 
   handlePage(i) {
     console.log("clicked", i);
     this.props.pagination(i);
   }
+  clickHandler(reviewText, reviewId) {
+    this.setState({ clicked: true, reviewText: reviewText, reviewId: reviewId });
+  }
+  closeReview() {
+    this.setState({ clicked: false, reviewText: '', reviewId: '' });
+  }
 
   render() {
     let Items;
-
+    let reviewText;
+    if (this.state.clicked) {
+      reviewText = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        { onClick: this.closeReview, className: 'review-modal' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'review-text-container' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'button',
+            { onClick: this.closeReview, type: 'button', className: 'close', 'aria-label': 'Close' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'span',
+              { 'aria-hidden': 'true' },
+              '\xD7'
+            )
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'h5',
+            { className: 'review-id' },
+            'ReviewID: ',
+            this.state.reviewId
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'p',
+            { className: 'review-text' },
+            this.state.reviewText
+          )
+        )
+      );
+    }
     if (this.props.data.length > 1) {
 
       //create the pages
@@ -56680,6 +56759,7 @@ class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         { id: 'displayableReviewsTitle' },
         this.props.title
       ),
+      reviewText,
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'table',
         { className: 'tableMain', id: 'displayableReviews' },
@@ -56752,89 +56832,98 @@ class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
 // ONE LINE of the Grid
 
-
-const GridLine = ({ productId, data, clicked }) => {
+class GridLine extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.props.clickHandler(this.props.data.ReviewText, this.props.data.Id);
+  }
+  render() {
     // set css classes dynamically depending on what type of review.
     let color;
     let type = "Native";
     let codes = "N/A";
     let reason;
 
-    if (data.Content) {
-        switch (data.Content) {
-            case "PC":
-                codes = "Promotions/Coupon References";
-                break;
-            case "RET":
-                codes = "Specific Retailer Reference";
-                break;
-            case "STP":
-                codes = "Stop Syndication (Multi-Reason)";
-                break;
-            default:
-                codes = "N/A";
-        }
-        reason = "highlight";
-        type = "blocked";
-        color = "red";
+    if (this.props.data.Content) {
+      switch (this.props.data.Content) {
+        case "PC":
+          codes = "Promotions/Coupon References";
+          break;
+        case "RET":
+          codes = "Specific Retailer Reference";
+          break;
+        case "STP":
+          codes = "Stop Syndication (Multi-Reason)";
+          break;
+        default:
+          codes = "N/A";
+      }
+      reason = "highlight";
+      type = "blocked";
+      color = "red";
     }
 
-    if (data.IsSyndicated && !data.blocked) {
-        type = "Syndicated";
-        color = "blue";
-    } else if (data.ProductId.toLowerCase() != productId.toLowerCase()) {
-        type = "Family";
-        color = "yellow";
+    if (this.props.data.IsSyndicated && !this.props.data.blocked) {
+      type = "Syndicated";
+      color = "blue";
+    } else if (this.props.data.ProductId.toLowerCase() != this.props.productId.toLowerCase()) {
+      type = "Family";
+      color = "yellow";
     }
-    var date = __WEBPACK_IMPORTED_MODULE_1_moment___default()(data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
+    var date = __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.props.data.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
 
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'tr',
-        { className: color },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.Id
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            type
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.SourceClient
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.ProductId
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.Rating
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            data.ModerationStatus
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            { className: reason },
-            codes
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'td',
-            null,
-            date
-        )
+      'tr',
+      { onClick: this.handleClick, className: color },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'td',
+        null,
+        this.props.data.Id
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'td',
+        null,
+        type
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'td',
+        null,
+        this.props.data.SourceClient
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'td',
+        null,
+        this.props.data.ProductId
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'td',
+        null,
+        this.props.data.Rating
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'td',
+        null,
+        this.props.data.ModerationStatus
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'td',
+        { className: reason },
+        codes
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'td',
+        null,
+        date
+      )
     );
-};
+  }
 
-/* harmony default export */ __webpack_exports__["a"] = (GridLine);
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = GridLine;
+
 
 /***/ }),
 /* 229 */
@@ -57164,6 +57253,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         itemsCountPerPage: 100,
         totalItemsCount: this.props.totalResults,
         pageRangeDisplayed: 5,
+        prevPageText: "Prev",
+        firstPageText: "First",
+        lastPageText: "Last",
+        nextPageText: "Next",
         onChange: this.handlePageChange
       })
     );

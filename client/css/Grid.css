@@ -14,17 +14,26 @@ body {
 .blue {
   background: #d9edf7;
   height: 5rem;
-  ;
+  transition: .3s ease-in-out;
+  cursor: pointer;
 }
 
 .yellow {
   background: #fff2b1;
   height: 5rem;
+  transition: .3s ease-in-out;
+  cursor: pointer;
 }
 
 .red {
   background: #be3534;
   height: 5rem;
+  transition: .3s ease-in-out;
+  cursor: pointer;
+}
+
+.blue:hover {
+  transform: scale(1.01);
 }
 
 table {
@@ -85,4 +94,39 @@ th, td {
 
 .page-button:hover {
   background: #e5f3f7;
+}
+
+.review-text-container {
+  background: white;
+  position: fixed;
+  width: 1000px;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -500px;
+}
+
+.review-text {
+  padding: 2rem;
+  text-align: center;
+}
+
+.review-id {
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.close {
+  margin-right: 1rem;
+  font-size: 3rem;
+}
+
+.review-modal {
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  background: grey;
+  background-color: #0e0d0d61;
 }

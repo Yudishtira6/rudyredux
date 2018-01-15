@@ -54,6 +54,7 @@ export default class App extends React.Component {
       this.onClick=this.onClick.bind(this);
       this.checkForm=this.checkForm.bind(this);
       this.paginationClick=this.paginationClick.bind(this);
+      this.getSourceData=this.getSourceData.bind(this);
   }
   //bind this so that I may set state.
   onClick(e){
@@ -74,16 +75,65 @@ export default class App extends React.Component {
     //api call to change page!
     console.log("current page number",e);
   }
-  //get all reviews from backend
 
+
+    getSourceData(){
+
+      axios.post('/sourceforrealFam',
+              {
+                source: this.state.source
+              }
+              ).then(function(response) {
+     //set state for product details.
+                console.log("Family call was successful!!",response.data);
+            }).catch(function(error){
+              console.log('error: ',error);
+            });
+
+            axios.post('/sourceforrealSyn',
+                     {
+                       source: this.state.source
+                     }
+                     ).then(function(response) {
+            //set state for product details.
+                       console.log("Syndication call was successful!!",response.data);
+                   }).catch(function(error){
+                     console.log('error: ',error);
+                   });
+    }
+
+
+  //get all reviews from backend
     getReviews(e){
+      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
       let client=document.getElementById('client').value;
       let productId=document.getElementById('prodid').value;
       this.checkForm();
   //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
-      if(client && productId && productId!=this.state.productId){
+      if(client && productId && productId!==this.state.productId){
           this.setState({loading:true});
-  //call to get product data from backend.
+//START DRAKES CODE FOR FRONTEND*********************>
+      axios.post('/oracle',
+             {
+               clientName: client,
+               productId: productId
+             }
+             ).then(function(response) {
+               console.log("oracle call was successful", response.data);
+               e.setState({source:response.data},e.getSourceData);
+           }).catch(function(error){
+             console.log('error: ',error);
+           });
+
+
+
+
+
+
+
+//END DRAKES CODE FRO FRONTEND ***************************>>>>
+  
           axios.post('/getProductDetails',
             querystring.stringify({
               clientName: client,
@@ -120,22 +170,22 @@ export default class App extends React.Component {
                   var syndicatedReviews=[];
                   var nativeReviews=[];
                   var sourceClient=[];
-  //loop through all reviews and filter reviews out to correct buckets.
-                  response.data.hagrid.Results.filter((review)=>{
-                    if(review.IsSyndicated){
-                      syndicatedReviews.push(review);
-                    }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
-                      familyReviews.push(review);
-                    }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
-                      nativeReviews.push(review);
-                    }
-  //collect source client data.
-                    if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
-                      if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
-                        sourceClient.push(review.SourceClient.toLowerCase());
-                      }
-                    }
-                  });
+  // //loop through all reviews and filter reviews out to correct buckets.
+  //                 response.data.hagrid.Results.filter((review)=>{
+  //                   if(review.IsSyndicated){
+  //                     syndicatedReviews.push(review);
+  //                   }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
+  //                     familyReviews.push(review);
+  //                   }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
+  //                     nativeReviews.push(review);
+  //                   }
+  // //collect source client data.
+  //                   if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
+  //                     if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
+  //                       sourceClient.push(review.SourceClient.toLowerCase());
+  //                     }
+  //                   }
+  //                 });
   //set state of looped buckets.
                 e.setState({reviews:response.data.hagrid.Results,
                             displayableReviews:response.data.hagrid.Results,

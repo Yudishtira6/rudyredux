@@ -26,6 +26,10 @@ export default class App extends Component {
           itemsCountPerPage={100}
           totalItemsCount={this.props.totalResults}
           pageRangeDisplayed={5}
+          prevPageText={"Prev"}
+          firstPageText={"First"}
+          lastPageText={"Last"}
+          nextPageText={"Next"}
           onChange={this.handlePageChange}
         />
       </div>

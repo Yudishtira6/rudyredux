@@ -7,7 +7,7 @@ var jsonfiletest = require("../../sample.json");
 console.log('jsonfiletest: ',jsonfiletest);
 var testSwitchArray = [];
 var fs = require('fs'),
-    path = require('path'),    
+    path = require('path'),
     filePath = path.join(__dirname, '../../sampleswitchtest.json');
     console.log("start");
 fs.readFile(filePath, function(error, data) {
@@ -430,7 +430,7 @@ router.route('/insert')
                     var syndicatedReviews = syndObj[source.syndication[0][1]]["Results"].length;
                     var blockedSyndicatedReviews = syndObj[source.syndication[0][1]]["Results"].length-syndTotal;
                   }
-                  
+
                   var responseObj = {
                     hagrid:hagridTotalObj,
                     syndObj,
@@ -456,6 +456,131 @@ router.route('/insert')
         // API call failed...
     });
 });
+// Oracle route
+router.route('/oracle').post(function(req,res){
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+  var source = {};
+  var options = {
+    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  console.log(' Oracle options: ',options);
+  rp(options)
+    .then(function (data) {
+      console.log('Oracle call data',JSON.stringify(data));
+      console.log('Oracle call data["products"].length: ',data["products"].length)
+      // set local function vars that will be set to the global source object
+      var family = [];
+      var syndication = [];
+      // set data
+      var hero = data.products;
+      var len = hero.length;
+      console.log('hero: ',hero);
+      console.log('len: ',len);
+      // need error handling for product with no families and no syndication
+      if(len==0){
+        // no syndication and no family
+        source = { syndication: [], family: [] };
+      } else {
+        // loop through results of calll and organize into family and syndication
+        for (i = 0; i < len; i++) {
+            if ((data.products[i]['sources'][0]) === ('FAMILY')) {
+              var innerFamily = [];
+              family.push(innerFamily)
+              innerFamily.push((data.products[i]['client']), (data.products[i]['externalId']))
+            }
+            else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC') || (data.products[i]['sources'][0]) === ('EXTERNAL_ID')) {
+              var innerSyndication = [];
+              syndication.push(innerSyndication)
+              innerSyndication.push((data.products[i]['client']), (data.products[i]['externalId']))
+            }
+            source.syndication = syndication;
+            source.family = family;
+        }
+      }
+      // console.log('syndication: ', syndication);
+      console.log('Oracle call complete');
+      console.log('source: ', source);
+      res.json(source);
+    })
+    .catch(function (err) {
+        // API call failed...
+    });
+});
+// source for real - syndication
+router.route('/sourceforrealSyn').post(function(req,res){
+  console.log('*****');
+  console.log('sourceforrealSyn route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('*****');
+  var source = req.body.source;
+  var syndications = [];
+  // iterate through source object for syndication info
+  for (let i = 0, len = source.syndication.length;i<len;i++){
+    var options = {
+      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+source.syndication[i][0]+'&filter=id:'+source.syndication[i][1],
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: true // Automatically parses the JSON string in the response
+    };
+    console.log('options: ',options);
+    rp(options)
+      .then(function (data) {
+        console.log('data for sfr Syn: ',JSON.stringify(data));
+        syndications.push(data);
+      })
+      .catch(function (err) {
+          // API call failed...
+      });
+  }
+  // delay
+  setTimeout(myTimeout5, 4000);
+  function myTimeout5() {
+    var SynResponseObject = {syndicationData:syndications};
+    res.json(SynResponseObject);
+  }
+});
+
+
+// source for real - family
+router.route('/sourceforrealFam').post(function(req,res){
+  console.log('*****');
+  console.log('sourceforrealFam route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('*****');
+  var source = req.body.source;
+  var families = [];
+  // iterate through source object for syndication info
+  for (let i = 0, len = source.family.length;i<len;i++){
+    var options = {
+      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+source.family[i][0]+'&filter=id:'+source.family[i][1],
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: true // Automatically parses the JSON string in the response
+    };
+    console.log('options: ',options);
+    rp(options)
+      .then(function (data) {
+        console.log('data for sfr Fam: ',JSON.stringify(data));
+        families.push(data);
+      })
+      .catch(function (err) {
+          // API call failed...
+      });
+  }
+  // delay
+  setTimeout(myTimeout4, 4000);
+  function myTimeout4() {
+    var FamResponseObject = {familyData:families};
+    res.json(FamResponseObject);
+  }
+});
+
 
 router.route('/update')
 .post(function(req, res) {
