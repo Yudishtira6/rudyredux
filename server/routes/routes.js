@@ -3,48 +3,57 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var rp = require('request-promise');
-var jsonfiletest = require("../../sample.json");
-console.log('jsonfiletest: ',jsonfiletest);
-var testSwitchArray = [];
-var fs = require('fs'),
-    path = require('path'),
-    filePath = path.join(__dirname, '../../sampleswitchtest.json');
-    console.log("start");
-fs.readFile(filePath, function(error, data) {
-  if (error) { throw error; }
-  data.toString().split("\n").forEach(function(line, index, arr) {
-    if (index === arr.length - 1 && line === "") { return; }
-    console.log(index + " " + line);
-    switchArrayConstruct(line);
-  });
-  console.log("end");
-});
-function switchArrayConstruct(data){
-  testSwitchArray.push(JSON.parse(data));
-  console.log('testSwitchArray: ',testSwitchArray);
-  return;
-}
+var switchboardArray = [];
+var nativeContentTotal = 0;
+var nativeRatingsOnlyTotal = 0;
+var nativeDisplayTotal = 0;
+var syndDisplayTotal = 0;
+var famDisplayTotal = 0;
+var allReviewDisplayTotal = 0;
+// var fs = require('fs'),
+//     path = require('path'),    
+//     filePath = path.join(__dirname, '../../switchboard-expressiveClient.json');
+// console.log("start");
+// var stream = fs.createReadStream(filePath, {flags: 'r', encoding: 'utf-8'});
+// var buf = '';
+// stream.on('data', function(d) {
+//     buf += d.toString(); // when data is read, stash it in a string buffer
+//     pump(); // then process the buffer
+// });
 
-var switchboardOshKoshData = {"_name":"Cartersoshkoshca","_syndicationVersion":2,"display":{"5084-fr_ca":{"_internalCode":"5084-fr_ca","_sources":{"Carters":{"_sourceDisplayName":"carters.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3ACarters.gif","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}},"OshKosh":{"_sourceDisplayName":"oshkosh.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3AOshKosh.png","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}}}},"5084-fr":{"_internalCode":"5084-fr","_sources":{"Carters":{"_sourceDisplayName":"carters.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3ACarters.gif","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}},"OshKosh":{"_sourceDisplayName":"oshkosh.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3AOshKosh.png","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}}}},"5084-en_ca":{"_internalCode":"5084-en_ca","_sources":{"Carters":{"_sourceDisplayName":"carters.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3ACarters.gif","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}},"OshKosh":{"_sourceDisplayName":"oshkosh.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3AOshKosh.png","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}}}},"5084":{"_internalCode":"5084","_sources":{"Carters":{"_sourceDisplayName":"carters.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3ACarters.gif","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}},"OshKosh":{"_sourceDisplayName":"oshkosh.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3AOshKosh.png","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}}}},"5084-en":{"_internalCode":"5084-en","_sources":{"Carters":{"_sourceDisplayName":"carters.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3ACarters.gif","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}},"OshKosh":{"_sourceDisplayName":"oshkosh.com","_logoImageName":"https://photos-us.bazaarvoice.com/photo/2/cGhvdG86YXR0cmlidXRpb25sb2dvMg/cartersoshkoshca%3AOshKosh.png","_summaryIcon":null,"_bannerIcon":null,"_displayOrder":2147483647,"_maxSyndicatedSummaries":0,"_contentConfigurations":{"REVIEW":{"_contentTruncationEnabled":false,"_showAttribution":true,"_showLogo":true,"_useAttributionLink":false,"_syndicationDisplayType":"INLINE","_showInSearchVoiceInlinePages":false}}}}}},"export":{},"import":{"Carters":{"_sourceClientName":"Carters","_allowDuplicateContent":true,"_contextDataValueStrategy":"IMPORT_MATCHING","_includeClientResponses":false,"_includeRatingsOnlyReviews":false,"_keepFeatured":false,"_productMatchingStrategies":["SYNDICATION_MATCH_TABLE","EAN","UPC","ISBN","EXTERNAL_ID"],"_ratingDimensionsStrategy":"IMPORT_ALL","_videoImportStrategy":"VIDEO_EXTERNAL_ONLY","_includePhotos":false,"_excludedContentCodesForImport":["RET","PC","PRI","STP","CSN"],"_copyFamilyAttributesFromHostProduct":false,"_syndicationVersion":2,"_sendThroughModeration":false},"OshKosh":{"_sourceClientName":"OshKosh","_allowDuplicateContent":true,"_contextDataValueStrategy":"IMPORT_MATCHING","_includeClientResponses":false,"_includeRatingsOnlyReviews":false,"_keepFeatured":false,"_productMatchingStrategies":["SYNDICATION_MATCH_TABLE","EAN","UPC","ISBN","EXTERNAL_ID"],"_ratingDimensionsStrategy":"IMPORT_ALL","_videoImportStrategy":"VIDEO_EXTERNAL_ONLY","_includePhotos":false,"_excludedContentCodesForImport":["RET","PC","PRI","STP","CSN"],"_copyFamilyAttributesFromHostProduct":false,"_syndicationVersion":2,"_sendThroughModeration":false}},"portal":{"_enabledAnalystReports":["PRR_SYNDICATION_INBOUND","PRR_SYNDICATION_PRODUCT"]}};
+// function pump() {
+//     var pos;
+//     while ((pos = buf.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
+//         if (pos == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
+//             buf = buf.slice(1); // discard it
+//             continue; // so that the next iteration will start with data
+//         }
+//         processLine(buf.slice(0,pos)); // hand off the line
+//         buf = buf.slice(pos+1); // and slice the processed data off the buffer
+//     }
+// }
+// console.log('end');
+// function processLine(line) { // here's where we do something with a line
 
-console.log('Switchboard data- switchboardOshKoshData["import"]["Carters"]["_excludedContentCodesForImport"]:',switchboardOshKoshData["import"]["Carters"]["_excludedContentCodesForImport"]);
+//     if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
+
+//     if (line.length > 0) { // ignore empty lines
+//         var obj = JSON.parse(line); // parse the JSON
+//         switchboardArray.push(obj);
+//     }
+// }
 
 router.get('/', function(req, res){
   res.render('index')
 });
 
+// Test routes
 
-// On user input - quick call to get product name and image
-router.route('/getProductDetails')
-.post(function(req,res) {
-  // get user inputs
+// product
+router.route('/getProductDetails').post(function(req,res){
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
-
-console.log('Switchboard data- testSwitchArray[0]["import"]["EverydaymeFI_FI"]["_excludedContentCodesForImport"]:',testSwitchArray[0]["import"]["EverydaymeFI_FI"]["_excludedContentCodesForImport"]);
-console.log('Switchboard data - using find - testSwitchArray.find(x => x._name === "Cyberdefender")',testSwitchArray.find(x => x._name === 'Cyberdefender'));
   var clientName = req.body.clientName;
   var productId = req.body.productId;
-  // plug in user input to hagrid product call to get name and image
   var options = {
     uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+req.body.clientName+'&filter=id:'+req.body.productId,
     headers: {
@@ -52,11 +61,387 @@ console.log('Switchboard data - using find - testSwitchArray.find(x => x._name =
     },
     json: true // Automatically parses the JSON string in the response
   };
-  // console.log('options: ',options);
+  console.log('options: ',options);
   rp(options)
     .then(function (data) {
       console.log('data',JSON.stringify(data));
       res.json(data);
+    })
+    .catch(function (err) {
+        // API call failed...
+    });
+});
+
+// Oracle route
+router.route('/oracle').post(function(req,res){
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+  var source = {};
+  var options = {
+    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  console.log(' Oracle options: ',options);
+  rp(options)
+    .then(function (data) {
+      console.log('Oracle call data',JSON.stringify(data));
+      console.log('Oracle call data["products"].length: ',data["products"].length)
+      // set local function vars that will be set to the global source object
+      var family = [];
+      var syndication = [];
+      // set data
+      var hero = data.products;
+      var len = hero.length;
+      console.log('hero: ',hero);
+      console.log('len: ',len);
+      // need error handling for product with no families and no syndication
+      if(len==0){
+        // no syndication and no family
+        source = { syndication: [], family: [] };
+      } else {
+        // loop through results of calll and organize into family and syndication
+        for (i = 0; i < len; i++) {
+            if ((data.products[i]['sources'][0]) === ('FAMILY')) {
+              var innerFamily = [];
+              family.push(innerFamily)
+              innerFamily.push((data.products[i]['client']), (data.products[i]['externalId']))
+            }
+            else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC') || (data.products[i]['sources'][0]) === ('EXTERNAL_ID')) {
+              var innerSyndication = [];
+              syndication.push(innerSyndication)
+              innerSyndication.push((data.products[i]['client']), (data.products[i]['externalId']))
+            }
+            source.syndication = syndication;
+            source.family = family;
+        }
+      }
+
+      // console.log('syndication: ', syndication);
+      console.log('Oracle call complete');
+      console.log('source: ', source);
+      res.json(source);
+    })
+    .catch(function (err) {
+        // API call failed...
+    });
+});
+
+// source for real - syndication
+router.route('/sourceforrealSyn').post(function(req,res){
+  console.log('*****');
+  console.log('sourceforrealSyn route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('*****');
+  var source = req.body.source;
+  var syndications = [];
+  // iterate through source object for syndication info
+  for (let i = 0, len = source.syndication.length;i<len;i++){
+    var options = {
+      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+source.syndication[i][0]+'&filter=id:'+source.syndication[i][1],
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: true // Automatically parses the JSON string in the response
+    };
+    console.log('options: ',options);
+    rp(options)
+      .then(function (data) {
+        console.log('data for sfr Syn: ',JSON.stringify(data));
+        syndications.push(data);
+      })
+      .catch(function (err) {
+          // API call failed...
+      });
+  }
+  // delay
+  setTimeout(myTimeout5, 4000);
+  function myTimeout5() {
+    var SynResponseObject = {syndicationData:syndications};
+    res.json(SynResponseObject);
+  }
+});
+
+// source for real - family
+router.route('/sourceforrealFam').post(function(req,res){
+  console.log('*****');
+  console.log('sourceforrealFam route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('*****');
+  var source = req.body.source;
+  var families = [];
+  // iterate through source object for syndication info
+  for (let i = 0, len = source.family.length;i<len;i++){
+    var options = {
+      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+source.family[i][0]+'&filter=id:'+source.family[i][1],
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: true // Automatically parses the JSON string in the response
+    };
+    console.log('options: ',options);
+    rp(options)
+      .then(function (data) {
+        console.log('data for sfr Fam: ',JSON.stringify(data));
+        families.push(data);
+      })
+      .catch(function (err) {
+          // API call failed...
+      });
+  }
+  // delay
+  setTimeout(myTimeout4, 4000);
+  function myTimeout4() {
+    var FamResponseObject = {familyData:families};
+    res.json(FamResponseObject);
+  }
+});
+
+
+
+//  pagination for reals
+router.route('/paginationforreals').post(function(req,res){
+  console.log('*****');
+  console.log('paginationforreals route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source, ' category: ', req.body.category, ' pageNumber: ', req.body.pageNumber);
+  console.log('*****');
+  var source = req.body.source;
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var category = req.body.category;
+  var pageNumber = req.body.pageNumber;
+  let pagopt = {
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&limit=100&offset='+(pageNumber*100),
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  // console.log('hagopt: ',hagopt);
+  rp(pagopt)
+    .then(function (pageResults) {
+      console.log('****')
+      console.log('pageResults: ', pageResults);
+      console.log('****')
+      res.json(pageResults);
+    })
+    .catch(function (err) {
+      // API call failed...
+  });
+});
+
+// sources
+router.route('/getSources').post(function(req,res){
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var syndTotal = 0;
+  var totalId = [];
+  var syndId = [];
+  var sources = {};
+  var dashboard = {};
+  var totalReviews = {};
+  var hagridTotalObj = {};
+  var familyObj = {};
+  var syndObj = {};
+  var rejected = {};
+  rejected["Results"] = [];
+  // console.log('rejected: ',rejected);
+  var hagridTotalResults = [];
+  var source = new Object ();
+  // Step 1 (Oracle call to get sources)
+  var options = {
+    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  console.log('options: ',options);
+  rp(options)
+    .then(function (data) {
+      console.log('Oracle call data',JSON.stringify(data));
+      console.log('Oracle call data["products"].length: ',data["products"].length)
+      // set local function vars that will be set to the global source object
+      var family = [];
+      var syndication = [];
+      // set data
+      var hero = data.products;
+      var len = hero.length;
+      console.log('hero: ',hero);
+      console.log('len: ',len);
+      // need error handling for product with no families and no syndication
+      if(len==0){
+        // no syndication and no family
+        source = { syndication: [], family: [] };
+      } else {
+        // loop through results of calll and organize into family and syndication
+        for (i = 0; i < len; i++) {
+            if ((data.products[i]['sources'][0]) === ('FAMILY')) {
+              var innerFamily = [];
+              family.push(innerFamily)
+              innerFamily.push((data.products[i]['client']), (data.products[i]['externalId']))
+            }
+            else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC') || (data.products[i]['sources'][0]) === ('EXTERNAL_ID')) {
+              var innerSyndication = [];
+              syndication.push(innerSyndication)
+              innerSyndication.push((data.products[i]['client']), (data.products[i]['externalId']))
+            }
+            source.syndication = syndication;
+            source.family = family;
+        }
+      }
+
+      // console.log('syndication: ', syndication);
+      console.log('Oracle call complete');
+      console.log('source: ', source);
+
+      // iterate through synd sources to get switchboard info
+
+    })
+    .catch(function (err) {
+        // API call failed...
+    });
+});
+
+// dashboard
+router.route('/dashboard').post(function(req,res) {
+  // get user inputs
+  console.log('Hiting dashboard . . .');
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  console.log('clientName: ', clientName,'productId: ', productId);
+  // batch call #1 - q0 syndicated total, q1 - review display total
+  var batchOneOptions = {
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhaul&clientname='+clientName+'&keyproperty=syndication&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+productId+'&filter.q0=issyndicated:true&limit.q0=1&resource.q1=statistics&filter.q1=productid:'+productId+'&stats.q1=reviews',
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  console.log('batchOneOptions options: ',batchOneOptions);
+  rp(batchOneOptions)
+    .then(function (synRev) {
+      console.log('hitting batchoneoptions . . .');
+      console.log('synRev["BatchedResults"]["q0"]["TotalResults"]: ',synRev["BatchedResults"]["q0"]["TotalResults"]);
+      // console.log('synRev["BatchedResults"]["q1"]["Results"][0]["ProductStatistics"]["ReviewStatistics"]["TotalReviewCount"]: ',synRev["BatchedResults"]["q1"]["Results"][0]["ProductStatistics"]["ReviewStatistics"]["TotalReviewCount"]);
+      syndDisplayTotal = synRev["BatchedResults"]["q0"]["TotalResults"];
+      allReviewDisplayTotal = synRev["BatchedResults"]["q1"]["Results"][0]["ProductStatistics"]["ReviewStatistics"]["TotalReviewCount"];
+      // console.log('synRev: ',JSON.stringify(prodData));
+      console.log('syndDisplayTotal: ',syndDisplayTotal);
+      console.log('allReviewDisplayTotal: ',allReviewDisplayTotal);
+      // nested batch2Option
+      // batch call #2 - q0 num native reviews (reviews with content + ratingsOnly)
+      // q1 num ratingsOnly native reviews
+      var batch2Options = {
+        uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhaul&clientname='+clientName+'&excludeFamily=true&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+productId+'&limit.q0=1&resource.q1=reviews&filter.q1=productid:'+productId+'&limit.q1=1&filter.q1=isRatingsOnly:true',
+        headers: {
+            'User-Agent': 'Request-Promise'
+        },
+        json: true // Automatically parses the JSON string in the response
+      };
+      console.log('batch2Options options: ',batch2Options);
+      rp(batch2Options)
+        .then(function (conRat) {
+          console.log('conRat: ',JSON.stringify(conRat));
+          nativeDisplayTotal = conRat["BatchedResults"]["q0"]["TotalResults"];
+          if (conRat["BatchedResults"]["q1"]["Results"].length>0){
+              nativeRatingsOnlyTotal = conRat["BatchedResults"]["q1"]["Results"][0]["ReviewStatistics"]["TotalReviewCount"];
+          } else {
+            nativeRatingsOnlyTotal = 0;
+          }
+          nativeContentTotal = nativeDisplayTotal - nativeRatingsOnlyTotal;
+          famDisplayTotal = allReviewDisplayTotal - nativeDisplayTotal - syndDisplayTotal;
+          console.log('nativeContentTotal: ',nativeContentTotal);
+          console.log('nativeDisplayTotal: ',nativeDisplayTotal);
+          console.log('nativeRatingsOnlyTotal: ',nativeRatingsOnlyTotal);
+          console.log('famDisplayTotal: ',famDisplayTotal);
+          console.log('Am I going crazy?');
+          var responseObject = {};
+          responseObject["dashboard"] = {nativeReviews:nativeContentTotal, displayableSyndicatedReviews:syndDisplayTotal, familyReviews:famDisplayTotal, totalReviews:allReviewDisplayTotal, ratingsOnlyReviews:nativeRatingsOnlyTotal, displayableNativeReviews:nativeDisplayTotal};
+          console.log('ResponseObject object: ',responseObject);
+          res.json(responseObject);
+
+        })
+        .catch(function (err) {
+          // API call failed...
+        });
+    })
+    .catch(function (err) {
+        // API call failed...
+    });
+});
+
+// On user input - quick call to get product name and image
+// Also get Dashboard data - all except blocked syndication reviews
+router.route('/getProductDetailsComplex')
+.post(function(req,res) {
+  // get user inputs
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+
+  // batch call #1 - q0 syndicated total, q1 - review display total
+  var batch1Options = {
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhaul&clientname='+req.body.clientName+'&keyproperty=syndication&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+req.body.productId+'&filter.q0=issyndicated:true&limit.q0=1&resource.q1=statistics&filter.q1=productid:'+req.body.productId+'&stats.q1=reviews',
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  console.log('batch1Options options: ',batch1Options);
+  rp(batch1Options)
+    .then(function (synRev) {
+      syndDisplayTotal = synRev["BatchedResults"]["q0"]["TotalResults"];
+      allReviewDisplayTotal = synRev["BatchedResults"]["q1"]["Results"]["ReviewStatistics"]["TotalReviewCount"];
+      console.log('synRev: ',JSON.stringify(prodData));
+      console.log('syndDisplayTotal: ',syndDisplayTotal);
+      console.log('allReviewDisplayTotal: ',allReviewDisplayTotal);
+
+      // nested batch2Option
+      // batch call #2 - q0 num native reviews (reviews with content + ratingsOnly)
+      // q1 num ratingsOnly native reviews
+      var batch2Options = {
+        uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhaul&clientname='+req.body.clientName+'&excludeFamily=true&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+req.body.productId+'&limit.q0=1&resource.q1=reviews&filter.q1=productid:'+req.body.productId+'&limit.q1=1&filter.q1=isRatingsOnly:true',
+        headers: {
+            'User-Agent': 'Request-Promise'
+        },
+        json: true // Automatically parses the JSON string in the response
+      };
+      console.log('batch2Options options: ',batch2Options);
+      rp(batch2Options)
+        .then(function (conRat) {
+          nativeDisplayTotal = conRat["BatchedResults"]["q0"]["TotalResults"];
+          nativeRatingsOnlyTotal = conRat["BatchedResults"]["q1"]["Results"]["ReviewStatistics"]["TotalReviewCount"];
+          nativeContentTotal = nativeDisplayTotal - nativeRatingsOnlyTotal;
+          famDisplayTotal = allReviewDisplayTotal - nativeDisplayTotal - syndDisplayTotal;
+          console.log('conRat: ',JSON.stringify(conRat));
+          console.log('nativeContentTotal: ',nativeContentTotal);
+          console.log('nativeDisplayTotal: ',nativeDisplayTotal);
+          console.log('nativeRatingsOnlyTotal: ',nativeRatingsOnlyTotal);
+          console.log('famDisplayTotal: ',famDisplayTotal);
+
+          // nested product function
+          // plug in user input to hagrid product call to get name and image
+          var options = {
+            uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=narwhaul&clientName='+req.body.clientName+'&filter=id:'+req.body.productId,
+            headers: {
+                'User-Agent': 'Request-Promise'
+            },
+            json: true // Automatically parses the JSON string in the response
+          };
+          console.log('Product options: ',options);
+          rp(options)
+            .then(function (prodData) {
+              console.log('prodData',JSON.stringify(prodData));
+              res.json(prodData);
+            })
+            .catch(function (err) {
+                // API call failed...
+            });
+      })
+      .catch(function (err) {
+            // API call failed...
+      });
     })
     .catch(function (err) {
         // API call failed...
@@ -68,14 +453,11 @@ router.route('/insert')
 .post(function(req,res) {
   // get user inputs
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+  // console.log('switchboardArray[0]: ',switchboardArray[0]);
   // set global vars that will persist through all the nested calls
   var clientName = req.body.clientName;
   var productId = req.body.productId;
-  var familyTotal = 0;
   var syndTotal = 0;
-  var ratingsOnlyTotal = 0;
-  var syndRatOnly = 0;
-  var natRatOnly = 0;
   var totalId = [];
   var syndId = [];
   var sources = {};
@@ -86,7 +468,7 @@ router.route('/insert')
   var syndObj = {};
   var rejected = {};
   rejected["Results"] = [];
-  console.log('rejected: ',rejected);
+  // console.log('rejected: ',rejected);
   var hagridTotalResults = [];
   var source = new Object ();
   // Step 1 (Oracle call to get sources)
@@ -97,7 +479,7 @@ router.route('/insert')
     },
     json: true // Automatically parses the JSON string in the response
   };
-  // console.log('options: ',options);
+  console.log('options: ',options);
   rp(options)
     .then(function (data) {
       console.log('Oracle call data',JSON.stringify(data));
@@ -290,9 +672,14 @@ router.route('/insert')
                 rp(hagopt)
                   .then(function (hagsyn) {
                     // console.log('hagsyn["TotalResults"]: ', hagsyn["TotalResults"]);
-                    console.log('first rp call for i = ',i);
+                    console.log('Sydication first rp call for i = ',i);
+                    console.log('hagsyn["TotalResults"]: ',hagsyn["TotalResults"]);
+                    console.log('source.syndication['+i+'][1]: ',source.syndication[i][1]);
+                    console.log('syndObj: ',syndObj);
                     syndObj[source.syndication[i][1]] = hagsyn;
+                    console.log('syndObj[source.syndication['+i+'][1]]["TotalResults"]: ',syndObj[source.syndication[i][1]]["TotalResults"]);
                     // march over results
+                    if(hagsyn["TotalResults"]>100){
                     for(let j = 1; j<hagsyn["TotalResults"]/100;j++){
                       console.log('Inner synd loop #',j);
                       var hagsynoffopt = {
@@ -318,10 +705,90 @@ router.route('/insert')
                           // API call failed...
                         });
                     }
+                  } else {
+                    console.log('less than 100 syndicated reviews');
+                  }
                   })
                   .catch(function (err) {
                       // API call failed...
                   });
+                // reject calls
+                // console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "'+clientName.toLowerCase()+'")',switchboardArray.find(x => x._name.toLowerCase() === clientName.toLowerCase()));
+                console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "'+clientName.toLowerCase()+'")');
+                // console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "Buyagift-EN")',switchboardArray.find(x => x._name.toLowerCase() === 'buyagift-en'));
+                var switchEntry = switchboardArray.find(x => x._name.toLowerCase() === clientName.toLowerCase());
+                var theKeys = Object.getOwnPropertyNames(switchEntry["import"]).toString();
+                // console.log('theKeys: ', theKeys);
+
+                // console.log('source.syndication['+i+'][0]: ',source.syndication[i][0]);
+
+                var getPropValue = function(prop){
+                  console.log('prop: ',prop);
+                  var match = new RegExp(prop, 'i').exec(theKeys);
+                  console.log('match: ',match);
+                  // return match && match.length > 0 ? theObject[match[0]] : '';
+                  return match[0];
+                }
+                var testSwitch1 = getPropValue(source.syndication[i][0]);
+                console.log('testSwitch1: ', testSwitch1);
+                console.log('switchEntry["import"]['+testSwitch1+']: ',switchEntry["import"][testSwitch1]);
+                var modCodes = switchEntry["import"][testSwitch1]['_excludedContentCodesForImport'];
+                console.log('modCodes: ',modCodes);
+                var contentCodeLength = modCodes.length;
+                // console.log('getPropValue('+source.syndication[i][0]+'): ',getPropValue(source.syndication[i][0]));
+                // console.log('switchEntry["import"]: ',switchEntry["import"]);
+                // var switchEntry = switchboardArray.find(x => x._name.toLowerCase() === 'oralb-fi_fi');
+                
+                // var contentCodeLength = switchEntry["import"][source.syndication[i][0]].length;
+                // console.log('contentCodeLength: ', contentCodeLength);
+
+                // var contentCodeLength = switchEntry["import"].find(x => x.[source.syndication[i][0]].length;
+                // console.log('contentCodeLength: ', contentCodeLength);
+                // console.log('Pre Rejtest - syndObj: ', syndObj);
+                console.log('Pre Rejtest - syndTotal: ',syndTotal);
+                console.log('Pre Rejtest - syndDisplayTotal: ',syndDisplayTotal);
+                // console.log('Pre Rejtest - syndObj[source.syndication[0][1]]["Results"].length: ',syndObj[source.syndication[0][1]]["Results"].length);
+
+                var rejtest = {};
+                if(syndDisplayTotal==0){
+                  console.log('no syndication');
+                } else if (syndObj[source.syndication[0][1]]["Results"].length>syndDisplayTotal){
+                  console.log('there are blocked syndicated reviews');
+                  for(let i=0;i<contentCodeLength;i++){
+                    console.log('Rejected loop #',i);
+                    // var hagrejopt = {
+                    //   uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+source.syndication[0][0]+'&keyProperty=syndication&filter=productid:'+source.syndication[0][1]+'&include=products&stats=reviews&filter=ModeratorCode:'+switchEntry["import"][source.syndication[i][0]][i],
+                    //   headers: {
+                    //       'User-Agent': 'Request-Promise'
+                    //   },
+                    //   json: true // Automatically parses the JSON string in the response
+                    // };
+
+                    var hagrejopt = {
+                      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+source.syndication[0][0]+'&keyProperty=syndication&filter=productid:'+source.syndication[0][1]+'&include=products&stats=reviews&filter=ModeratorCode:'+modCodes[i],
+                      headers: {
+                          'User-Agent': 'Request-Promise'
+                      },
+                      json: true // Automatically parses the JSON string in the response
+                    };
+                    console.log('hagrejopt: ',hagrejopt);
+                    rp(hagrejopt)
+                      .then(function (hagrej) {
+                        hagrej["Results"][0]["Content"] = switchboardOshKoshData["import"]["Carters"]["_excludedContentCodesForImport"][i];
+                        rejected["Results"].push.apply(rejected["Results"],hagrej["Results"]);
+                        rejtest = rejected;
+                    })
+                    .catch(function (err) {
+                          // API call failed...
+                    });
+                  }
+                  // function rejectConcat(hagrejobj){
+                  //   rejected["Results"].push.apply(rejected["Results"],hagrej["Results"]);
+                  //   console.log('rejected["Results"].length = ',rejected["Results"].length);
+                  //   console.log('rejected: ',rejected);
+                  //   return rejected;
+                  // }
+                }
               }
             }
 
@@ -357,59 +824,8 @@ router.route('/insert')
                 console.log("waiting "+timeDelay+" milliseconds");
                 console.log('finished for loop');
                 console.log('waiting for calls');
-                var len = hagridTotalResults.length;
-                console.log('len: ',len);
-                for (let i=0;i<len;i++){
-                  totalId.push(hagridTotalResults[i]["Id"]);
-                  if(hagridTotalResults[i]["IsSyndicated"]){
-                    syndTotal++
-                    if(hagridTotalResults[i]["IsRatingsOnly"]){
-                      syndRatOnly++
-                    }
-                  }
-                  if(hagridTotalResults[i]["IsRatingsOnly"]){
-                    natRatOnly++
-                  }
-                }
-                // for (let product in syndObj){
-                //   syndId.push(syndObj["Results"]["Id"]);
-                // }
-
-                console.log('syndTotal: ',syndTotal);
-                console.log('syndRatOnly: ',syndRatOnly);
-                console.log('natRatOnly: ',natRatOnly);
-                var rejtest = {};
-                if(syndTotal==0){
-                  console.log('no syndication');
-                } else if (syndObj[source.syndication[0][1]]["Results"].length>syndTotal){
-                  console.log('there are blocked syndicated reviews');
-                  for(let i=0,len=switchboardOshKoshData["import"]["Carters"]["_excludedContentCodesForImport"].length;i<len;i++){
-                    console.log('Rejected loop #',i);
-                    var hagrejopt = {
-                      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+source.syndication[0][0]+'&keyProperty=syndication&filter=productid:'+source.syndication[0][1]+'&include=products&stats=reviews&filter=ModeratorCode:'+switchboardOshKoshData["import"]["Carters"]["_excludedContentCodesForImport"][i],
-                      headers: {
-                          'User-Agent': 'Request-Promise'
-                      },
-                      json: true // Automatically parses the JSON string in the response
-                    };
-                    console.log('hagrejopt: ',hagrejopt);
-                    rp(hagrejopt)
-                      .then(function (hagrej) {
-                        hagrej["Results"][0]["Content"] = switchboardOshKoshData["import"]["Carters"]["_excludedContentCodesForImport"][i];
-                        rejected["Results"].push.apply(rejected["Results"],hagrej["Results"]);
-                        rejtest = rejected;
-                    })
-                    .catch(function (err) {
-                          // API call failed...
-                    });
-                  }
-                  // function rejectConcat(hagrejobj){
-                  //   rejected["Results"].push.apply(rejected["Results"],hagrej["Results"]);
-                  //   console.log('rejected["Results"].length = ',rejected["Results"].length);
-                  //   console.log('rejected: ',rejected);
-                  //   return rejected;
-                  // }
-                }
+                // console.log('Switchboard data- switchboardArray[0]["import"]["EverydaymeFI_FI"]["_excludedContentCodesForImport"]:',switchboardArray[0]["import"]["EverydaymeFI_FI"]["_excludedContentCodesForImport"]);
+                
                 console.log('totalId.length: ',totalId.length);
                 console.log('hagridTotalResults.length: ',hagridTotalResults.length);
                 hagridTotalObj['Results']=hagridTotalResults;
@@ -430,20 +846,22 @@ router.route('/insert')
                     var syndicatedReviews = syndObj[source.syndication[0][1]]["Results"].length;
                     var blockedSyndicatedReviews = syndObj[source.syndication[0][1]]["Results"].length-syndTotal;
                   }
-
+                  
                   var responseObj = {
                     hagrid:hagridTotalObj,
                     syndObj,
                     familyObj,
                     rejected: rejtest,
                     dashboard: {
-                      nativeReviews:(dashboard['totalDisplayNumber']-syndTotal),
+                      nativeReviews:nativeContentTotal,
                       syndicatedReviews:syndicatedReviews,
-                      familyReviews:famRevTotal, totalReviews:dashboard['totalDisplayNumber'],
-                      ratingsOnlyReviews:0,
-                      displayableNativeReviews:(dashboard['totalDisplayNumber']-syndTotal),
+                      familyReviews:famDisplayTotal,
+                      totalReviews:allReviewDisplayTotal,
+                      ratingsOnlyReviews:nativeRatingsOnlyTotal,
+                      displayableNativeReviews:nativeDisplayTotal,
                       blockedSyndicatedReviews:blockedSyndicatedReviews,
-                      displayableSyndicatedReviews:syndTotal}};
+                      displayableSyndicatedReviews:syndDisplayTotal}};
+                  console.log('responseObj: ',responseObj);
                   res.json(responseObj);
                 }
               }
@@ -456,18 +874,26 @@ router.route('/insert')
         // API call failed...
     });
 });
-// Oracle route
-router.route('/oracle').post(function(req,res){
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
-  var source = {};
+
+
+// paginate route
+router.route('/paginate')
+.post(function(req,res){
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var category = req.body.category;
+  var pageNum = req.body.pageNum;
+  console.log('clientName: ',clientName,' productId: ',productId, ' category: ',category,' pageNum: ',pageNum);
+  // Step 1 (Oracle call to get sources)
+  var source = new Object ();
   var options = {
-    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
+    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+clientName+'/'+productId+'/sources?apikey=hackathon-qdu8sarvq',
     headers: {
         'User-Agent': 'Request-Promise'
     },
     json: true // Automatically parses the JSON string in the response
   };
-  console.log(' Oracle options: ',options);
+  console.log('options: ',options);
   rp(options)
     .then(function (data) {
       console.log('Oracle call data',JSON.stringify(data));
@@ -501,86 +927,101 @@ router.route('/oracle').post(function(req,res){
             source.family = family;
         }
       }
-      // console.log('syndication: ', syndication);
-      console.log('Oracle call complete');
-      console.log('source: ', source);
-      res.json(source);
+      console.log('Oracle call complete')
+      console.log('source: ', source)
+      // switch statements for category
+      switch(category) {
+        case native:
+          let natopt = {
+            uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&limit=100&excludeFamily=true&offset='+(pageNum*100),
+            headers: {
+                'User-Agent': 'Request-Promise'
+            },
+            json: true // Automatically parses the JSON string in the response
+          };
+          rp(natopt)
+            .then(function (data) {
+              console.log('data: ',data);
+              res.json(data);
+            })
+            .catch(function (err) {
+                // API call failed...
+            });
+          break;
+        case syndicated:
+          let synopt = {
+            uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&limit=100&excludeFamily=true&offset='+(pageNum*100),
+            headers: {
+                'User-Agent': 'Request-Promise'
+            },
+            json: true // Automatically parses the JSON string in the response
+          };
+          rp(synopt)
+            .then(function (data) {
+              console.log('data: ',data);
+              res.json(data);
+            })
+            .catch(function (err) {
+                // API call failed...
+            });
+          break;
+        case family:
+          let famopt = {
+            uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&limit=100&excludeFamily=true&offset='+(pageNum*100),
+            headers: {
+                'User-Agent': 'Request-Promise'
+            },
+            json: true // Automatically parses the JSON string in the response
+          };
+          rp(famopt)
+            .then(function (data) {
+              console.log('data: ',data);
+              res.json(data);
+            })
+            .catch(function (err) {
+                // API call failed...
+            });
+          break;
+        case blocked:
+          let blockopt = {
+            uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&limit=100&excludeFamily=true&offset='+(pageNum*100),
+            headers: {
+                'User-Agent': 'Request-Promise'
+            },
+            json: true // Automatically parses the JSON string in the response
+          };
+          rp(blockopt)
+            .then(function (data) {
+              console.log('data: ',data);
+              res.json(data);
+            })
+            .catch(function (err) {
+                // API call failed...
+            });
+          break;
+        default:
+          let totalopt = {
+            uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&limit=100&excludeFamily=true&offset='+(pageNum*100),
+            headers: {
+                'User-Agent': 'Request-Promise'
+            },
+            json: true // Automatically parses the JSON string in the response
+          };
+          rp(totalopt)
+            .then(function (data) {
+              console.log('data: ',data);
+              res.json(data);
+            })
+            .catch(function (err) {
+                // API call failed...
+            });
+      }
     })
     .catch(function (err) {
         // API call failed...
     });
-});
-// source for real - syndication
-router.route('/sourceforrealSyn').post(function(req,res){
-  console.log('*****');
-  console.log('sourceforrealSyn route: ')
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
-  console.log('*****');
-  var source = req.body.source;
-  var syndications = [];
-  // iterate through source object for syndication info
-  for (let i = 0, len = source.syndication.length;i<len;i++){
-    var options = {
-      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+source.syndication[i][0]+'&filter=id:'+source.syndication[i][1],
-      headers: {
-          'User-Agent': 'Request-Promise'
-      },
-      json: true // Automatically parses the JSON string in the response
-    };
-    console.log('options: ',options);
-    rp(options)
-      .then(function (data) {
-        console.log('data for sfr Syn: ',JSON.stringify(data));
-        syndications.push(data);
-      })
-      .catch(function (err) {
-          // API call failed...
-      });
-  }
-  // delay
-  setTimeout(myTimeout5, 4000);
-  function myTimeout5() {
-    var SynResponseObject = {syndicationData:syndications};
-    res.json(SynResponseObject);
-  }
-});
 
-
-// source for real - family
-router.route('/sourceforrealFam').post(function(req,res){
-  console.log('*****');
-  console.log('sourceforrealFam route: ')
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
-  console.log('*****');
-  var source = req.body.source;
-  var families = [];
-  // iterate through source object for syndication info
-  for (let i = 0, len = source.family.length;i<len;i++){
-    var options = {
-      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+source.family[i][0]+'&filter=id:'+source.family[i][1],
-      headers: {
-          'User-Agent': 'Request-Promise'
-      },
-      json: true // Automatically parses the JSON string in the response
-    };
-    console.log('options: ',options);
-    rp(options)
-      .then(function (data) {
-        console.log('data for sfr Fam: ',JSON.stringify(data));
-        families.push(data);
-      })
-      .catch(function (err) {
-          // API call failed...
-      });
-  }
-  // delay
-  setTimeout(myTimeout4, 4000);
-  function myTimeout4() {
-    var FamResponseObject = {familyData:families};
-    res.json(FamResponseObject);
-  }
 });
-
 
 router.route('/update')
 .post(function(req, res) {
