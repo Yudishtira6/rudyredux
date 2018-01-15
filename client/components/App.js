@@ -133,7 +133,7 @@ export default class App extends React.Component {
 
 
 //END DRAKES CODE FRO FRONTEND ***************************>>>>
-  
+
           axios.post('/getProductDetails',
             querystring.stringify({
               clientName: client,
@@ -156,55 +156,80 @@ export default class App extends React.Component {
                           });
                 });
   //call to get review data from backend
-            axios.post('/insert',
-              querystring.stringify({
-                clientName: client,
-                productId: productId
-              }) , {
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded"
-                }
-              }).then(function(response) {
-                  console.log("data returned by backend", response);
-                  var familyReviews=[];
-                  var syndicatedReviews=[];
-                  var nativeReviews=[];
-                  var sourceClient=[];
-  // //loop through all reviews and filter reviews out to correct buckets.
-  //                 response.data.hagrid.Results.filter((review)=>{
-  //                   if(review.IsSyndicated){
-  //                     syndicatedReviews.push(review);
-  //                   }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
-  //                     familyReviews.push(review);
-  //                   }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
-  //                     nativeReviews.push(review);
-  //                   }
-  // //collect source client data.
-  //                   if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
-  //                     if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
-  //                       sourceClient.push(review.SourceClient.toLowerCase());
-  //                     }
-  //                   }
-  //                 });
-  //set state of looped buckets.
-                e.setState({reviews:response.data.hagrid.Results,
-                            displayableReviews:response.data.hagrid.Results,
-                            snapTotal:response.data.dashboard.totalReviews,
-                            loading:false,
-                            familyReviews:familyReviews,
-                            nativeReviews:nativeReviews,
-                            syndicatedReviews:syndicatedReviews,
-                            blockedReviews:response.data.rejected.Results,
-                            snapSyndicated:response.data.dashboard.syndicatedReviews,
-                            snapNative:response.data.dashboard.nativeReviews,
-                            snapFamily:response.data.dashboard.familyReviews,
-                            snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
-                            snapStopped:response.data.dashboard.blockedSyndicatedReviews,
-                            snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
-                            snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
-                            sourceClient:sourceClient,
-                            });
-                });
+  //           axios.post('/insert',
+  //             querystring.stringify({
+  //               clientName: client,
+  //               productId: productId
+  //             }) , {
+  //               headers: {
+  //                 "Content-Type": "application/x-www-form-urlencoded"
+  //               }
+  //             }).then(function(response) {
+  //                 console.log("DATA WAS RETURNED BY BACKEND NOW!!", response);
+  //                 var familyReviews=[];
+  //                 var syndicatedReviews=[];
+  //                 var nativeReviews=[];
+  //                 var sourceClient=[];
+  // // //loop through all reviews and filter reviews out to correct buckets.
+  // //                 response.data.hagrid.Results.filter((review)=>{
+  // //                   if(review.IsSyndicated){
+  // //                     syndicatedReviews.push(review);
+  // //                   }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
+  // //                     familyReviews.push(review);
+  // //                   }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
+  // //                     nativeReviews.push(review);
+  // //                   }
+  // // //collect source client data.
+  // //                   if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
+  // //                     if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
+  // //                       sourceClient.push(review.SourceClient.toLowerCase());
+  // //                     }
+  // //                   }
+  // //                 });
+  // //set state of looped buckets.
+  //               e.setState({reviews:response.data.hagrid.Results,
+  //                           displayableReviews:response.data.hagrid.Results,
+  //                           snapTotal:response.data.dashboard.totalReviews,
+  //                           loading:false,
+  //                           familyReviews:familyReviews,
+  //                           nativeReviews:nativeReviews,
+  //                           syndicatedReviews:syndicatedReviews,
+  //                           blockedReviews:response.data.rejected.Results,
+  //                           snapSyndicated:response.data.dashboard.syndicatedReviews,
+  //                           snapNative:response.data.dashboard.nativeReviews,
+  //                           snapFamily:response.data.dashboard.familyReviews,
+  //                           snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
+  //                           snapStopped:response.data.dashboard.blockedSyndicatedReviews,
+  //                           snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
+  //                           snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
+  //                           sourceClient:sourceClient,
+  //                           });
+  //               });
+
+
+                console.log('About to run Dashboard call');
+                        axios.post('/dashboard',
+                        querystring.stringify({
+                          clientName: client,
+                          productId: productId
+                        }), {
+                          headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                          }
+                        }).then(function(response) {
+              //set state for product details.
+                          console.log("response.data for Dashboard",response.data);
+                          e.setState({snapTotal:response.data.dashboard.totalReviews,
+                                        loading:false,
+                                        snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
+                                        snapNative:response.data.dashboard.nativeReviews,
+                                        snapFamily:response.data.dashboard.familyReviews,
+                                        snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
+                                        snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
+                                      });
+                      }).catch(function(error){
+                        console.log('error: ',error);
+                      });
       }
     }
   checkForm(){
