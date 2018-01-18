@@ -3,45 +3,187 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var rp = require('request-promise');
-var switchboardArray = [];
 var nativeContentTotal = 0;
 var nativeRatingsOnlyTotal = 0;
 var nativeDisplayTotal = 0;
 var syndDisplayTotal = 0;
 var famDisplayTotal = 0;
 var allReviewDisplayTotal = 0;
-// var fs = require('fs'),
-//     path = require('path'),    
-//     filePath = path.join(__dirname, '../../switchboard-expressiveClient.json');
-// console.log("start");
-// var stream = fs.createReadStream(filePath, {flags: 'r', encoding: 'utf-8'});
-// var buf = '';
-// stream.on('data', function(d) {
-//     buf += d.toString(); // when data is read, stash it in a string buffer
-//     pump(); // then process the buffer
-// });
+var switchboardArray = [];
+var fs = require('fs')
+var path = require('path')
+    // 5 calls
+console.log("start switchboard call 1");
+var switchboardArray1 = [];
+var filePath1 = path.join(__dirname, '../../switchboardlines1to2000.json');
+var stream1 = fs.createReadStream(filePath1, {flags: 'r', encoding: 'utf-8'});
+var buf1 = '';
+stream1.on('data', function(d) {
+    buf1 += d.toString(); // when data is read, stash it in a string buffer
+    pump1(); // then process the buffer
+});
 
-// function pump() {
-//     var pos;
-//     while ((pos = buf.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
-//         if (pos == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
-//             buf = buf.slice(1); // discard it
-//             continue; // so that the next iteration will start with data
-//         }
-//         processLine(buf.slice(0,pos)); // hand off the line
-//         buf = buf.slice(pos+1); // and slice the processed data off the buffer
-//     }
-// }
-// console.log('end');
-// function processLine(line) { // here's where we do something with a line
+console.log("start switchboard call 2");
+var switchboardArray2 = [];
+var filePath2 = path.join(__dirname, '../../switchboardlines2001to4000.json');
+var stream2 = fs.createReadStream(filePath2, {flags: 'r', encoding: 'utf-8'});
+var buf2 = '';
+stream2.on('data', function(d) {
+    buf2 += d.toString(); // when data is read, stash it in a string buffer
+    pump2(); // then process the buffer
+});
 
-//     if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
+console.log("start switchboard call 3");
+var switchboardArray3 = [];
+var filePath3 = path.join(__dirname, '../../switchboardlines4001to6000.json');
+var stream3 = fs.createReadStream(filePath3, {flags: 'r', encoding: 'utf-8'});
+var buf3 = '';
+stream3.on('data', function(d) {
+    buf3 += d.toString(); // when data is read, stash it in a string buffer
+    pump3(); // then process the buffer
+});
 
-//     if (line.length > 0) { // ignore empty lines
-//         var obj = JSON.parse(line); // parse the JSON
-//         switchboardArray.push(obj);
-//     }
-// }
+console.log("start switchboard call 4");
+var switchboardArray4 = [];
+var filePath4 = path.join(__dirname, '../../switchboardlines6001to8000.json');
+var stream4 = fs.createReadStream(filePath4, {flags: 'r', encoding: 'utf-8'});
+var buf4 = '';
+stream4.on('data', function(d) {
+    buf4 += d.toString(); // when data is read, stash it in a string buffer
+    pump4(); // then process the buffer
+});
+
+console.log("start switchboard call 5");
+var switchboardArray5 = [];
+var filePath5 = path.join(__dirname, '../../switchboardlines8001to9636.json');
+var stream5 = fs.createReadStream(filePath5, {flags: 'r', encoding: 'utf-8'});
+var buf5 = '';
+stream5.on('data', function(d) {
+    buf5 += d.toString(); // when data is read, stash it in a string buffer
+    pump5(); // then process the buffer
+});
+
+function pump1() {
+    var pos1;
+    while ((pos1 = buf1.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
+        if (pos1 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
+            buf1 = buf1.slice(1); // discard it
+            continue; // so that the next iteration will start with data
+        }
+        processLine1(buf1.slice(0,pos1)); // hand off the line
+        buf1 = buf1.slice(pos1+1); // and slice the processed data off the buffer
+    }
+}
+console.log('end1');
+
+function processLine1(line) { // here's where we do something with a line
+
+    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
+
+    if (line.length > 0) { // ignore empty lines
+        var obj1 = JSON.parse(line); // parse the JSON
+        // console.log('Name: ',obj1['_name'],' array.length: ',switchboardArray1.length);
+        switchboardArray1.push(obj1);
+    }
+}
+
+function pump2() {
+    var pos2;
+    while ((pos2 = buf2.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
+        if (pos2 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
+            buf2 = buf2.slice(1); // discard it
+            continue; // so that the next iteration will start with data
+        }
+        processLine2(buf2.slice(0,pos2)); // hand off the line
+        buf2 = buf2.slice(pos2+1); // and slice the processed data off the buffer
+    }
+}
+console.log('end2');
+
+function processLine2(line) { // here's where we do something with a line
+
+    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
+
+    if (line.length > 0) { // ignore empty lines
+        var obj2 = JSON.parse(line); // parse the JSON
+        // console.log('Name: ',obj2['_name'],' array.length: ',switchboardArray2.length);
+        switchboardArray2.push(obj2);
+    }
+}
+
+function pump3() {
+    var pos3;
+    while ((pos3 = buf3.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
+        if (pos3 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
+            buf3 = buf3.slice(1); // discard it
+            continue; // so that the next iteration will start with data
+        }
+        processLine3(buf3.slice(0,pos3)); // hand off the line
+        buf3 = buf3.slice(pos3+1); // and slice the processed data off the buffer
+    }
+}
+console.log('end3');
+
+function processLine3(line) { // here's where we do something with a line
+
+    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
+
+    if (line.length > 0) { // ignore empty lines
+        var obj3 = JSON.parse(line); // parse the JSON
+        // console.log('Name: ',obj3['_name'],' array.length: ',switchboardArray3.length);
+        switchboardArray3.push(obj3);
+    }
+}
+
+function pump4() {
+    var pos4;
+    while ((pos4 = buf4.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
+        if (pos4 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
+            buf4 = buf4.slice(1); // discard it
+            continue; // so that the next iteration will start with data
+        }
+        processLine4(buf4.slice(0,pos4)); // hand off the line
+        buf4 = buf4.slice(pos4+1); // and slice the processed data off the buffer
+    }
+}
+console.log('end4');
+
+function processLine4(line) { // here's where we do something with a line
+
+    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
+
+    if (line.length > 0) { // ignore empty lines
+        var obj4 = JSON.parse(line); // parse the JSON
+        // console.log('Name: ',obj4['_name'],' array.length: ',switchboardArray4.length);
+        switchboardArray4.push(obj4);
+    }
+}
+
+function pump5() {
+    var pos5;
+    while ((pos5 = buf5.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
+        if (pos5 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
+            buf5 = buf5.slice(1); // discard it
+            continue; // so that the next iteration will start with data
+        }
+        processLine5(buf5.slice(0,pos5)); // hand off the line
+        buf5 = buf5.slice(pos5+1); // and slice the processed data off the buffer
+    }
+}
+console.log('end5');
+
+function processLine5(line) { // here's where we do something with a line
+
+    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
+
+    if (line.length > 0) { // ignore empty lines
+        var obj5 = JSON.parse(line); // parse the JSON
+        // console.log('Name: ',obj5['_name'],' array.length: ',switchboardArray5.length);
+        switchboardArray5.push(obj5);
+    }
+}
+
+
 
 router.get('/', function(req, res){
   res.render('index')
@@ -128,11 +270,63 @@ router.route('/oracle').post(function(req,res){
     });
 });
 
+// info drake wants for source syndication
+// company Logo, Name, Prod ID, Moderation stop codes, locales that syndicate, syndication delay
+// source for real2 - syndication
+router.route('/sourceforrealSyn2').post(function(req,res){
+  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
+  console.log('*****');
+  console.log('sourceforrealSyn2 route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('sourceforrealSyn2 route - switchboardArray.length: ',switchboardArray.length);
+  console.log('*****');
+  var source = req.body.source;
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var syndications = [];
+  // iterate through source object for syndication info
+  for (let i = 0, len = source.syndication.length;i<len;i++){
+    // find match on switchboard and get info
+    console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "'+clientName.toLowerCase()+'")');
+    // console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "Buyagift-EN")',switchboardArray.find(x => x._name.toLowerCase() === 'buyagift-en'));
+    var switchEntry = switchboardArray.find(x => x._name.toLowerCase() === clientName.toLowerCase());
+    // console.log('switchboardArray entry '+i+'["export"]['+clientName+']: ',switchEntry["export"]["CVSPharmacy"]);
+    console.log('switchEntry["display"]["3006"]["_sources"]["Bengay"]: ',switchEntry['display']['3006']['_sources']['Bengay']);
+    // console.log('switchEntry["display"]: ',switchEntry["display"]);
+    console.log('iterating through switchEntry["display"]');
+    for (var key in switchEntry["display"]) {
+      console.log('key: ',key);
+      console.log('switchEntry["display"]["'+key+'"]["_sources"]["Bengay"]: ',switchEntry['display'][key]['_sources']['bengay']);
+      break;
+    }
+    console.log('switchEntry["import"]["Bengay"]: ',switchEntry["import"]['Bengay']);
+    var theKeys = Object.getOwnPropertyNames(switchEntry["import"]).toString();
+    var getPropValue = function(prop){
+      console.log('prop: ',prop);
+      var match = new RegExp(prop, 'i').exec(theKeys);
+      console.log('match: ',match);
+      // return match && match.length > 0 ? theObject[match[0]] : '';
+      return match[0];
+    }
+    var testSwitch1 = getPropValue(source.syndication[i][0]);
+    console.log('testSwitch1: ', testSwitch1);
+    console.log('switchEntry["import"]['+testSwitch1+']: ',switchEntry["import"][testSwitch1]);
+    var modCodes = switchEntry["import"][testSwitch1]['_excludedContentCodesForImport'];
+    console.log('modCodes: ',modCodes);
+    var contentCodeLength = modCodes.length;
+
+  }
+  var SynResponseObject = {syndicationData:syndications};
+  res.json(SynResponseObject);
+});
+
 // source for real - syndication
 router.route('/sourceforrealSyn').post(function(req,res){
+  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
   console.log('*****');
   console.log('sourceforrealSyn route: ')
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('sourceforrealSyn route - switchboardArray.length: ',switchboardArray.length);
   console.log('*****');
   var source = req.body.source;
   var syndications = [];
@@ -453,7 +647,15 @@ router.route('/insert')
 .post(function(req,res) {
   // get user inputs
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
-  // console.log('switchboardArray[0]: ',switchboardArray[0]);
+  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
+  console.log('**************');
+  console.log('switchboardArray.length: ',switchboardArray.length);
+  console.log('switchboardArray1.length: ',switchboardArray1.length);
+  console.log('switchboardArray2.length: ',switchboardArray2.length);
+  console.log('switchboardArray3.length: ',switchboardArray3.length);
+  console.log('switchboardArray4.length: ',switchboardArray4.length);
+  console.log('switchboardArray5.length: ',switchboardArray5.length);
+  console.log('**************');
   // set global vars that will persist through all the nested calls
   var clientName = req.body.clientName;
   var productId = req.body.productId;
