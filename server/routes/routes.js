@@ -12,176 +12,7 @@ var allReviewDisplayTotal = 0;
 var switchboardArray = [];
 var fs = require('fs')
 var path = require('path')
-    // 5 calls
-console.log("start switchboard call 1");
-var switchboardArray1 = [];
-var filePath1 = path.join(__dirname, '../../switchboardlines1to2000.json');
-var stream1 = fs.createReadStream(filePath1, {flags: 'r', encoding: 'utf-8'});
-var buf1 = '';
-stream1.on('data', function(d) {
-    buf1 += d.toString(); // when data is read, stash it in a string buffer
-    pump1(); // then process the buffer
-});
 
-console.log("start switchboard call 2");
-var switchboardArray2 = [];
-var filePath2 = path.join(__dirname, '../../switchboardlines2001to4000.json');
-var stream2 = fs.createReadStream(filePath2, {flags: 'r', encoding: 'utf-8'});
-var buf2 = '';
-stream2.on('data', function(d) {
-    buf2 += d.toString(); // when data is read, stash it in a string buffer
-    pump2(); // then process the buffer
-});
-
-console.log("start switchboard call 3");
-var switchboardArray3 = [];
-var filePath3 = path.join(__dirname, '../../switchboardlines4001to6000.json');
-var stream3 = fs.createReadStream(filePath3, {flags: 'r', encoding: 'utf-8'});
-var buf3 = '';
-stream3.on('data', function(d) {
-    buf3 += d.toString(); // when data is read, stash it in a string buffer
-    pump3(); // then process the buffer
-});
-
-console.log("start switchboard call 4");
-var switchboardArray4 = [];
-var filePath4 = path.join(__dirname, '../../switchboardlines6001to8000.json');
-var stream4 = fs.createReadStream(filePath4, {flags: 'r', encoding: 'utf-8'});
-var buf4 = '';
-stream4.on('data', function(d) {
-    buf4 += d.toString(); // when data is read, stash it in a string buffer
-    pump4(); // then process the buffer
-});
-
-console.log("start switchboard call 5");
-var switchboardArray5 = [];
-var filePath5 = path.join(__dirname, '../../switchboardlines8001to9636.json');
-var stream5 = fs.createReadStream(filePath5, {flags: 'r', encoding: 'utf-8'});
-var buf5 = '';
-stream5.on('data', function(d) {
-    buf5 += d.toString(); // when data is read, stash it in a string buffer
-    pump5(); // then process the buffer
-});
-
-function pump1() {
-    var pos1;
-    while ((pos1 = buf1.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
-        if (pos1 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
-            buf1 = buf1.slice(1); // discard it
-            continue; // so that the next iteration will start with data
-        }
-        processLine1(buf1.slice(0,pos1)); // hand off the line
-        buf1 = buf1.slice(pos1+1); // and slice the processed data off the buffer
-    }
-}
-console.log('end1');
-
-function processLine1(line) { // here's where we do something with a line
-
-    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
-
-    if (line.length > 0) { // ignore empty lines
-        var obj1 = JSON.parse(line); // parse the JSON
-        // console.log('Name: ',obj1['_name'],' array.length: ',switchboardArray1.length);
-        switchboardArray1.push(obj1);
-    }
-}
-
-function pump2() {
-    var pos2;
-    while ((pos2 = buf2.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
-        if (pos2 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
-            buf2 = buf2.slice(1); // discard it
-            continue; // so that the next iteration will start with data
-        }
-        processLine2(buf2.slice(0,pos2)); // hand off the line
-        buf2 = buf2.slice(pos2+1); // and slice the processed data off the buffer
-    }
-}
-console.log('end2');
-
-function processLine2(line) { // here's where we do something with a line
-
-    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
-
-    if (line.length > 0) { // ignore empty lines
-        var obj2 = JSON.parse(line); // parse the JSON
-        // console.log('Name: ',obj2['_name'],' array.length: ',switchboardArray2.length);
-        switchboardArray2.push(obj2);
-    }
-}
-
-function pump3() {
-    var pos3;
-    while ((pos3 = buf3.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
-        if (pos3 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
-            buf3 = buf3.slice(1); // discard it
-            continue; // so that the next iteration will start with data
-        }
-        processLine3(buf3.slice(0,pos3)); // hand off the line
-        buf3 = buf3.slice(pos3+1); // and slice the processed data off the buffer
-    }
-}
-console.log('end3');
-
-function processLine3(line) { // here's where we do something with a line
-
-    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
-
-    if (line.length > 0) { // ignore empty lines
-        var obj3 = JSON.parse(line); // parse the JSON
-        // console.log('Name: ',obj3['_name'],' array.length: ',switchboardArray3.length);
-        switchboardArray3.push(obj3);
-    }
-}
-
-function pump4() {
-    var pos4;
-    while ((pos4 = buf4.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
-        if (pos4 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
-            buf4 = buf4.slice(1); // discard it
-            continue; // so that the next iteration will start with data
-        }
-        processLine4(buf4.slice(0,pos4)); // hand off the line
-        buf4 = buf4.slice(pos4+1); // and slice the processed data off the buffer
-    }
-}
-console.log('end4');
-
-function processLine4(line) { // here's where we do something with a line
-
-    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
-
-    if (line.length > 0) { // ignore empty lines
-        var obj4 = JSON.parse(line); // parse the JSON
-        // console.log('Name: ',obj4['_name'],' array.length: ',switchboardArray4.length);
-        switchboardArray4.push(obj4);
-    }
-}
-
-function pump5() {
-    var pos5;
-    while ((pos5 = buf5.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
-        if (pos5 == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
-            buf5 = buf5.slice(1); // discard it
-            continue; // so that the next iteration will start with data
-        }
-        processLine5(buf5.slice(0,pos5)); // hand off the line
-        buf5 = buf5.slice(pos5+1); // and slice the processed data off the buffer
-    }
-}
-console.log('end5');
-
-function processLine5(line) { // here's where we do something with a line
-
-    if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
-
-    if (line.length > 0) { // ignore empty lines
-        var obj5 = JSON.parse(line); // parse the JSON
-        // console.log('Name: ',obj5['_name'],' array.length: ',switchboardArray5.length);
-        switchboardArray5.push(obj5);
-    }
-}
 
 
 
@@ -940,7 +771,7 @@ router.route('/insert')
                 // console.log('getPropValue('+source.syndication[i][0]+'): ',getPropValue(source.syndication[i][0]));
                 // console.log('switchEntry["import"]: ',switchEntry["import"]);
                 // var switchEntry = switchboardArray.find(x => x._name.toLowerCase() === 'oralb-fi_fi');
-                
+
                 // var contentCodeLength = switchEntry["import"][source.syndication[i][0]].length;
                 // console.log('contentCodeLength: ', contentCodeLength);
 
@@ -1027,7 +858,7 @@ router.route('/insert')
                 console.log('finished for loop');
                 console.log('waiting for calls');
                 // console.log('Switchboard data- switchboardArray[0]["import"]["EverydaymeFI_FI"]["_excludedContentCodesForImport"]:',switchboardArray[0]["import"]["EverydaymeFI_FI"]["_excludedContentCodesForImport"]);
-                
+
                 console.log('totalId.length: ',totalId.length);
                 console.log('hagridTotalResults.length: ',hagridTotalResults.length);
                 hagridTotalObj['Results']=hagridTotalResults;
@@ -1048,7 +879,7 @@ router.route('/insert')
                     var syndicatedReviews = syndObj[source.syndication[0][1]]["Results"].length;
                     var blockedSyndicatedReviews = syndObj[source.syndication[0][1]]["Results"].length-syndTotal;
                   }
-                  
+
                   var responseObj = {
                     hagrid:hagridTotalObj,
                     syndObj,

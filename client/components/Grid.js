@@ -9,7 +9,12 @@ class Grid extends React.Component {
       this.state={
                   clicked:false,
                   reviewText:'',
-                  reviewId:''
+                  reviewId:'',
+                  user:'',
+                  locale:'',
+                  source:'',
+                  rating:'',
+                  title:'',
                   }
     this.handlePage=this.handlePage.bind(this);
     this.clickHandler=this.clickHandler.bind(this);
@@ -20,14 +25,33 @@ class Grid extends React.Component {
     console.log("clicked",i);
     this.props.pagination(i);
    }
-  clickHandler(reviewText,reviewId){
-    this.setState({clicked:true,reviewText:reviewText, reviewId:reviewId});
+  clickHandler(reviewText,reviewId, user, locale, source, rating, title, color){
+    this.setState({clicked:true,reviewText:reviewText, reviewId:reviewId, user:user, locale:locale, source:source, rating:rating, title:title});
   }
   closeReview(){
-  this.setState({clicked:false, reviewText:'', reviewId:''});
+  this.setState({clicked:false, reviewText:'', reviewId:'',user:'',locale:'',source:'',rating:'',title:''});
   }
 
 render(){
+  let rating;
+  let color;
+  switch(this.state.rating){
+    case 1:
+    rating=<img src="../components/photos/rating-1_0.gif"/>
+    break;
+    case 2:
+    rating=<img src="../components/photos/rating-2_0.gif"/>
+    break;
+    case 3:
+    rating=<img src="../components/photos/rating-3_0.gif"/>
+    break;
+    case 4:
+    rating=<img src="../components/photos/rating-4_0.gif"/>
+    break;
+    case 5:
+    rating=<img src="../components/photos/rating-5_0.gif"/>
+    break;
+  }
   let Items;
   let reviewText;
   if(this.state.clicked){
@@ -37,7 +61,14 @@ render(){
                       <button onClick={this.closeReview} type="button" className="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
-                      <h5 className="review-id">ReviewID: {this.state.reviewId}</h5>
+                      <h5 className="review-id-container">ReviewID<span className="review-id">{this.state.reviewId}</span></h5>
+                      <ul classname="review-details">
+                        <li>user:{this.state.user}</li>
+                        <li>Locale:{this.state.locale}</li>
+                        <li>Source:{this.state.source}</li>
+                      </ul>
+                      {rating}
+                      <h5 className="review-title">{this.state.title}</h5>
                       <p className="review-text">{this.state.reviewText}</p>
                     </div>
                   </div>

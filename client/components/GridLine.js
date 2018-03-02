@@ -7,11 +7,11 @@ export default class GridLine extends React.Component{
     this.handleClick=this.handleClick.bind(this);
   }
   handleClick(){
-    this.props.clickHandler(this.props.data.ReviewText, this.props.data.Id);
+    this.props.clickHandler(this.props.data.ReviewText, this.props.data.Id, this.props.data.UserNickname, this.props.data.ContentLocale, this.props.data.SourceClient, this.props.data.Rating, this.props.data.Title );
   }
   render(){
   // set css classes dynamically depending on what type of review.
-      let color;
+      let color="white";
       let type="Native";
       let codes="N/A";
       let reason;

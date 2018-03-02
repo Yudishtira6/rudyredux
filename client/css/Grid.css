@@ -1,39 +1,89 @@
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: rgb(245, 247, 248);
-}
-
 #displayableReviewsTitle {
   font-size: 30px;
   margin: 6rem 0 2rem 0;
   color: #444;
-  border-top: 1px solid #d4d4d4;
-  padding-top: 1.5rem;
+  padding-top: 0rem;
+  margin-left: 1rem;
 }
 
 .blue {
-  background: #d9edf7;
   height: 5rem;
   transition: .3s ease-in-out;
   cursor: pointer;
+  background-color: #f4f3f3;
+  color: black;
+  border-left: 10px solid #fcb150;
 }
 
 .yellow {
-  background: #fff2b1;
+  background: #f4f3f3;
   height: 5rem;
   transition: .3s ease-in-out;
   cursor: pointer;
+  color: black;
+  border-left: 10px solid #C4348A
+}
+
+.label {
+  display: none;
+  position: absolute;
 }
 
 .red {
-  background: #be3534;
+  background: #f4f3f3;
   height: 5rem;
   transition: .3s ease-in-out;
   cursor: pointer;
 }
 
-.blue:hover {
-  transform: scale(1.01);
+.black {
+  background: #f4f3f3;
+  height: 5rem;
+  transition: .3s ease-in-out;
+  cursor: pointer;
+  color: black;
+  border-left: 10px solid #65C8CF;
+}
+
+.black:hover, .yellow:hover, .red:hover, .blue:hover {
+  background: #e6e6e6;
+}
+
+.review-title {
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.review-id-container {
+  background: #01b096;
+  margin-top: 0;
+  padding: 1rem;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  color: black;
+}
+
+.review-id {
+  float: right;
+  margin-right: 2rem;
+}
+
+.review-text-container ul {
+  padding: 0;
+  list-style: none;
+}
+
+.review-text-container li {
+  display: inline-block;
+  width: 33%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.review-text-container img {
+  display: block;
+  margin: 0 auto;
+  width: 110px;
 }
 
 table {
@@ -41,7 +91,7 @@ table {
 }
 
 .highlight {
-  color: white;
+  color: black;
 }
 
 /* Main styling for tables */
@@ -104,16 +154,11 @@ th, td {
   left: 50%;
   margin-top: -100px;
   margin-left: -500px;
+  border-radius: 10px;
 }
 
 .review-text {
-  padding: 2rem;
-  text-align: center;
-}
-
-.review-id {
-  font-size: 1.8rem;
-  text-align: center;
+  padding: 1rem;
 }
 
 .close {
