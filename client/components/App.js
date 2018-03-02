@@ -44,6 +44,7 @@ export default class App extends React.Component {
                   productPageUrl:'',
                   activeTab:"product",
                   reviewFilter:"All Displayable Reviews",
+                  // make key the product id
                   sourceData:[
                               {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:1,benchName:"Walmart1",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
                               {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:2,benchName:"Walmart2",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
@@ -109,6 +110,19 @@ export default class App extends React.Component {
                    }).catch(function(error){
                      console.log('error: ',error);
                    });
+
+            axios.post('/sourceforrealSyn2',
+                     {
+                        clientName: this.state.client,
+                        productId: this.state.productId,
+                        source: this.state.source
+                     }
+                     ).then(function(response) {
+            //set state for product details.
+                       console.log("Syndication call was successful!!",response.data);
+                   }).catch(function(error){
+                     console.log('error: ',error);
+                   });
     }
 
 
@@ -135,9 +149,32 @@ export default class App extends React.Component {
              console.log('error: ',error);
            });
 
+// Bob dash call
 
-
-
+            console.log('About to run Dashboard call');
+            axios.post('/dashboard',
+            querystring.stringify({
+              clientName: client,
+              productId: productId
+            }), {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              }
+            }).then(function(response) {
+  //set state for product details.
+              console.log("response.data for Dashboard",response.data);
+              e.setState({snapTotal:response.data.dashboard.totalReviews,
+                            loading:false,
+                            snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
+                            snapNative:response.data.dashboard.nativeReviews,
+                            snapFamily:response.data.dashboard.familyReviews,
+                            snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
+                            snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
+                          });
+          }).catch(function(error){
+            console.log('error: ',error);
+          });
+// End Bob dash call
 
 
 

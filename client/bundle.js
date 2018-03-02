@@ -51323,6 +51323,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       productPageUrl: '',
       activeTab: "product",
       reviewFilter: "All Displayable Reviews",
+      // make key the product id
       sourceData: [{ attributionLogo: 'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png', key: 1, benchName: "Walmart1", ModStopCodes: ["RET", "PC", "STP"], Loc: "en_US" }, { attributionLogo: 'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png', key: 2, benchName: "Walmart2", ModStopCodes: ["RET", "PC", "STP"], Loc: "en_US" }, { attributionLogo: 'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png', key: 3, benchName: "Walmart3", ModStopCodes: ["RET", "PC", "STP"], Loc: "en_US" }, { attributionLogo: 'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png', key: 4, benchName: "Walmart4", ModStopCodes: ["RET", "PC", "STP"], Loc: "en_US" }, { attributionLogo: 'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png', key: 5, benchName: "Walmart5", ModStopCodes: ["RET", "PC", "STP"], Loc: "en_US" }, { attributionLogo: 'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png', key: 6, benchName: "Walmart6", ModStopCodes: ["RET", "PC", "STP"], Loc: "en_US" }, { attributionLogo: 'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png', key: 7, benchName: "Walmart7", ModStopCodes: ["RET", "PC", "STP"], Loc: "en_US" }, { attributionLogo: 'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png', key: 8, benchName: "Walmart8", ModStopCodes: ["RET", "PC", "STP"], Loc: "en_US" }]
 
     };
@@ -51374,6 +51375,17 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     }).catch(function (error) {
       console.log('error: ', error);
     });
+
+    __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/sourceforrealSyn2', {
+      clientName: this.state.client,
+      productId: this.state.productId,
+      source: this.state.source
+    }).then(function (response) {
+      //set state for product details.
+      console.log("Syndication call was successful!!", response.data);
+    }).catch(function (error) {
+      console.log('error: ', error);
+    });
   }
 
   //get all reviews from backend
@@ -51396,6 +51408,33 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       }).catch(function (error) {
         console.log('error: ', error);
       });
+
+      // Bob dash call
+
+      console.log('About to run Dashboard call');
+      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/dashboard', __WEBPACK_IMPORTED_MODULE_3_querystring___default.a.stringify({
+        clientName: client,
+        productId: productId
+      }), {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }).then(function (response) {
+        //set state for product details.
+        console.log("response.data for Dashboard", response.data);
+        e.setState({ snapTotal: response.data.dashboard.totalReviews,
+          loading: false,
+          snapDisplayableSyndicated: response.data.dashboard.displayableSyndicatedReviews,
+          snapNative: response.data.dashboard.nativeReviews,
+          snapFamily: response.data.dashboard.familyReviews,
+          snapRatingOnlyReviews: response.data.dashboard.ratingsOnlyReviews,
+          snapDisplayableNative: response.data.dashboard.displayableNativeReviews
+        });
+      }).catch(function (error) {
+        console.log('error: ', error);
+      });
+      // End Bob dash call
+
 
       //END DRAKES CODE FRO FRONTEND ***************************>>>>
 

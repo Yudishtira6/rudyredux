@@ -3,45 +3,18 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var rp = require('request-promise');
-var switchboardArray = [];
 var nativeContentTotal = 0;
 var nativeRatingsOnlyTotal = 0;
 var nativeDisplayTotal = 0;
 var syndDisplayTotal = 0;
 var famDisplayTotal = 0;
 var allReviewDisplayTotal = 0;
-// var fs = require('fs'),
-//     path = require('path'),    
-//     filePath = path.join(__dirname, '../../switchboard-expressiveClient.json');
-// console.log("start");
-// var stream = fs.createReadStream(filePath, {flags: 'r', encoding: 'utf-8'});
-// var buf = '';
-// stream.on('data', function(d) {
-//     buf += d.toString(); // when data is read, stash it in a string buffer
-//     pump(); // then process the buffer
-// });
+var switchboardArray = [];
+var fs = require('fs')
+var path = require('path')
 
-// function pump() {
-//     var pos;
-//     while ((pos = buf.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
-//         if (pos == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
-//             buf = buf.slice(1); // discard it
-//             continue; // so that the next iteration will start with data
-//         }
-//         processLine(buf.slice(0,pos)); // hand off the line
-//         buf = buf.slice(pos+1); // and slice the processed data off the buffer
-//     }
-// }
-// console.log('end');
-// function processLine(line) { // here's where we do something with a line
 
-//     if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
 
-//     if (line.length > 0) { // ignore empty lines
-//         var obj = JSON.parse(line); // parse the JSON
-//         switchboardArray.push(obj);
-//     }
-// }
 
 router.get('/', function(req, res){
   res.render('index')
@@ -128,11 +101,63 @@ router.route('/oracle').post(function(req,res){
     });
 });
 
+// info drake wants for source syndication
+// company Logo, Name, Prod ID, Moderation stop codes, locales that syndicate, syndication delay
+// source for real2 - syndication
+router.route('/sourceforrealSyn2').post(function(req,res){
+  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
+  console.log('*****');
+  console.log('sourceforrealSyn2 route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('sourceforrealSyn2 route - switchboardArray.length: ',switchboardArray.length);
+  console.log('*****');
+  var source = req.body.source;
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var syndications = [];
+  // iterate through source object for syndication info
+  for (let i = 0, len = source.syndication.length;i<len;i++){
+    // find match on switchboard and get info
+    console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "'+clientName.toLowerCase()+'")');
+    // console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "Buyagift-EN")',switchboardArray.find(x => x._name.toLowerCase() === 'buyagift-en'));
+    var switchEntry = switchboardArray.find(x => x._name.toLowerCase() === clientName.toLowerCase());
+    // console.log('switchboardArray entry '+i+'["export"]['+clientName+']: ',switchEntry["export"]["CVSPharmacy"]);
+    console.log('switchEntry["display"]["3006"]["_sources"]["Bengay"]: ',switchEntry['display']['3006']['_sources']['Bengay']);
+    // console.log('switchEntry["display"]: ',switchEntry["display"]);
+    console.log('iterating through switchEntry["display"]');
+    for (var key in switchEntry["display"]) {
+      console.log('key: ',key);
+      console.log('switchEntry["display"]["'+key+'"]["_sources"]["Bengay"]: ',switchEntry['display'][key]['_sources']['bengay']);
+      break;
+    }
+    console.log('switchEntry["import"]["Bengay"]: ',switchEntry["import"]['Bengay']);
+    var theKeys = Object.getOwnPropertyNames(switchEntry["import"]).toString();
+    var getPropValue = function(prop){
+      console.log('prop: ',prop);
+      var match = new RegExp(prop, 'i').exec(theKeys);
+      console.log('match: ',match);
+      // return match && match.length > 0 ? theObject[match[0]] : '';
+      return match[0];
+    }
+    var testSwitch1 = getPropValue(source.syndication[i][0]);
+    console.log('testSwitch1: ', testSwitch1);
+    console.log('switchEntry["import"]['+testSwitch1+']: ',switchEntry["import"][testSwitch1]);
+    var modCodes = switchEntry["import"][testSwitch1]['_excludedContentCodesForImport'];
+    console.log('modCodes: ',modCodes);
+    var contentCodeLength = modCodes.length;
+
+  }
+  var SynResponseObject = {syndicationData:syndications};
+  res.json(SynResponseObject);
+});
+
 // source for real - syndication
 router.route('/sourceforrealSyn').post(function(req,res){
+  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
   console.log('*****');
   console.log('sourceforrealSyn route: ')
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('sourceforrealSyn route - switchboardArray.length: ',switchboardArray.length);
   console.log('*****');
   var source = req.body.source;
   var syndications = [];
@@ -453,7 +478,15 @@ router.route('/insert')
 .post(function(req,res) {
   // get user inputs
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
-  // console.log('switchboardArray[0]: ',switchboardArray[0]);
+  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
+  console.log('**************');
+  console.log('switchboardArray.length: ',switchboardArray.length);
+  console.log('switchboardArray1.length: ',switchboardArray1.length);
+  console.log('switchboardArray2.length: ',switchboardArray2.length);
+  console.log('switchboardArray3.length: ',switchboardArray3.length);
+  console.log('switchboardArray4.length: ',switchboardArray4.length);
+  console.log('switchboardArray5.length: ',switchboardArray5.length);
+  console.log('**************');
   // set global vars that will persist through all the nested calls
   var clientName = req.body.clientName;
   var productId = req.body.productId;
@@ -738,7 +771,7 @@ router.route('/insert')
                 // console.log('getPropValue('+source.syndication[i][0]+'): ',getPropValue(source.syndication[i][0]));
                 // console.log('switchEntry["import"]: ',switchEntry["import"]);
                 // var switchEntry = switchboardArray.find(x => x._name.toLowerCase() === 'oralb-fi_fi');
-                
+
                 // var contentCodeLength = switchEntry["import"][source.syndication[i][0]].length;
                 // console.log('contentCodeLength: ', contentCodeLength);
 
@@ -825,7 +858,7 @@ router.route('/insert')
                 console.log('finished for loop');
                 console.log('waiting for calls');
                 // console.log('Switchboard data- switchboardArray[0]["import"]["EverydaymeFI_FI"]["_excludedContentCodesForImport"]:',switchboardArray[0]["import"]["EverydaymeFI_FI"]["_excludedContentCodesForImport"]);
-                
+
                 console.log('totalId.length: ',totalId.length);
                 console.log('hagridTotalResults.length: ',hagridTotalResults.length);
                 hagridTotalObj['Results']=hagridTotalResults;
@@ -846,7 +879,7 @@ router.route('/insert')
                     var syndicatedReviews = syndObj[source.syndication[0][1]]["Results"].length;
                     var blockedSyndicatedReviews = syndObj[source.syndication[0][1]]["Results"].length-syndTotal;
                   }
-                  
+
                   var responseObj = {
                     hagrid:hagridTotalObj,
                     syndObj,
