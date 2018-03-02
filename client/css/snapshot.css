@@ -1,135 +1,140 @@
 .snapshot-header {
-  border-top: 1px solid #d6d6d6;
-  margin-bottom: 2rem;
-  font-size: 25px;
-  color: #444;
   font-size: 30px;
-  padding-top: 1.5rem;
-  margin-top: 20rem;
+  padding: 1rem;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.fa-camera {
-  margin-left: 8px;
+/*GRID LAYOUT***/
+
+.snap-container {
+  color: white;
+  display: grid;
+  grid-template-columns: repeat(4, [col] 1fr);
+  grid-template-rows: [row] auto;
+  box-shadow: -1px 12px 20px 0px lightgrey;
+  color: black;
+  border-radius: 10px;
 }
 
-.snapshot-container {
-  padding: 0;
-  list-style: none;
-  margin: 0 auto;
-  border: 1px solid #0084ab;
-  /*border-top-right-radius: 10px;
-  border-top-left-radius: 10px;*/
-  color: #0084ab;
-  box-shadow: -3px 3px 12px 0px #888;
+.snap-details {
+  display: grid;
+  grid-template-columns: repeat(2, [col] 1fr);
+  border: 1px solid black;
+  align-items: stretch;
 }
 
-.snapshot-container>li {
+.main {
+  grid-column: col / span 2;
+  text-align: center;
+  align-self: stretch;
+  border-bottom: 1px solid black;
+  padding-top: 1rem;
+  background-color: #f4f3f3;
+  cursor: pointer;
+  border-top-left-radius: 10px;
+}
+
+.main:hover {
+  background-color: #e6e6e6;
+}
+
+.main h2 {
+  font-size: 1rem;
+}
+
+.sub-one {
+  align-self: stretch;
+  text-align: center;
+  padding-top: 1rem;
+  border-right: 1px solid black;
+  background-color: #f4f3f3;
+  cursor: pointer;
+}
+
+.sub-one:hover {
+  background: #e6e6e6;
+}
+
+.sub-one h4 {
+  font-size: 1rem;
+}
+
+.sub-two {
+  align-self: stretch;
+  text-align: center;
+  padding-top: 1rem;
+  font-size: 1rem;
+  background-color: #f4f3f3;
+  cursor: pointer;
+}
+
+.sub-two:hover {
+  background: #e6e6e6;
+}
+
+.sub-two h4 {
+  font-size: 1rem;
+}
+
+.sub-main {
+  align-self: stretch;
+  text-align: center;
+  grid-column: col / span 2;
+  padding-top: 26px;
+  padding-bottom: 16px;
+  background-color: #f4f3f3;
+  cursor: pointer;
+}
+
+.sub-main h4 {
+  font-size: 1rem;
+}
+
+.sub-main:hover {
+  background: #e6e6e6;
+}
+
+.total {
   display: inline-block;
   text-align: center;
-  width: 25%;
-  box-sizing: border-box;
-  border-right: 1px solid #0084ab;
-  margin: 0 auto;
-  position: relative;
+  padding-top: 2rem;
+  background-color: #f4f3f3;
   cursor: pointer;
-  background: rgb(245, 247, 248);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
-.snapshot-container>li:last-of-type {
-  border-right: none;
-}
-
-.snap-main {
-  border-bottom: 1px solid #0084ab;
-  transition: .3s ease-in-out;
-}
-
-.family-information {
-  padding-top: 10px;
-  padding-bottom: 9px;
-}
-
-.main-number {
-  font-size: 4rem;
-  padding-top: .5rem;
-  margin-bottom: 0;
-  margin-top: 0;
-  transition: .3s ease-in-out;
-}
-
-.snap-main:hover {
-  background: #e5f3f7;
-}
-
-.main-label {
-  margin-top: 0;
+.total h2 {
   font-size: 1.5rem;
 }
 
-.secondary-container {
-  display: inline-block;
-  width: 50%;
-  border-right: 1px solid white;
-  box-sizing: border-box;
-}
-
-.secondary-container:last-child {
-  border-right: none;
-  background-color: #ab3900;
-  color: #fff;
-}
-
-.secondary-number {
-  margin-bottom: 0;
-  margin-top: 25px;
-}
-
-.secondary-label {
-  margin-top: 0;
-  font-size: 13px;
-}
-
-.family-title {
-  padding-top: 11px;
-  margin: 0;
-}
-
-.emptyh4 {
-  margin: 0;
-}
-
-.family-id {
-  margin-top: 12px;
-}
-
-.total-main {
-  padding-bottom: 35px;
-  transition: .3s ease-in-out;
-}
-
-.total-main:hover {
-  background: #e5f3f7;
-}
-
-.total-number {
-  font-size: 6rem;
-  margin: 0;
-  padding-top: 23px;
-  padding-bottom: 0rem;
-}
-
-.total-label {
-  font-size: 1.5rem;
-  margin-top: .5rem;
-  margin-bottom: 0rem;
-  display: block;
-}
-
-.total-container {
-  vertical-align: top;
-  margin-top: 3rem;
+.total:hover {
+  background: #e6e6e6;
 }
 
 .fa-pulse {
   line-height: 187px;
+}
+
+.native {
+  border-bottom: 2px solid #65C8CF;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.native-top {
+  border-bottom: 2px solid #65C8CF;
+}
+
+.native-bottom {
+  border-bottom-left-radius: 10px;
+}
+
+.syndicated {
+  border-bottom: 2px solid #F5A623;
+}
+
+.family {
+  border-bottom: 2px solid #C4348A;
 }

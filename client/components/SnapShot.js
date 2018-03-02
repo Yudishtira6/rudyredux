@@ -16,10 +16,10 @@ export default class SnapShot extends React.Component {
     this.props.display('native','product');
     }
     switchFamily(){
-    this.props.display('family','product');
+    this.props.display('family','family');
     }
     switchSyndicated(){
-    this.props.display('syndicated','syndicated');
+    this.props.display('syndication','syndication');
 
     }
     switchAll(){
@@ -36,71 +36,56 @@ export default class SnapShot extends React.Component {
       }
     console.log("snapshot DATA", this.props.data);
     let snapShot=(
-                  <ul className="snapshot-container">
-                    <li onClick={this.switchNative} className="native">
-                      <div className="snap-main">
-                        <h2 className="main-number">{this.props.data.displayableNative}</h2>
-                        <h3 className="main-label">DISPLAYED NATIVE REVIEWS</h3>
+                    <div className="snap-container">
+                      <div onClick={this.switchNative} className="snap-details native">
+                          <div className="main native-top">
+                              <h2>{this.props.data.displayableNative}</h2>
+                              <h2>DISPLAYED NATIVE REVIEWS</h2>
+                          </div>
+                          <div className="sub-one native-bottom">
+                              <h4>{this.props.data.native}</h4>
+                              <h4>Total Native</h4>
+                          </div>
+                          <div className="sub-two">
+                              <h4>{this.props.data.ratingOnly}</h4>
+                              <h4>Ratings-only Native</h4>
+                          </div>
                       </div>
-                      <div className="secondary-container">
-                        <h4 className="secondary-number">{this.props.data.native}</h4>
-                        <h4 className="secondary-label">Total Native</h4>
+                      <div onClick={this.switchSyndicated} className="snap-details syndicated">
+                          <div className="main syndicated">
+                              <h2>{this.props.data.displayableSyndicated}</h2>
+                              <h2>DISPLAYED SYNDICATED REVIEWS</h2>
+                          </div>
+                          <div className="sub-one">
+                              <h4>{this.props.data.syndicated}</h4>
+                              <h4>Total Syndicated</h4>
+                          </div>
+                          <div className="sub-two">
+                              <h4>{this.props.data.stopped}</h4>
+                              <h4>Blocked Syndicated</h4>
+                          </div>
                       </div>
-                      <div className="secondary-container">
-                        <h4 className="secondary-number">{this.props.data.ratingOnly}</h4>
-                        <h4 className="secondary-label">Ratings-only Native</h4>
+                      <div onClick={this.switchFamily} className="snap-details family">
+                          <div className="main family">
+                              <h2>{this.props.data.family}</h2>
+                              <h2>DISPLAYED FAMILY REVIEWS</h2>
+                          </div>
+                          <div className="sub-main">
+                              <h4>Member of {familyIds} Families </h4>
+                          </div>
                       </div>
-                    </li>
-
-                    <li>
-                    <div onClick={this.switchSyndicated} className="snap-main">
-                      <h2 className="main-number">{this.props.data.displayableSyndicated}</h2>
-                      <h3 className="main-label">DISPLAYED SYNDICATED REVIEWS</h3>
+                      <div onClick={this.switchAll} className="snap-details total">
+                          <h2>{this.props.data.total}</h2>
+                          <h2>DISPLAYED TOTAL REVIEWS</h2>
+                      </div>
                     </div>
-                    <div className="secondary-container">
-                      <h4 className="secondary-number">{this.props.data.syndicated}</h4>
-                      <h4 className="secondary-label">Total Syndicated</h4>
-                    </div>
-                    <div className="secondary-container" onClick={this.switchBlocked}>
-                      <h4 className="secondary-number">{this.props.data.stopped}</h4>
-                      <h4 className="secondary-label">Blocked Syndicated</h4>
-                    </div>
-                    </li>
-                    <li>
-                      <div onClick={this.switchFamily} className="snap-main">
-                        <h2 className="main-number">{this.props.data.family}</h2>
-                        <h3 className="main-label">DISPLAYED FAMILY REVIEWS</h3>
-                      </div>
-                      <div className="family-information">
-                        <h4 className="family-title">Member of {familyIds} Families </h4>
-                        <h4 className="emptyh4">&nbsp;</h4>
-                      </div>
-                    </li>
-                    <li onClick={this.switchAll} className="total-container">
-                      <div className="total-main">
-                        <h2 className="total-number">{this.props.data.total}</h2>
-                        <h3 className="total-label">DISPLAYED TOTAL REVIEWS</h3>
-                      </div>
-                    </li>
-                  </ul>
                 );
             if(this.props.loading){
             snapShot=(
-                        <ul className="snapshot-container">
-                          <li className="native">
-                            <Loader/>
-                          </li>
+                        <div className="loader-container">
 
-                          <li>
                             <Loader/>
-                          </li>
-                          <li>
-                            <Loader/>
-                          </li>
-                          <li>
-                            <Loader/>
-                          </li>
-                        </ul>
+                        </div>
 
                       );
               }
