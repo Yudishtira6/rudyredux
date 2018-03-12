@@ -45,16 +45,7 @@ export default class App extends React.Component {
                   activeTab:"product",
                   reviewFilter:"All Displayable Reviews",
                   // make key the product id
-                  sourceData:[
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:1,benchName:"Walmart1",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:2,benchName:"Walmart2",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:3,benchName:"Walmart3",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:4,benchName:"Walmart4",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:5,benchName:"Walmart5",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:6,benchName:"Walmart6",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:7,benchName:"Walmart7",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:8,benchName:"Walmart8",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                             ],
+                  sourceData:[],
 
                   };
   //bind this to each function
