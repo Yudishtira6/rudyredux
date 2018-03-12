@@ -89,6 +89,121 @@ export default class App extends React.Component {
 
     getSourceData(){
 
+      axios.post('/familyDashboard',
+               {
+                  source: this.state.source
+               }
+               ).then(function(response) {
+      //set state for product details.
+                 console.log("familyDashboard call was successful!!",response.data);
+             }).catch(function(error){
+               console.log('error: ',error);
+             });
+
+    // SB Test call
+      console.log('Hitting sb test');
+     axios.post('/sbtest',
+       {
+         clientName: this.state.client,
+         productId: this.state.productId,
+         source: this.state.source
+       }
+       ).then(function(response) {
+         console.log("SB test call was successful", response.data);
+         e.setState({source:response.data},e.getSourceData);
+     }).catch(function(error){
+       console.log('error: ',error);
+     });
+
+    // All Pagination test call
+      console.log('Hitting paginateAll test');
+     axios.post('/paginateAll',
+       {
+         clientName: this.state.client,
+         productId: this.state.productId,
+         pageNumber: 0
+       }
+       ).then(function(response) {
+         console.log("paginateAll test call was successful", response.data);
+         e.setState({source:response.data},e.getSourceData);
+     }).catch(function(error){
+       console.log('error: ',error);
+     });
+
+    // Syndication Pagination test call
+      console.log('Hitting paginateSyndicated test');
+     axios.post('/paginateSyndicated',
+       {
+         clientName: this.state.client,
+         productId: this.state.productId,
+         pageNumber: 0
+       }
+       ).then(function(response) {
+         console.log("paginateSyndicated test call was successful", response.data);
+         e.setState({source:response.data},e.getSourceData);
+     }).catch(function(error){
+       console.log('error: ',error);
+     });
+
+    // Native Pagination test call
+      console.log('Hitting paginateNative test');
+     axios.post('/paginateNative',
+       {
+         clientName: this.state.client,
+         productId: this.state.productId,
+         pageNumber: 0
+       }
+       ).then(function(response) {
+         console.log("paginateNative test call was successful", response.data);
+         e.setState({source:response.data},e.getSourceData);
+     }).catch(function(error){
+       console.log('error: ',error);
+     });
+
+    // Family Pagination test call
+      console.log('Hitting paginateFamily test');
+     axios.post('/paginateFamily',
+       {
+         clientName: this.state.client,
+         familyProductId: this.state.productId,
+         pageNumber: 0
+       }
+       ).then(function(response) {
+         console.log("paginateFamily test call was successful", response.data);
+         e.setState({source:response.data},e.getSourceData);
+     }).catch(function(error){
+       console.log('error: ',error);
+     });
+
+    // Syndication Pagination test call
+     //  console.log('Hitting paginateSyndicated test');
+     // axios.post('/paginateSyndicated',
+     //   {
+     //     clientName: this.state.client,
+     //     productId: this.state.productId,
+     //     pageNumber: 0
+     //   }
+     //   ).then(function(response) {
+     //     console.log("paginateSyndicated test call was successful", response.data);
+     //     e.setState({source:response.data},e.getSourceData);
+     // }).catch(function(error){
+     //   console.log('error: ',error);
+     // });
+    // // SB Logo call
+    //   console.log('Hitting sb logo');
+    //  axios.post('/sblogo',
+    //    {
+    //      clientName: this.state.client,
+    //      productId: this.state.productId,
+    //      source: this.state.source
+    //    }
+    //    ).then(function(response) {
+    //      console.log("SB logo call was successful", response.data);
+    //      e.setState({source:response.data},e.getSourceData);
+    //  }).catch(function(error){
+    //    console.log('error: ',error);
+    //  });
+
       axios.post('/sourceforrealFam',
               {
                 source: this.state.source

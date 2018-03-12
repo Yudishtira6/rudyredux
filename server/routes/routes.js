@@ -13,14 +13,9 @@ var switchboardArray = [];
 var fs = require('fs')
 var path = require('path')
 
-
-
-
 router.get('/', function(req, res){
   res.render('index')
 });
-
-// Test routes
 
 // product
 router.route('/getProductDetails').post(function(req,res){
@@ -41,11 +36,13 @@ router.route('/getProductDetails').post(function(req,res){
       res.json(data);
     })
     .catch(function (err) {
-        // API call failed...
+        // API call failed
+        console.log('/getProductDetails hagrid call failed');
+        console.log('error: ',err);
     });
 });
 
-// Oracle route
+// Oracle route (to get family and syndication info)
 router.route('/oracle').post(function(req,res){
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
   var source = {};
@@ -103,141 +100,137 @@ router.route('/oracle').post(function(req,res){
 
 // info drake wants for source syndication
 // company Logo, Name, Prod ID, Moderation stop codes, locales that syndicate, syndication delay
-// source for real2 - syndication
-router.route('/sourceforrealSyn2').post(function(req,res){
-  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
-  console.log('*****');
-  console.log('sourceforrealSyn2 route: ')
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
-  console.log('sourceforrealSyn2 route - switchboardArray.length: ',switchboardArray.length);
-  console.log('*****');
-  var source = req.body.source;
+//Structure - [{},{}]
+// final for syndication
+// sb test
+router.route('/sbtest').post(function(req,res){
+  console.log('**************')
+  console.log('Hitting /sbtest');
   var clientName = req.body.clientName;
-  var productId = req.body.productId;
-  var syndications = [];
-  // iterate through source object for syndication info
-  for (let i = 0, len = source.syndication.length;i<len;i++){
-    // find match on switchboard and get info
-    console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "'+clientName.toLowerCase()+'")');
-    // console.log('Switchboard data - using find - switchboardArray.find(x => x._name === "Buyagift-EN")',switchboardArray.find(x => x._name.toLowerCase() === 'buyagift-en'));
-    var switchEntry = switchboardArray.find(x => x._name.toLowerCase() === clientName.toLowerCase());
-    // console.log('switchboardArray entry '+i+'["export"]['+clientName+']: ',switchEntry["export"]["CVSPharmacy"]);
-    console.log('switchEntry["display"]["3006"]["_sources"]["Bengay"]: ',switchEntry['display']['3006']['_sources']['Bengay']);
-    // console.log('switchEntry["display"]: ',switchEntry["display"]);
-    console.log('iterating through switchEntry["display"]');
-    for (var key in switchEntry["display"]) {
-      console.log('key: ',key);
-      console.log('switchEntry["display"]["'+key+'"]["_sources"]["Bengay"]: ',switchEntry['display'][key]['_sources']['bengay']);
-      break;
-    }
-    console.log('switchEntry["import"]["Bengay"]: ',switchEntry["import"]['Bengay']);
-    var theKeys = Object.getOwnPropertyNames(switchEntry["import"]).toString();
-    var getPropValue = function(prop){
-      console.log('prop: ',prop);
-      var match = new RegExp(prop, 'i').exec(theKeys);
-      console.log('match: ',match);
-      // return match && match.length > 0 ? theObject[match[0]] : '';
-      return match[0];
-    }
-    var testSwitch1 = getPropValue(source.syndication[i][0]);
-    console.log('testSwitch1: ', testSwitch1);
-    console.log('switchEntry["import"]['+testSwitch1+']: ',switchEntry["import"][testSwitch1]);
-    var modCodes = switchEntry["import"][testSwitch1]['_excludedContentCodesForImport'];
-    console.log('modCodes: ',modCodes);
-    var contentCodeLength = modCodes.length;
-
+  var source = req.body.source;
+  console.log('/sbtest - clientName: ',clientName);
+  console.log('/sbtest - source: ',source);
+  if (source['syndication'].length){
+    let HmacAuthRequestor = require('hmac-auth');
+    let myRequestLib = require('request');
+    let yourAPIKey = 'narwhal';
+    let yourSecretKey = '7egc3s36ck9wjpg63y6r72csebq2k9chhxepa4z3ts9t';
+    let hmacAuth = new HmacAuthRequestor(yourAPIKey, yourSecretKey, myRequestLib);
+    let request = hmacAuth.getClient(myRequestLib);
+    var clientName = req.body.clientName;
+    var source = req.body.source;
+    var edgeArray = [];
+    var edgeBody = {};
+    console.log('/sbtest - clientName: ',clientName);
+    console.log('/sbtest - source: ',source);
+    request({
+      method : 'GET',
+      url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
+      timeout : 3000,
+      json: true
+    }, function (err, response, body) {
+      if(err){
+        // API call failed
+        console.log('/sbtest sb2 hmac edges call failed');
+        console.log('error: ',err);
+        res.json(err);
+      }
+      console.log('this works just as expected!');
+      edgeBody = body;
+      request({
+        method : 'GET',
+        url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/displays/'+clientName,
+        timeout : 3000,
+        json: true
+      }, function (err, response, body) {
+        if(err){
+          // API call failed
+          console.log('/sbtest sb2 hmac display call failed');
+          console.log('error: ',err);
+          res.json(err);
+        }
+        console.log('** SB Display this works just as expected!');
+        console.log('body["data"]["Actoralcarepwr"]: ',body["data"]["Actoralcarepwr"]);
+        // iterate through syndication sources
+        for(let i=0,len=source["syndication"].length;i<len;i++){
+          var syndClient = source["syndication"][i][0];
+          console.log('syndClient: ',syndClient);
+          var displayObject = body["data"];
+          var goal = displayObject[Object.keys(displayObject).find(key => key.toLowerCase() === syndClient.toLowerCase())];
+          console.log('Switchboard Display body["data"]['+syndClient+']: ',goal);
+          console.log('sourceDisplayName: ', goal["sourceDisplayName"]);
+          console.log('logoImageName: ',goal["logoImageName"]);
+          console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
+          var edgeObject = edgeBody["data"].find(x => x.sourceClientId === syndClient);
+          var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":goal["sourceDisplayName"],"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
+          edgeArray.push(drakeEdge);
+        }
+        console.log('edgeArray: ',edgeArray);
+        res.json(edgeArray);
+    });
+    });
+  } else {
+    console.log('There is no syndication sources so no need to make the call');
+    res.json({})
   }
-  var SynResponseObject = {syndicationData:syndications};
-  res.json(SynResponseObject);
 });
 
-// source for real - syndication
-router.route('/sourceforrealSyn').post(function(req,res){
-  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
-  console.log('*****');
-  console.log('sourceforrealSyn route: ')
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
-  console.log('sourceforrealSyn route - switchboardArray.length: ',switchboardArray.length);
-  console.log('*****');
+
+// family dashboard
+router.route('/familyDashboard').post(function(req,res) {
+  // get user inputs
+  console.log('Hiting familyDashboard . . .');
   var source = req.body.source;
-  var syndications = [];
-  // iterate through source object for syndication info
-  for (let i = 0, len = source.syndication.length;i<len;i++){
-    var options = {
-      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+source.syndication[i][0]+'&filter=id:'+source.syndication[i][1],
+  console.log('source: ', source);
+  var familyDisplayObject = {};
+  var totalFamilyResults = 0;
+  var len = source["family"].length;
+  var callsLeft = len;
+  // iterate through family object in source
+  console.log('source["family"]: ',source["family"]);
+  for (let i = 0;i<len;i++){
+    // make hagrid calls to get review totals
+    let hagopt = {
+      uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+source.family[i][0]+'&ApiVersion=5.4&filter=productid:'+source.family[i][1]+'&limit=1&excludeFamily=true',
       headers: {
           'User-Agent': 'Request-Promise'
       },
       json: true // Automatically parses the JSON string in the response
     };
-    console.log('options: ',options);
-    rp(options)
-      .then(function (data) {
-        console.log('data for sfr Syn: ',JSON.stringify(data));
-        syndications.push(data);
+    rp(hagopt)
+      .then(function (hagfam) {
+        console.log('hagfam["TotalResults"]: ', hagfam["TotalResults"]);
+        familyDisplayObject[source["family"][i][1]]=hagfam["TotalResults"];
+        totalFamilyResults += hagfam["TotalResults"];
+        familyDisplayObject["total"]=totalFamilyResults;
+        callsLeft--
+        console.log('familyDisplayObject: ',familyDisplayObject,' callsLeft: ',callsLeft);
+        if (callsLeft<=0){
+          console.log('familyDashboard res json call hit');
+          console.log('callsLeft: ',callsLeft);
+          console.log('familyDisplayObject: ',familyDisplayObject);
+          res.json(familyDisplayObject);
+        }
       })
       .catch(function (err) {
-          // API call failed...
-      });
-  }
-  // delay
-  setTimeout(myTimeout5, 4000);
-  function myTimeout5() {
-    var SynResponseObject = {syndicationData:syndications};
-    res.json(SynResponseObject);
+          // API call failed
+          console.log('/familyDashboard hagrid call failed');
+          console.log('error: ',err);
+    });
   }
 });
 
-// source for real - family
-router.route('/sourceforrealFam').post(function(req,res){
+// All reviews pagination route
+router.route('/paginateAll').post(function(req,res){
   console.log('*****');
-  console.log('sourceforrealFam route: ')
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source);
+  console.log('paginationAll route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, ' pageNumber: ', req.body.pageNumber);
   console.log('*****');
-  var source = req.body.source;
-  var families = [];
-  // iterate through source object for syndication info
-  for (let i = 0, len = source.family.length;i<len;i++){
-    var options = {
-      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=test&clientName='+source.family[i][0]+'&filter=id:'+source.family[i][1],
-      headers: {
-          'User-Agent': 'Request-Promise'
-      },
-      json: true // Automatically parses the JSON string in the response
-    };
-    console.log('options: ',options);
-    rp(options)
-      .then(function (data) {
-        console.log('data for sfr Fam: ',JSON.stringify(data));
-        families.push(data);
-      })
-      .catch(function (err) {
-          // API call failed...
-      });
-  }
-  // delay
-  setTimeout(myTimeout4, 4000);
-  function myTimeout4() {
-    var FamResponseObject = {familyData:families};
-    res.json(FamResponseObject);
-  }
-});
-
-
-
-//  pagination for reals
-router.route('/paginationforreals').post(function(req,res){
-  console.log('*****');
-  console.log('paginationforreals route: ')
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, 'source: ',req.body.source, ' category: ', req.body.category, ' pageNumber: ', req.body.pageNumber);
-  console.log('*****');
-  var source = req.body.source;
   var clientName = req.body.clientName;
   var productId = req.body.productId;
-  var category = req.body.category;
   var pageNumber = req.body.pageNumber;
   let pagopt = {
-    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&limit=100&offset='+(pageNumber*100),
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&limit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -247,7 +240,7 @@ router.route('/paginationforreals').post(function(req,res){
   rp(pagopt)
     .then(function (pageResults) {
       console.log('****')
-      console.log('pageResults: ', pageResults);
+      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
       console.log('****')
       res.json(pageResults);
     })
@@ -256,78 +249,91 @@ router.route('/paginationforreals').post(function(req,res){
   });
 });
 
-// sources
-router.route('/getSources').post(function(req,res){
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
+// Syndication reviews pagination route
+router.route('/paginateSyndicated').post(function(req,res){
+  console.log('*****');
+  console.log('paginationSyndicated route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, ' pageNumber: ', req.body.pageNumber);
+  console.log('*****');
   var clientName = req.body.clientName;
   var productId = req.body.productId;
-  var syndTotal = 0;
-  var totalId = [];
-  var syndId = [];
-  var sources = {};
-  var dashboard = {};
-  var totalReviews = {};
-  var hagridTotalObj = {};
-  var familyObj = {};
-  var syndObj = {};
-  var rejected = {};
-  rejected["Results"] = [];
-  // console.log('rejected: ',rejected);
-  var hagridTotalResults = [];
-  var source = new Object ();
-  // Step 1 (Oracle call to get sources)
-  var options = {
-    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=hackathon-qdu8sarvq',
+  var pageNumber = req.body.pageNumber;
+  let pagopt = {
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&filter=IsSyndicated:true&keyproperty=syndication&limit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },
     json: true // Automatically parses the JSON string in the response
   };
-  console.log('options: ',options);
-  rp(options)
-    .then(function (data) {
-      console.log('Oracle call data',JSON.stringify(data));
-      console.log('Oracle call data["products"].length: ',data["products"].length)
-      // set local function vars that will be set to the global source object
-      var family = [];
-      var syndication = [];
-      // set data
-      var hero = data.products;
-      var len = hero.length;
-      console.log('hero: ',hero);
-      console.log('len: ',len);
-      // need error handling for product with no families and no syndication
-      if(len==0){
-        // no syndication and no family
-        source = { syndication: [], family: [] };
-      } else {
-        // loop through results of calll and organize into family and syndication
-        for (i = 0; i < len; i++) {
-            if ((data.products[i]['sources'][0]) === ('FAMILY')) {
-              var innerFamily = [];
-              family.push(innerFamily)
-              innerFamily.push((data.products[i]['client']), (data.products[i]['externalId']))
-            }
-            else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC') || (data.products[i]['sources'][0]) === ('EXTERNAL_ID')) {
-              var innerSyndication = [];
-              syndication.push(innerSyndication)
-              innerSyndication.push((data.products[i]['client']), (data.products[i]['externalId']))
-            }
-            source.syndication = syndication;
-            source.family = family;
-        }
-      }
-
-      // console.log('syndication: ', syndication);
-      console.log('Oracle call complete');
-      console.log('source: ', source);
-
-      // iterate through synd sources to get switchboard info
-
+  // console.log('hagopt: ',hagopt);
+  rp(pagopt)
+    .then(function (pageResults) {
+      console.log('****')
+      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
+      console.log('****')
+      res.json(pageResults);
     })
     .catch(function (err) {
-        // API call failed...
-    });
+      // API call failed...
+  });
+});
+
+// Native reviews pagination route
+router.route('/paginateNative').post(function(req,res){
+  console.log('*****');
+  console.log('paginationNative route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, ' pageNumber: ', req.body.pageNumber);
+  console.log('*****');
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
+  var pageNumber = req.body.pageNumber;
+  let pagopt = {
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&excludeFamily=truelimit=100&offset='+(pageNumber*100),
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  // console.log('hagopt: ',hagopt);
+  rp(pagopt)
+    .then(function (pageResults) {
+      console.log('****')
+      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
+      console.log('****')
+      res.json(pageResults);
+    })
+    .catch(function (err) {
+      // API call failed...
+  });
+});
+
+// Family reviews pagination route
+router.route('/paginateFamily').post(function(req,res){
+  console.log('*****');
+  console.log('paginationFamily route: ')
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, ' pageNumber: ', req.body.pageNumber);
+  console.log('*****');
+  var clientName = req.body.clientName;
+  var productId = req.body.familyProductId;
+  var pageNumber = req.body.pageNumber;
+  let pagopt = {
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&excludeFamily=truelimit=100&offset='+(pageNumber*100),
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  // console.log('hagopt: ',hagopt);
+  rp(pagopt)
+    .then(function (pageResults) {
+      console.log('****')
+      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
+      console.log('****')
+      res.json(pageResults);
+    })
+    .catch(function (err) {
+      // API call failed...
+  });
 });
 
 // dashboard
@@ -398,95 +404,11 @@ router.route('/dashboard').post(function(req,res) {
     });
 });
 
-// On user input - quick call to get product name and image
-// Also get Dashboard data - all except blocked syndication reviews
-router.route('/getProductDetailsComplex')
-.post(function(req,res) {
-  // get user inputs
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
-
-  // batch call #1 - q0 syndicated total, q1 - review display total
-  var batch1Options = {
-    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhaul&clientname='+req.body.clientName+'&keyproperty=syndication&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+req.body.productId+'&filter.q0=issyndicated:true&limit.q0=1&resource.q1=statistics&filter.q1=productid:'+req.body.productId+'&stats.q1=reviews',
-    headers: {
-        'User-Agent': 'Request-Promise'
-    },
-    json: true // Automatically parses the JSON string in the response
-  };
-  console.log('batch1Options options: ',batch1Options);
-  rp(batch1Options)
-    .then(function (synRev) {
-      syndDisplayTotal = synRev["BatchedResults"]["q0"]["TotalResults"];
-      allReviewDisplayTotal = synRev["BatchedResults"]["q1"]["Results"]["ReviewStatistics"]["TotalReviewCount"];
-      console.log('synRev: ',JSON.stringify(prodData));
-      console.log('syndDisplayTotal: ',syndDisplayTotal);
-      console.log('allReviewDisplayTotal: ',allReviewDisplayTotal);
-
-      // nested batch2Option
-      // batch call #2 - q0 num native reviews (reviews with content + ratingsOnly)
-      // q1 num ratingsOnly native reviews
-      var batch2Options = {
-        uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhaul&clientname='+req.body.clientName+'&excludeFamily=true&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+req.body.productId+'&limit.q0=1&resource.q1=reviews&filter.q1=productid:'+req.body.productId+'&limit.q1=1&filter.q1=isRatingsOnly:true',
-        headers: {
-            'User-Agent': 'Request-Promise'
-        },
-        json: true // Automatically parses the JSON string in the response
-      };
-      console.log('batch2Options options: ',batch2Options);
-      rp(batch2Options)
-        .then(function (conRat) {
-          nativeDisplayTotal = conRat["BatchedResults"]["q0"]["TotalResults"];
-          nativeRatingsOnlyTotal = conRat["BatchedResults"]["q1"]["Results"]["ReviewStatistics"]["TotalReviewCount"];
-          nativeContentTotal = nativeDisplayTotal - nativeRatingsOnlyTotal;
-          famDisplayTotal = allReviewDisplayTotal - nativeDisplayTotal - syndDisplayTotal;
-          console.log('conRat: ',JSON.stringify(conRat));
-          console.log('nativeContentTotal: ',nativeContentTotal);
-          console.log('nativeDisplayTotal: ',nativeDisplayTotal);
-          console.log('nativeRatingsOnlyTotal: ',nativeRatingsOnlyTotal);
-          console.log('famDisplayTotal: ',famDisplayTotal);
-
-          // nested product function
-          // plug in user input to hagrid product call to get name and image
-          var options = {
-            uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=narwhaul&clientName='+req.body.clientName+'&filter=id:'+req.body.productId,
-            headers: {
-                'User-Agent': 'Request-Promise'
-            },
-            json: true // Automatically parses the JSON string in the response
-          };
-          console.log('Product options: ',options);
-          rp(options)
-            .then(function (prodData) {
-              console.log('prodData',JSON.stringify(prodData));
-              res.json(prodData);
-            })
-            .catch(function (err) {
-                // API call failed...
-            });
-      })
-      .catch(function (err) {
-            // API call failed...
-      });
-    })
-    .catch(function (err) {
-        // API call failed...
-    });
-});
-
 // On user input - detailed call to get syndication data
-router.route('/insert')
+router.route('/insertTest')
 .post(function(req,res) {
   // get user inputs
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
-  switchboardArray = switchboardArray1.concat(switchboardArray2,switchboardArray3,switchboardArray4,switchboardArray5);
-  console.log('**************');
-  console.log('switchboardArray.length: ',switchboardArray.length);
-  console.log('switchboardArray1.length: ',switchboardArray1.length);
-  console.log('switchboardArray2.length: ',switchboardArray2.length);
-  console.log('switchboardArray3.length: ',switchboardArray3.length);
-  console.log('switchboardArray4.length: ',switchboardArray4.length);
-  console.log('switchboardArray5.length: ',switchboardArray5.length);
-  console.log('**************');
   // set global vars that will persist through all the nested calls
   var clientName = req.body.clientName;
   var productId = req.body.productId;
