@@ -18,7 +18,7 @@ router.get('/', function(req, res){
 });
 
 // product
-router.route('/getProductDetails').post(function(req,res){
+router.route('/getProduct').post(function(req,res){
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
   var clientName = req.body.clientName;
   var productId = req.body.productId;
@@ -103,13 +103,11 @@ router.route('/oracle').post(function(req,res){
 //Structure - [{},{}]
 // final for syndication
 // sb test
-router.route('/sbtest').post(function(req,res){
+router.route('/syndicationDashboard').post(function(req,res){
   console.log('**************')
-  console.log('Hitting /sbtest');
+  console.log('Hitting /syndicationDashboard');
   var clientName = req.body.clientName;
-  var source = req.body.source;
-  console.log('/sbtest - clientName: ',clientName);
-  console.log('/sbtest - source: ',source);
+  var source = req.body.sourceObject;
   if (source['syndication'].length){
     let HmacAuthRequestor = require('hmac-auth');
     let myRequestLib = require('request');
@@ -121,8 +119,8 @@ router.route('/sbtest').post(function(req,res){
     var source = req.body.source;
     var edgeArray = [];
     var edgeBody = {};
-    console.log('/sbtest - clientName: ',clientName);
-    console.log('/sbtest - source: ',source);
+    console.log('/syndicationDashboard - clientName: ',clientName);
+    console.log('/syndicationDashboard - source: ',source);
     request({
       method : 'GET',
       url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
@@ -131,7 +129,7 @@ router.route('/sbtest').post(function(req,res){
     }, function (err, response, body) {
       if(err){
         // API call failed
-        console.log('/sbtest sb2 hmac edges call failed');
+        console.log('/syndicationDashboard sb2 hmac edges call failed');
         console.log('error: ',err);
         res.json(err);
       }
@@ -145,7 +143,7 @@ router.route('/sbtest').post(function(req,res){
       }, function (err, response, body) {
         if(err){
           // API call failed
-          console.log('/sbtest sb2 hmac display call failed');
+          console.log('/syndicationDashboard sb2 hmac display call failed');
           console.log('error: ',err);
           res.json(err);
         }
@@ -175,6 +173,53 @@ router.route('/sbtest').post(function(req,res){
   }
 });
 
+// blocked dashboard
+router.route('/blockedDashboard').post(function(req,res) {
+  // get user inputs
+  console.log('Hiting blockedDashboard . . .');
+  var syndicationObject = req.body.syndicationObject;
+  var source = req.body.sourceObject
+  console.log('source: ', source);
+  console.log('syndicationObject: ',syndicationObject);
+  /*
+  var familyDisplayObject = {};
+  var totalFamilyResults = 0;
+  var len = source["family"].length;
+  var callsLeft = len;
+  // iterate through family object in source
+  console.log('source["family"]: ',source["family"]);
+  for (let i = 0;i<len;i++){
+    // make hagrid calls to get review totals
+    let hagopt = {
+      uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+source.family[i][0]+'&ApiVersion=5.4&filter=productid:'+source.family[i][1]+'&limit=1&excludeFamily=true',
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: true // Automatically parses the JSON string in the response
+    };
+    rp(hagopt)
+      .then(function (hagfam) {
+        console.log('hagfam["TotalResults"]: ', hagfam["TotalResults"]);
+        familyDisplayObject[source["family"][i][1]]=hagfam["TotalResults"];
+        totalFamilyResults += hagfam["TotalResults"];
+        familyDisplayObject["total"]=totalFamilyResults;
+        callsLeft--
+        console.log('familyDisplayObject: ',familyDisplayObject,' callsLeft: ',callsLeft);
+        if (callsLeft<=0){
+          console.log('familyDashboard res json call hit');
+          console.log('callsLeft: ',callsLeft);
+          console.log('familyDisplayObject: ',familyDisplayObject);
+          res.json(familyDisplayObject);
+        }
+      })
+      .catch(function (err) {
+          // API call failed
+          console.log('/familyDashboard hagrid call failed');
+          console.log('error: ',err);
+    });
+  }
+  */
+});
 
 // family dashboard
 router.route('/familyDashboard').post(function(req,res) {
@@ -250,9 +295,9 @@ router.route('/paginateAll').post(function(req,res){
 });
 
 // Syndication reviews pagination route
-router.route('/paginateSyndicated').post(function(req,res){
+router.route('/paginateDisplayableSyndicated').post(function(req,res){
   console.log('*****');
-  console.log('paginationSyndicated route: ')
+  console.log('paginateDisplayableSyndicated route: ')
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, ' pageNumber: ', req.body.pageNumber);
   console.log('*****');
   var clientName = req.body.clientName;
@@ -311,13 +356,13 @@ router.route('/paginateNative').post(function(req,res){
 router.route('/paginateFamily').post(function(req,res){
   console.log('*****');
   console.log('paginationFamily route: ')
-  console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId, ' pageNumber: ', req.body.pageNumber);
+  console.log('clientName: ',req.body.clientName,'productId: ',req.body.familyProductId, ' pageNumber: ', req.body.pageNumber);
   console.log('*****');
   var clientName = req.body.clientName;
-  var productId = req.body.familyProductId;
+  var familyProductId = req.body.familyProductId;
   var pageNumber = req.body.pageNumber;
   let pagopt = {
-    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&excludeFamily=truelimit=100&offset='+(pageNumber*100),
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+familyProductId+'&excludeFamily=truelimit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -336,6 +381,36 @@ router.route('/paginateFamily').post(function(req,res){
   });
 });
 
+// Blocked Syndicated reviews route - all the syndicated reviews on the respective sites
+router.route('/blockedReviews').post(function(req,res){
+  console.log('*****');
+  console.log('blockedReviews route: ')
+  console.log('*****');
+  var source = req.body.sourceObject;
+  var syndicationObject = req.body.syndicationObject;
+  console.log('source: ',source);
+  console.log('syndicationObject: ',syndicationObject);
+  /*
+  let pagopt = {
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+familyProductId+'&excludeFamily=truelimit=100&offset='+(pageNumber*100),
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  // console.log('hagopt: ',hagopt);
+  rp(pagopt)
+    .then(function (pageResults) {
+      console.log('****')
+      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
+      console.log('****')
+      res.json(pageResults);
+    })
+    .catch(function (err) {
+      // API call failed...
+  });
+  */
+});
 // dashboard
 router.route('/dashboard').post(function(req,res) {
   // get user inputs

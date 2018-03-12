@@ -51423,7 +51423,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     console.log('Hitting paginateFamily test');
     __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/paginateFamily', {
       clientName: this.state.client,
-      productId: this.state.productId,
+      familyProductId: this.state.productId,
       pageNumber: 0
     }).then(function (response) {
       console.log("paginateFamily test call was successful", response.data);
