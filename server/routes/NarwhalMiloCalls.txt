@@ -1,0 +1,31 @@
+give bad ones
+
+filter=contentCodes:eq:stp,pc, ...
+
+&attributes=moderatorCodes  - return content codes
+
+
+
+give not bad ones
+
+filter=contentCodes:neq:stp,pc, ...
+
+
+syndication delay
+
+filter=submissiontime:lt:[time now - (syndication day delays + fudge factor) convert to epoch - seconds ]
+
+locale - language
+
+find reviews with
+
+filter=contentLocale:eq:en_CA, fr_CA etc
+
+
+find reviews without
+
+filter=contentLocale:neq:en_CA, fr_CA etc
+
+
+http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName=carters&keyProperty=syndication&filter=productid:v_235g912&include=products&stats=reviews&filter=ModeratorCode:RET,PRI,PC,STP&attributes=moderatorCodes
+
