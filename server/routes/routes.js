@@ -108,6 +108,8 @@ router.route('/syndicationDashboard').post(function(req,res){
   console.log('Hitting /syndicationDashboard');
   var clientName = req.body.clientName;
   var source = req.body.sourceObject;
+  console.log('clientName: ',clientName);
+  console.log('source: ',source);
   if (source['syndication'].length){
     let HmacAuthRequestor = require('hmac-auth');
     let myRequestLib = require('request');
@@ -115,8 +117,6 @@ router.route('/syndicationDashboard').post(function(req,res){
     let yourSecretKey = '7egc3s36ck9wjpg63y6r72csebq2k9chhxepa4z3ts9t';
     let hmacAuth = new HmacAuthRequestor(yourAPIKey, yourSecretKey, myRequestLib);
     let request = hmacAuth.getClient(myRequestLib);
-    var clientName = req.body.clientName;
-    var source = req.body.source;
     var edgeArray = [];
     var edgeBody = {};
     console.log('/syndicationDashboard - clientName: ',clientName);
@@ -148,7 +148,7 @@ router.route('/syndicationDashboard').post(function(req,res){
           res.json(err);
         }
         console.log('** SB Display this works just as expected!');
-        console.log('body["data"]["Actoralcarepwr"]: ',body["data"]["Actoralcarepwr"]);
+
         // iterate through syndication sources
         for(let i=0,len=source["syndication"].length;i<len;i++){
           var syndClient = source["syndication"][i][0];
@@ -225,7 +225,7 @@ router.route('/blockedDashboard').post(function(req,res) {
 router.route('/familyDashboard').post(function(req,res) {
   // get user inputs
   console.log('Hiting familyDashboard . . .');
-  var source = req.body.source;
+  var source = req.body.sourceObject;
   console.log('source: ', source);
   var familyDisplayObject = {};
   var totalFamilyResults = 0;

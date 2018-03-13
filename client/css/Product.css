@@ -140,6 +140,10 @@
   top: 19rem;
 }*/
 
+.code {
+  margin-right: 5px;
+}
+
 .tiles {
   margin-top: 2rem;
   display: inline-block;
@@ -202,7 +206,7 @@
   text-align: center;
   color: black;
   border-radius: 10px;
-  padding-bottom: 51px;
+  padding-bottom: 30px;
   vertical-align: top;
   margin-top: 2rem;
 }
@@ -231,6 +235,7 @@
 .family-container {
   padding-bottom: 56px;
   margin-left: 44px;
+  position: relative;
 }
 
 .source-data h3 {
@@ -238,12 +243,9 @@
 }
 
 .slick-slide img {
-  width: 108px;
-  height: 98px;
-  border-radius: 50%;
-  border: 5px solid #4d5679;
   margin: 0 auto;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .slick-prev {
@@ -254,4 +256,8 @@
 .slick-next {
   right: 3px !important;
   z-index: 3;
+}
+
+.syndication-id {
+  margin-left: 1rem;
 }

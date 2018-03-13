@@ -23,7 +23,7 @@ class Grid extends React.Component {
 
   handlePage(i){
     console.log("clicked",i);
-    this.props.pagination(i);
+    this.props.pagination(i, this.props.title);
    }
   clickHandler(reviewText,reviewId, user, locale, source, rating, title, color){
     this.setState({clicked:true,reviewText:reviewText, reviewId:reviewId, user:user, locale:locale, source:source, rating:rating, title:title});
@@ -62,7 +62,7 @@ render(){
                         <span aria-hidden="true">&times;</span>
                       </button>
                       <h5 className="review-id-container">ReviewID<span className="review-id">{this.state.reviewId}</span></h5>
-                      <ul classname="review-details">
+                      <ul className="review-details">
                         <li>user:{this.state.user}</li>
                         <li>Locale:{this.state.locale}</li>
                         <li>Source:{this.state.source}</li>
@@ -74,6 +74,7 @@ render(){
                   </div>
                 );
   }
+console.log(this.props);
   if(this.props.data.length>1){
 
   //create the pages
