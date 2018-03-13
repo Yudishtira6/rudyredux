@@ -75,7 +75,7 @@ render(){
                 );
   }
 console.log(this.props);
-  if(this.props.data.length>1){
+  if(this.props.data.length>=1){
 
   //create the pages
 console.log("TOTAL RESULTS AT GRID", this.props.results);

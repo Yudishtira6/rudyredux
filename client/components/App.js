@@ -1,16 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import $ from 'jquery';
 import axios from 'axios';
 import querystring from 'querystring';
-import $ from 'jquery';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
+import FamilyInfo from './FamilyInfo';
 import Grid from './Grid';
+import ProductInfo from './ProductInfo';
 import Product from './Product';
 import SnapShot from './SnapShot';
-import ProductInfo from './ProductInfo';
 import SyndicatedInfo from './SyndicationInfo';
-import FamilyInfo from './FamilyInfo';
-
 
 
 export default class App extends React.Component {
@@ -20,6 +19,9 @@ export default class App extends React.Component {
                   client:"",
                   productId:"",
                   reviews:[],
+                  loadingSyndicated:false,
+                  loadingFamily:false,
+                  loadingBlocked:false,
                   syndicatedReviews:[],
                   familyReviews:[],
                   nativeReviews:[],
@@ -36,11 +38,14 @@ export default class App extends React.Component {
                   snapTotal:0,
                   snapDisplayableSyndicated:0,
                   snapDisplayableNative:0,
+                  total:0,
                   familyIds:[],
                   loading:false,
                   clientError:'',
                   prodError:'',
                   pagination:0,
+                  errorSyndicated:false,
+                  errorFamily:false,
                   productPageUrl:'',
                   activeTab:"product",
                   reviewFilter:"All Displayable Reviews",
@@ -51,14 +56,14 @@ export default class App extends React.Component {
 
                   };
   //bind this to each function
-      this.getReviews=this.getReviews.bind(this);
-      this.switchReviews=this.switchReviews.bind(this);
-      this.switchTabs=this.switchTabs.bind(this);
-      this.onClick=this.onClick.bind(this);
-      this.checkForm=this.checkForm.bind(this);
-      this.paginationClick=this.paginationClick.bind(this);
-      this.getSyndicationData=this.getSyndicationData.bind(this);
-      this.getBlocked=this.getBlocked.bind(this);
+    this.getReviews=this.getReviews.bind(this);
+    this.switchReviews=this.switchReviews.bind(this);
+    this.switchTabs=this.switchTabs.bind(this);
+    this.onClick=this.onClick.bind(this);
+    this.checkForm=this.checkForm.bind(this);
+    this.paginationClick=this.paginationClick.bind(this);
+    this.getSyndicationData=this.getSyndicationData.bind(this);
+    this.getBlocked=this.getBlocked.bind(this);
   }
   //bind this so that I may set state.
   onClick(e){
@@ -66,89 +71,86 @@ export default class App extends React.Component {
     this.getReviews(this);
   }
 
-//user clicks the go button to request reviews
-    getReviews(e){
-      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+  //user clicks the go button to request reviews
+  getReviews(e){
+    axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-      let client=document.getElementById('client').value;
-      let productId=document.getElementById('prodid').value;
-      this.checkForm();
+    let client=document.getElementById('client').value;
+    let productId=document.getElementById('prodid').value;
+    this.checkForm();
       //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
-      if(client && productId && productId!==this.state.productId){
-          this.setState({loading:true});
-          //Get oracle data.
-          axios.post('/oracle',
-               {
-                 clientName: client,
-                 productId: productId
-               }
-               ).then(function(response) {
-                 console.log("oracle call was successful", response.data);
-                 e.setState({sourceObject:response.data}, e.getSyndicationData);
-             }).catch(function(error){
-               console.log('error: ',error);
-             });
-
-            //Get Dashboard information
-            axios.post('/dashboard',
+    if(client && productId && productId!==this.state.productId){
+        this.setState({loading:true, loadingFamily:true, loadingBlocked:true, loadingSyndicated:true});
+        //Get oracle data.
+        axios.post('/oracle',
+             {
+               clientName: client,
+               productId: productId
+             }
+             ).then(function(response) {
+               console.log("oracle call was successful", response.data);
+               e.setState({sourceObject:response.data}, e.getSyndicationData);
+           }).catch(function(error){
+             console.log('error: ',error);
+           });
+          //Get Dashboard information
+          axios.post('/dashboard',
+          querystring.stringify({
+            clientName: client,
+            productId: productId,
+          }), {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          }).then(function(response) {
+          //set state for product details.
+            console.log("response.data for Dashboard",response.data);
+            e.setState({  snapTotal:response.data.dashboard.totalReviews,
+                          total:response.data.dashboard.totalReviews,
+                          loading:false,
+                          snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
+                          snapNative:response.data.dashboard.nativeReviews,
+                          snapFamily:response.data.dashboard.familyReviews,
+                          snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
+                          snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
+                        });
+          }).catch(function(error){
+            console.log('error: ',error);
+          });
+          //Get product information block
+          axios.post('/getProduct',
             querystring.stringify({
               clientName: client,
               productId: productId,
-            }), {
+             }) , {
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
               }
             }).then(function(response) {
-            //set state for product details.
-              console.log("response.data for Dashboard",response.data);
-              e.setState({  snapTotal:response.data.dashboard.totalReviews,
-                            loading:false,
-                            snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
-                            snapNative:response.data.dashboard.nativeReviews,
-                            snapFamily:response.data.dashboard.familyReviews,
-                            snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
-                            snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
+              console.log("response for product",response);
+              e.setState({image:response.data.Results[0].ImageUrl,
+                          client:client,
+                          clientError:'',
+                          prodError:'',
+                          productId:response.data.Results[0].Id,
+                          productName:response.data.Results[0].Name,
+                          familyIds:response.data.Results[0].FamilyIds,
+                          productPageUrl:response.data.Results[0].ProductPageUrl,
                           });
-            }).catch(function(error){
-              console.log('error: ',error);
-            });
-
-            //Get product information block
-            axios.post('/getProduct',
-              querystring.stringify({
-                clientName: client,
-                productId: productId,
-               }) , {
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded"
-                }
-              }).then(function(response) {
-                console.log("response for product",response);
-                e.setState({image:response.data.Results[0].ImageUrl,
-                            client:client,
-                            clientError:'',
-                            prodError:'',
-                            productId:response.data.Results[0].Id,
-                            productName:response.data.Results[0].Name,
-                            familyIds:response.data.Results[0].FamilyIds,
-                            productPageUrl:response.data.Results[0].ProductPageUrl,
-                            });
-                  });
-                  axios.post('/paginateAll',
-                           {
-                              clientName:client,
-                              productId:productId,
-                              pageNumber:0
-
-                           }
-                           ).then(function(response) {
-                  //set state for product details.
-                            console.log("PAGINATION ROUTE SUCCEEDED???",response.data);
-                             e.setState({displayingReviews:response.data.Results})
-                         }).catch(function(error){
-                           console.log('error: ',error);
-                         });
-
+                });
+                axios.post('/paginateAll',
+                         {
+                            clientName:client,
+                            productId:productId,
+                            pageNumber:0
+                         }
+                         ).then(function(response) {
+                //set state for product details.
+                          console.log("PAGINATION ROUTE SUCCEEDED???",response.data);
+                           e.setState({displayingReviews:response.data.Results})
+                       }).catch(function(error){
+                         console.log('error: ',error);
+                       });
       }
     }
 
@@ -172,7 +174,7 @@ export default class App extends React.Component {
                  ).then(function(response) {
         //set state for product details.
                   console.log("Native Reviews response here*******", response);
-                   self.setState({displayingReviews:response.data.Results})
+                   self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults})
                }).catch(function(error){
                  console.log('error: ',error);
                });
@@ -187,7 +189,7 @@ export default class App extends React.Component {
                  }
                  ).then(function(response) {
         //set state for product details.
-                   self.setState({displayingReviews:response.data.Results})
+                   self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults})
                }).catch(function(error){
                  console.log('error: ',error);
                });
@@ -202,7 +204,7 @@ export default class App extends React.Component {
                  }
                  ).then(function(response) {
         //set state for product details.
-                   self.setState({displayingReviews:response.data.Results})
+                   self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults})
                }).catch(function(error){
                  console.log('error: ',error);
                });
@@ -217,7 +219,7 @@ export default class App extends React.Component {
                  ).then(function(response) {
         //set state for product details.
                   console.log("PAGINATION ROUTE SUCCEEDED???",response.data);
-                   self.setState({displayingReviews:response.data.Results})
+                   self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults})
                }).catch(function(error){
                  console.log('error: ',error);
                });
@@ -236,9 +238,10 @@ export default class App extends React.Component {
                ).then(function(response) {
       //set state for product details.
                  console.log("syndicationDashboard call was successful!!",response.data, self);
-                 self.setState({syndicationObject:response.data}, self.getBlocked);
+                 self.setState({syndicationObject:response.data, loadingSyndicated:false}, self.getBlocked);
              }).catch(function(error){
                console.log('error: ',error);
+                self.setState({loadingSyndicated:false, errorSyndicated:true});
              });
       axios.post('/familyDashboard',
                 {
@@ -250,7 +253,7 @@ export default class App extends React.Component {
                 console.log("Family Dashboard call was successful!!",response.data);
                 let familyObject=[];
                 familyObject.push(response.data);
-                self.setState({familyObject:familyObject});
+                self.setState({familyObject:familyObject, loadingFamily:false});
                 }).catch(function(error){
                   console.log('error: ',error);
                 });
@@ -304,23 +307,77 @@ export default class App extends React.Component {
       this.setState({clientError:'', prodError:''});
     }
   }
+
+
+
   //logic to filter reviews in snapshot
-  switchReviews(reviews,activeTab){
+  switchReviews(reviews, familyId){
+      var self=this;
     switch(reviews) {
         case "native":
-            this.setState({displayingReviews:this.state.nativeReviews,reviewFilter:"Native Reviews"});
+        axios.post('/paginateNative',
+                 {
+                    productId:this.state.productId,
+                    clientName: this.state.client,
+                    pageNumber: 0
+
+                 }
+                 ).then(function(response) {
+        //set state for product details.
+                  console.log("RESPONSE FROM NATIVE TAB**********************", response);
+                  self.setState({displayingReviews:response.data.Results, reviewFilter:"Native Reviews", total:response.data.TotalResults})
+               }).catch(function(error){
+                 console.log('error: ',error);
+               });
             break;
         case "family":
-            this.setState({displayingReviews:this.state.familyReviews, reviewFilter:"Family Reviews"});
+        axios.post('/paginateFamily',
+                 {
+                    familyProductId:familyId,
+                    clientName: this.state.client,
+                    pageNumber: 0
+
+                 }
+                 ).then(function(response) {
+        //set state for product details.
+                  self.setState({displayingReviews:response.data.Results, reviewFilter:"Family Reviews", total:response.data.TotalResults})
+               }).catch(function(error){
+                 console.log('error: ',error);
+               });
             break;
         case "blocked":
-            this.setState({displayingReviews:this.state.blockedReviews, reviewFilter:"Blocked Syndicated Reviews"});
+            this.setState({displayingReviews:this.state.blockedReviews, reviewFilter:"Blocked Syndicated Reviews", total:response.data.TotalResults});
             break;
         case "syndication":
-             this.setState({displayingReviews:this.state.syndicatedReviews, reviewFilter:"Syndicated Reviews"});
+          axios.post('/paginateDisplayableSyndicated',
+                   {
+                      productId:this.state.productId,
+                      clientName: this.state.client,
+                      pageNumber:0
+
+                   }
+                   ).then(function(response) {
+          //set state for product details.
+                    self.setState({displayingReviews:response.data.Results, reviewFilter:"Syndicated Reviews", total:response.data.TotalResults})
+                 }).catch(function(error){
+                   console.log('error: ',error);
+                 });
             break;
         default:
-            this.setState({displayingReviews:this.state.reviews, reviewFilter:"All Displayable Reviews"});
+          axios.post('/paginateAll',
+                   {
+                      productId:this.state.productId,
+                      clientName: this.state.client,
+                      pageNumber:0
+
+                   }
+                   ).then(function(response) {
+          //set state for product details.
+                    console.log("RESULTS FROM ALLLLLL REVIEWS HERE*********", response);
+                    self.setState({displayingReviews:response.data.Results, reviewFilter:"All Displayable Reviews", total:response.data.TotalResults})
+                 }).catch(function(error){
+                   console.log('error: ',error);
+                 });
     }
   }
   switchTabs(tab){
@@ -360,7 +417,7 @@ export default class App extends React.Component {
                         <h3>Syndicated Reviews <span className="header-review-number">{this.state.snapDisplayableSyndicated}</span></h3>
                       </div>
                       <div className="nav-component">
-                        <h3>Family Reviews <span className="header-review-number">{this.state.snapFamily}</span></h3>
+                        <h3>  Family Reviews <span className="header-review-number">{this.state.snapFamily}</span></h3>
                       </div>
                     </nav>
                     <form onSubmit={this.onClick}>
@@ -375,10 +432,10 @@ export default class App extends React.Component {
                     </form>
                   </div>
                   <ProductInfo data={productData}/>
-                  <SyndicatedInfo data={syndicationObject}/>
-                  <FamilyInfo data={this.state.familyObject}/>
+                  <SyndicatedInfo data={syndicationObject} loading={this.state.loadingSyndicated} error={this.state.errorSyndicated}/>
+                  <FamilyInfo data={this.state.familyObject} loading={this.state.loadingFamily} error={this.state.errorFamily} paginateFamily={this.switchReviews}/>
                   <SnapShot display={this.switchReviews} loading={this.state.loading} data={snapShot}/>
-                  <Grid page={this.state.pagination} results={this.state.snapTotal} pagination={this.paginationClick} title={this.state.reviewFilter} productId={this.state.productId} data={this.state.displayingReviews}/>
+                  <Grid page={this.state.pagination} results={this.state.total} pagination={this.paginationClick} title={this.state.reviewFilter} productId={this.state.productId} data={this.state.displayingReviews}/>
                 </div>
               );
   }

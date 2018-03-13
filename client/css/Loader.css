@@ -11,6 +11,17 @@
   margin-bottom: 1rem;
 }
 
+.loader-top {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  font-size: 1.5rem;
+}
+
+.loader-top p {
+  font-size: 1rem;
+  margin-bottom: -13px;
+}
+
 .left {
   margin-right: .5rem;
   animation: pulse 1s infinite linear;
