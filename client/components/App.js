@@ -44,17 +44,10 @@ export default class App extends React.Component {
                   productPageUrl:'',
                   activeTab:"product",
                   reviewFilter:"All Displayable Reviews",
+                  sourceObject:[],
                   // make key the product id
-                  sourceData:[
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:1,benchName:"Walmart1",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:2,benchName:"Walmart2",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:3,benchName:"Walmart3",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:4,benchName:"Walmart4",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:5,benchName:"Walmart5",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:6,benchName:"Walmart6",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:7,benchName:"Walmart7",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                              {attributionLogo:'http://www.cabelas.com/assets/cms/img/doorway/040214_logo_4.png',key:8,benchName:"Walmart8",ModStopCodes:["RET","PC","STP"],Loc:"en_US"},
-                             ],
+                  syndicationObject:[],
+                  familyObject:[]
 
                   };
   //bind this to each function
@@ -64,221 +57,51 @@ export default class App extends React.Component {
       this.onClick=this.onClick.bind(this);
       this.checkForm=this.checkForm.bind(this);
       this.paginationClick=this.paginationClick.bind(this);
-      this.getSourceData=this.getSourceData.bind(this);
+      this.getSyndicationData=this.getSyndicationData.bind(this);
+      this.getBlocked=this.getBlocked.bind(this);
   }
   //bind this so that I may set state.
   onClick(e){
     e.preventDefault();
     this.getReviews(this);
   }
-  paginationClick(e){
-    console.log("SETTING STATE OF PAGINATION");
-    $.ajax({
-    url:`http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName=${this.state.client}&keyProperty=syndication&filter=productid:${this.state.productId}&limit=100&offset=${e*100}`,
-    success:(response)=>{
-      console.log("RESPONSE FROM PAGINATION REQUEST",response);
-      this.setState({displayingReviews:response.Results});
-    },
-    dataType:'jsonp',
-  });
-    this.setState({pagination:e})
-    //api call to change page!
-    console.log("current page number",e);
-  }
 
-
-    getSourceData(){
-
-      axios.post('/familyDashboard',
-               {
-                  source: this.state.source
-               }
-               ).then(function(response) {
-      //set state for product details.
-                 console.log("familyDashboard call was successful!!",response.data);
-             }).catch(function(error){
-               console.log('error: ',error);
-             });
-
-    // SB Test call
-      console.log('Hitting sb test');
-     axios.post('/sbtest',
-       {
-         clientName: this.state.client,
-         productId: this.state.productId,
-         source: this.state.source
-       }
-       ).then(function(response) {
-         console.log("SB test call was successful", response.data);
-         e.setState({source:response.data},e.getSourceData);
-     }).catch(function(error){
-       console.log('error: ',error);
-     });
-
-    // All Pagination test call
-      console.log('Hitting paginateAll test');
-     axios.post('/paginateAll',
-       {
-         clientName: this.state.client,
-         productId: this.state.productId,
-         pageNumber: 0
-       }
-       ).then(function(response) {
-         console.log("paginateAll test call was successful", response.data);
-         e.setState({source:response.data},e.getSourceData);
-     }).catch(function(error){
-       console.log('error: ',error);
-     });
-
-    // Syndication Pagination test call
-      console.log('Hitting paginateSyndicated test');
-     axios.post('/paginateSyndicated',
-       {
-         clientName: this.state.client,
-         productId: this.state.productId,
-         pageNumber: 0
-       }
-       ).then(function(response) {
-         console.log("paginateSyndicated test call was successful", response.data);
-         e.setState({source:response.data},e.getSourceData);
-     }).catch(function(error){
-       console.log('error: ',error);
-     });
-
-    // Native Pagination test call
-      console.log('Hitting paginateNative test');
-     axios.post('/paginateNative',
-       {
-         clientName: this.state.client,
-         productId: this.state.productId,
-         pageNumber: 0
-       }
-       ).then(function(response) {
-         console.log("paginateNative test call was successful", response.data);
-         e.setState({source:response.data},e.getSourceData);
-     }).catch(function(error){
-       console.log('error: ',error);
-     });
-
-    // Family Pagination test call
-      console.log('Hitting paginateFamily test');
-     axios.post('/paginateFamily',
-       {
-         clientName: this.state.client,
-         familyProductId: this.state.productId,
-         pageNumber: 0
-       }
-       ).then(function(response) {
-         console.log("paginateFamily test call was successful", response.data);
-         e.setState({source:response.data},e.getSourceData);
-     }).catch(function(error){
-       console.log('error: ',error);
-     });
-
-    // Syndication Pagination test call
-     //  console.log('Hitting paginateSyndicated test');
-     // axios.post('/paginateSyndicated',
-     //   {
-     //     clientName: this.state.client,
-     //     productId: this.state.productId,
-     //     pageNumber: 0
-     //   }
-     //   ).then(function(response) {
-     //     console.log("paginateSyndicated test call was successful", response.data);
-     //     e.setState({source:response.data},e.getSourceData);
-     // }).catch(function(error){
-     //   console.log('error: ',error);
-     // });
-    // // SB Logo call
-    //   console.log('Hitting sb logo');
-    //  axios.post('/sblogo',
-    //    {
-    //      clientName: this.state.client,
-    //      productId: this.state.productId,
-    //      source: this.state.source
-    //    }
-    //    ).then(function(response) {
-    //      console.log("SB logo call was successful", response.data);
-    //      e.setState({source:response.data},e.getSourceData);
-    //  }).catch(function(error){
-    //    console.log('error: ',error);
-    //  });
-
-      axios.post('/sourceforrealFam',
-              {
-                source: this.state.source
-              }
-              ).then(function(response) {
-     //set state for product details.
-                console.log("Family call was successful!!",response.data);
-            }).catch(function(error){
-              console.log('error: ',error);
-            });
-
-            axios.post('/sourceforrealSyn',
-                     {
-                       source: this.state.source
-                     }
-                     ).then(function(response) {
-            //set state for product details.
-                       console.log("Syndication call was successful!!",response.data);
-                   }).catch(function(error){
-                     console.log('error: ',error);
-                   });
-
-            axios.post('/sourceforrealSyn2',
-                     {
-                        clientName: this.state.client,
-                        productId: this.state.productId,
-                        source: this.state.source
-                     }
-                     ).then(function(response) {
-            //set state for product details.
-                       console.log("Syndication call was successful!!",response.data);
-                   }).catch(function(error){
-                     console.log('error: ',error);
-                   });
-    }
-
-
-  //get all reviews from backend
+//user clicks the go button to request reviews
     getReviews(e){
       axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
       let client=document.getElementById('client').value;
       let productId=document.getElementById('prodid').value;
       this.checkForm();
-  //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
+      //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
       if(client && productId && productId!==this.state.productId){
           this.setState({loading:true});
-//START DRAKES CODE FOR FRONTEND*********************>
-      axios.post('/oracle',
-             {
-               clientName: client,
-               productId: productId
-             }
-             ).then(function(response) {
-               console.log("oracle call was successful", response.data);
-               e.setState({source:response.data},e.getSourceData);
-           }).catch(function(error){
-             console.log('error: ',error);
-           });
+          //Get oracle data.
+          axios.post('/oracle',
+               {
+                 clientName: client,
+                 productId: productId
+               }
+               ).then(function(response) {
+                 console.log("oracle call was successful", response.data);
+                 e.setState({sourceObject:response.data}, e.getSyndicationData);
+             }).catch(function(error){
+               console.log('error: ',error);
+             });
 
-// Bob dash call
-
-            console.log('About to run Dashboard call');
+            //Get Dashboard information
             axios.post('/dashboard',
             querystring.stringify({
               clientName: client,
-              productId: productId
+              productId: productId,
             }), {
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
               }
             }).then(function(response) {
-  //set state for product details.
+            //set state for product details.
               console.log("response.data for Dashboard",response.data);
-              e.setState({snapTotal:response.data.dashboard.totalReviews,
+              e.setState({  snapTotal:response.data.dashboard.totalReviews,
                             loading:false,
                             snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
                             snapNative:response.data.dashboard.nativeReviews,
@@ -286,113 +109,188 @@ export default class App extends React.Component {
                             snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
                             snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
                           });
-          }).catch(function(error){
-            console.log('error: ',error);
-          });
-// End Bob dash call
+            }).catch(function(error){
+              console.log('error: ',error);
+            });
 
+            //Get product information block
+            axios.post('/getProduct',
+              querystring.stringify({
+                clientName: client,
+                productId: productId,
+               }) , {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                }
+              }).then(function(response) {
+                console.log("response for product",response);
+                e.setState({image:response.data.Results[0].ImageUrl,
+                            client:client,
+                            clientError:'',
+                            prodError:'',
+                            productId:response.data.Results[0].Id,
+                            productName:response.data.Results[0].Name,
+                            familyIds:response.data.Results[0].FamilyIds,
+                            productPageUrl:response.data.Results[0].ProductPageUrl,
+                            });
+                  });
+                  axios.post('/paginateAll',
+                           {
+                              clientName:client,
+                              productId:productId,
+                              pageNumber:0
 
+                           }
+                           ).then(function(response) {
+                  //set state for product details.
+                            console.log("PAGINATION ROUTE SUCCEEDED???",response.data);
+                             e.setState({displayingReviews:response.data.Results})
+                         }).catch(function(error){
+                           console.log('error: ',error);
+                         });
 
-//END DRAKES CODE FRO FRONTEND ***************************>>>>
-
-          axios.post('/getProductDetails',
-            querystring.stringify({
-              clientName: client,
-              productId: productId
-             }) , {
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-              }
-            }).then(function(response) {
-  //set state for product details.
-              console.log("response for product",response);
-              e.setState({image:response.data.Results[0].ImageUrl,
-                          client:client,
-                          clientError:'',
-                          prodError:'',
-                          productId:response.data.Results[0].Id,
-                          productName:response.data.Results[0].Name,
-                          familyIds:response.data.Results[0].FamilyIds,
-                          productPageUrl:response.data.Results[0].ProductPageUrl,
-                          });
-                });
-  //call to get review data from backend
-  //           axios.post('/insert',
-  //             querystring.stringify({
-  //               clientName: client,
-  //               productId: productId
-  //             }) , {
-  //               headers: {
-  //                 "Content-Type": "application/x-www-form-urlencoded"
-  //               }
-  //             }).then(function(response) {
-  //                 console.log("DATA WAS RETURNED BY BACKEND NOW!!", response);
-  //                 var familyReviews=[];
-  //                 var syndicatedReviews=[];
-  //                 var nativeReviews=[];
-  //                 var sourceClient=[];
-  // // //loop through all reviews and filter reviews out to correct buckets.
-  // //                 response.data.hagrid.Results.filter((review)=>{
-  // //                   if(review.IsSyndicated){
-  // //                     syndicatedReviews.push(review);
-  // //                   }else if(review.ProductId.toLowerCase() !== productId.toLowerCase() && !review.IsSyndicated){
-  // //                     familyReviews.push(review);
-  // //                   }else if(review.ProductId.toLowerCase()===productId.toLowerCase() && review.SourceClient===client && !review.IsSyndicated){
-  // //                     nativeReviews.push(review);
-  // //                   }
-  // // //collect source client data.
-  // //                   if(review.SourceClient.toLowerCase()!=client.toLowerCase()){
-  // //                     if(sourceClient.indexOf(review.SourceClient.toLowerCase())==-1){
-  // //                       sourceClient.push(review.SourceClient.toLowerCase());
-  // //                     }
-  // //                   }
-  // //                 });
-  // //set state of looped buckets.
-  //               e.setState({reviews:response.data.hagrid.Results,
-  //                           displayableReviews:response.data.hagrid.Results,
-  //                           snapTotal:response.data.dashboard.totalReviews,
-  //                           loading:false,
-  //                           familyReviews:familyReviews,
-  //                           nativeReviews:nativeReviews,
-  //                           syndicatedReviews:syndicatedReviews,
-  //                           blockedReviews:response.data.rejected.Results,
-  //                           snapSyndicated:response.data.dashboard.syndicatedReviews,
-  //                           snapNative:response.data.dashboard.nativeReviews,
-  //                           snapFamily:response.data.dashboard.familyReviews,
-  //                           snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
-  //                           snapStopped:response.data.dashboard.blockedSyndicatedReviews,
-  //                           snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
-  //                           snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
-  //                           sourceClient:sourceClient,
-  //                           });
-  //               });
-
-
-                console.log('About to run Dashboard call');
-                        axios.post('/dashboard',
-                        querystring.stringify({
-                          clientName: client,
-                          productId: productId
-                        }), {
-                          headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
-                          }
-                        }).then(function(response) {
-              //set state for product details.
-                          console.log("response.data for Dashboard",response.data);
-                          e.setState({snapTotal:response.data.dashboard.totalReviews,
-                                        loading:false,
-                                        snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
-                                        snapNative:response.data.dashboard.nativeReviews,
-                                        snapFamily:response.data.dashboard.familyReviews,
-                                        snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
-                                        snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
-                                      });
-                      }).catch(function(error){
-                        console.log('error: ',error);
-                      });
       }
     }
+
+
+
+
+    //handle pagination
+    paginationClick(e,type){
+      this.setState({pagination:e})
+      console.log("PAGINATION TYPE**********",type);
+      var self=this;
+      switch(type){
+        case 'Native Reviews':
+        axios.post('/paginateNative',
+                 {
+                    clientName:this.state.client,
+                    productId:this.state.productId,
+                    pageNumber:e
+
+                 }
+                 ).then(function(response) {
+        //set state for product details.
+                  console.log("Native Reviews response here*******", response);
+                   self.setState({displayingReviews:response.data.Results})
+               }).catch(function(error){
+                 console.log('error: ',error);
+               });
+        break;
+        case 'Family Reviews':
+        axios.post('/paginateFamily',
+                 {
+                    clientName:this.state.client,
+                    productId:this.state.productId,
+                    pageNumber:e
+
+                 }
+                 ).then(function(response) {
+        //set state for product details.
+                   self.setState({displayingReviews:response.data.Results})
+               }).catch(function(error){
+                 console.log('error: ',error);
+               });
+        break;
+        case 'Syndicated Reviews':
+        axios.post('/paginateDisplayableSyndicated',
+                 {
+                    clientName:this.state.client,
+                    productId:this.state.productId,
+                    pageNumber:e
+
+                 }
+                 ).then(function(response) {
+        //set state for product details.
+                   self.setState({displayingReviews:response.data.Results})
+               }).catch(function(error){
+                 console.log('error: ',error);
+               });
+        default:
+        axios.post('/paginateAll',
+                 {
+                    clientName:this.state.client,
+                    productId:this.state.productId,
+                    pageNumber:e
+
+                 }
+                 ).then(function(response) {
+        //set state for product details.
+                  console.log("PAGINATION ROUTE SUCCEEDED???",response.data);
+                   self.setState({displayingReviews:response.data.Results})
+               }).catch(function(error){
+                 console.log('error: ',error);
+               });
+      }
+      //api call to change page!
+      console.log("current page number",e);
+    }
+      getSyndicationData(){
+        //Get synication Dashboard
+      var self=this;
+      axios.post('/syndicationDashboard',
+               {
+                  clientName:this.state.client,
+                  sourceObject: this.state.sourceObject
+               }
+               ).then(function(response) {
+      //set state for product details.
+                 console.log("syndicationDashboard call was successful!!",response.data, self);
+                 self.setState({syndicationObject:response.data}, self.getBlocked);
+             }).catch(function(error){
+               console.log('error: ',error);
+             });
+      axios.post('/familyDashboard',
+                {
+                  clientName:this.state.client,
+                  sourceObject: this.state.sourceObject
+                }
+                ).then(function(response) {
+               //set state for product details.
+                console.log("Family Dashboard call was successful!!",response.data);
+                let familyObject=[];
+                familyObject.push(response.data);
+                self.setState({familyObject:familyObject});
+                }).catch(function(error){
+                  console.log('error: ',error);
+                });
+  }
+
+    getBlocked(){
+
+                    //BOB's Blocked Calls here*******
+                    axios.post('/blockedReviews',
+                             {
+                                sourceObject:this.state.sourceObject,
+                                syndicationObject: this.state.syndicationObject
+
+                             }).then(function(response) {
+                    //set state for product details.
+                              console.log("Blocked Reviews route here*******",response.data);
+                           }).catch(function(error){
+                             console.log('error: ',error);
+                           });
+                           axios.post('/blockedDashboard',
+                                    {
+                                       sourceObject:this.state.sourceObject,
+                                       syndicationObject: this.state.syndicationObject
+
+                                    }
+                                    ).then(function(response) {
+                           //set state for product details.
+                                     console.log("Blocked Dashboard response route here*******",response.data);
+                                  }).catch(function(error){
+                                    console.log('error: ',error);
+                                  });
+    }
+
+
+
+
+
+
+
+
   checkForm(){
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
@@ -439,7 +337,7 @@ export default class App extends React.Component {
                      productId:this.state.productId,
                      productPageUrl:this.state.productPageUrl,
                     }
-    let sourceData=this.state.sourceData;
+    let syndicationObject=this.state.syndicationObject;
 
     let snapShot={native:this.state.snapNative,
                   syndicated:this.state.snapSyndicated,
@@ -477,8 +375,8 @@ export default class App extends React.Component {
                     </form>
                   </div>
                   <ProductInfo data={productData}/>
-                  <SyndicatedInfo data={sourceData}/>
-                  <FamilyInfo/>
+                  <SyndicatedInfo data={syndicationObject}/>
+                  <FamilyInfo data={this.state.familyObject}/>
                   <SnapShot display={this.switchReviews} loading={this.state.loading} data={snapShot}/>
                   <Grid page={this.state.pagination} results={this.state.snapTotal} pagination={this.paginationClick} title={this.state.reviewFilter} productId={this.state.productId} data={this.state.displayingReviews}/>
                 </div>
