@@ -15,6 +15,15 @@
   border-left: 10px solid #fcb150;
 }
 
+.white {
+  height: 5rem;
+  transition: .3s ease-in-out;
+  cursor: pointer;
+  background-color: #f4f3f3;
+  color: black;
+  border-left: 10px solid #65c8cf;
+}
+
 .yellow {
   background: #f4f3f3;
   height: 5rem;
@@ -45,7 +54,7 @@
   border-left: 10px solid #65C8CF;
 }
 
-.black:hover, .yellow:hover, .red:hover, .blue:hover {
+.black:hover, .yellow:hover, .red:hover, .blue:hover, .white:hover {
   background: #e6e6e6;
 }
 

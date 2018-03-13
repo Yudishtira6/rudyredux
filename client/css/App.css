@@ -128,6 +128,15 @@ form {
 
 .product {
   font-size: 12px;
+  cursor: pointer;
+}
+
+.error-message img {
+  width: 35%;
+}
+
+.product:hover {
+  text-decoration: underline;
 }
 
 .chart-text {
