@@ -30,7 +30,7 @@
   transition: .3s ease-in-out;
   cursor: pointer;
   color: black;
-  border-left: 10px solid #C4348A
+  border-left: 10px solid #247dd8
 }
 
 .label {
@@ -128,8 +128,30 @@ th, td {
 }
 
 .pagination {
-  padding: 0;
   float: right;
+  border: 1px solid;
+  padding: 0 6px;
+  color: black;
+  margin-top: 10px;
+}
+
+.pagination li {
+  border-right: 1px solid black;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.pagination li:last-of-type {
+  border-right: none;
+}
+
+.pagination a {
+  color: black;
+}
+
+.active {
+  background: #f4f3f3;
+  font-weight: bold;
 }
 
 .active-page {
