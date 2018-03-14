@@ -8,19 +8,16 @@ export default class FamilyInfo extends Component {
     this.triggerFamily=this.triggerFamily.bind(this);
   }
   triggerFamily(e){
-    console.log("Triggering family stuff",e.target.innerHTML.split(' '), this.props);
+
+    //get family ID when clicking on dashboard
     this.props.paginateFamily('family',e.target.innerHTML.split(' ')[0])
-    // this.props.paginateFamily('family',key);
   }
   render() {
-
-
     var colors=["#4cc4f6","#fcb150","#12a8ab","#007aff","#e84c64","#01b08d","#e94cb9","#884ce9","#4ce9af","#4ee94c","#e9864c","#cae94c"];
-    let familyProducts;
-    console.log("FMAILY STUFF**************", this.props.data);
-    if(this.props.data.length>0 && !this.props.loading && !this.props.error){
+    let familyProducts=<p className="no-data">NO FAMILIES YET</p>
+    //when there is family data, and the page isn't loading, and does not have errors map through the family object, and create a segment of the donut graph, and a key.
+    if(this.props.data.length > 0 && !this.props.loading && !this.props.error){
      familyProducts=this.props.data.map((family,i)=>{
-        console.log("family Array", family);
         var total=family.total;
         let counter=0;
         let segments=[];
@@ -30,20 +27,19 @@ export default class FamilyInfo extends Component {
               if(key === 'total'){
                 return false;
               }else {
-              console.log("value",val);
-              console.log('total!!',total);
-
               let percentage=(val/total * 100);
               let secondNum=100-percentage;
               let offset= 100 - totalPercentage + 25;
               if(totalPercentage === 0){
                 offset=25;
               }
+              //stroke dash array= first number: % of how much second number is %-100.
+              //stroke dash-offset=100-total% + first dash array #.
               let startingPlace=`0 ${secondNum}`;
               totalPercentage=totalPercentage + percentage;
               let input=`${percentage} ${secondNum}`;
-              keyDisplay.push(<li><span  className="key" style={{backgroundColor:colors[counter]}}></span><span onClick={this.triggerFamily} className="product">{key} ({val})</span></li>);
-              segments.push(<g className="circle-component"><circle className="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke={colors[counter]} strokeWidth="3" strokeDasharray={input} strokeDashoffset={offset}><animate attributeType="XML" attributeName="stroke-dasharray" from={startingPlace} to={input}
+              keyDisplay.push(<li><span key={key} className="key" style={{backgroundColor:colors[counter]}}></span><span onClick={this.triggerFamily} className="product">{key} ({val})</span></li>);
+              segments.push(<g key={counter} className="circle-component"><circle className="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke={colors[counter]} strokeWidth="3" strokeDasharray={input} strokeDashoffset={offset}><animate attributeType="XML" attributeName="stroke-dasharray" from={startingPlace} to={input}
         dur="1s"/></circle></g>);
               }
             counter++;
@@ -72,24 +68,26 @@ export default class FamilyInfo extends Component {
 
                 );
     });
-}else if(this.props.loading && !this.props.error){
-  familyProducts=(<div className="loader-top">
-                 <i className="fa left fa-circle" aria-hidden="true"></i>
-                 <i className="fa middle fa-circle" aria-hidden="true"></i>
-                 <i className="fa right fa-circle" aria-hidden="true"></i>
-                 <p> Calculating...</p>
-              </div>)
-}else if(this.props.error){
-  familyProducts=(<div className="error-message">
-                <img src="https://yt3.ggpht.com/a-/AJLlDp2Q_yE_9epRWRApU2gu-v1XZrxtr4ZkKeXDQw=s900-mo-c-c0xffffffff-rj-k-no"/>
-                <p>Something went wrong... Please try again</p>
-              </div>
-              );
-}else{
-familyProducts=<p className="no-data">NO FAMILIES YET</p>
-}
-//stroke dash array= first number: % of how much second number is %-100.
-//stroke dash-offset=100-total% + first dash array #.
+    //inject loader to family dashboard
+    }else if(this.props.loading && !this.props.error){
+      familyProducts=(<div className="loader-top">
+                     <i className="fa left fa-circle" aria-hidden="true"></i>
+                     <i className="fa middle fa-circle" aria-hidden="true"></i>
+                     <i className="fa right fa-circle" aria-hidden="true"></i>
+                     <p> Calculating...</p>
+                  </div>)
+    //inject error message if error is present
+    }else if(this.props.error){
+      familyProducts=(<div className="error-message">
+                    <img src="https://yt3.ggpht.com/a-/AJLlDp2Q_yE_9epRWRApU2gu-v1XZrxtr4ZkKeXDQw=s900-mo-c-c0xffffffff-rj-k-no"/>
+                    <p>Something went wrong... Please try again</p>
+                  </div>
+                  );
+    //no families were found
+    }else if(!this.props.loading && !this.props.error){
+    familyProducts=<p className="no-data">NO FAMILIES FOUND</p>
+    }
+
 
 
     return (

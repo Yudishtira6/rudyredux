@@ -7,7 +7,6 @@ import ReactDOM from 'react-dom';
 import FamilyInfo from './FamilyInfo';
 import Grid from './Grid';
 import ProductInfo from './ProductInfo';
-import Product from './Product';
 import SnapShot from './SnapShot';
 import SyndicatedInfo from './SyndicationInfo';
 
@@ -43,11 +42,11 @@ export default class App extends React.Component {
                   loading:false,
                   clientError:'',
                   prodError:'',
-                  pagination:0,
+                  pagination:1,
                   errorSyndicated:false,
                   errorFamily:false,
                   productPageUrl:'',
-                  activeTab:"product",
+                  // activeTab:"product",
                   reviewFilter:"All Displayable Reviews",
                   sourceObject:[],
                   // make key the product id
@@ -55,17 +54,16 @@ export default class App extends React.Component {
                   familyObject:[]
 
                   };
-  //bind this to each function
+
     this.getReviews=this.getReviews.bind(this);
     this.switchReviews=this.switchReviews.bind(this);
-    this.switchTabs=this.switchTabs.bind(this);
     this.onClick=this.onClick.bind(this);
     this.checkForm=this.checkForm.bind(this);
     this.paginationClick=this.paginationClick.bind(this);
     this.getSyndicationData=this.getSyndicationData.bind(this);
     this.getBlocked=this.getBlocked.bind(this);
   }
-  //bind this so that I may set state.
+  //when user clicks "go", run getReviews function
   onClick(e){
     e.preventDefault();
     this.getReviews(this);
@@ -73,14 +71,18 @@ export default class App extends React.Component {
 
   //user clicks the go button to request reviews
   getReviews(e){
+    //set default headers for axios functions
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
     this.checkForm();
-      //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
+    //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
     if(client && productId && productId!==this.state.productId){
-        this.setState({loading:true, loadingFamily:true, loadingBlocked:true, loadingSyndicated:true});
+        //set loaders and defaults
+        this.setState({loading:true, loadingFamily:true, loadingBlocked:true, loadingSyndicated:true,reviewFilter:"All Displayable Reviews",pagination:1});
+
+
         //Get oracle data.
         axios.post('/oracle',
              {
@@ -88,11 +90,11 @@ export default class App extends React.Component {
                productId: productId
              }
              ).then(function(response) {
-               console.log("oracle call was successful", response.data);
                e.setState({sourceObject:response.data}, e.getSyndicationData);
            }).catch(function(error){
-             console.log('error: ',error);
            });
+
+
           //Get Dashboard information
           axios.post('/dashboard',
           querystring.stringify({
@@ -103,8 +105,7 @@ export default class App extends React.Component {
               "Content-Type": "application/x-www-form-urlencoded"
             }
           }).then(function(response) {
-          //set state for product details.
-            console.log("response.data for Dashboard",response.data);
+          //create dashboard
             e.setState({  snapTotal:response.data.dashboard.totalReviews,
                           total:response.data.dashboard.totalReviews,
                           loading:false,
@@ -115,8 +116,9 @@ export default class App extends React.Component {
                           snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
                         });
           }).catch(function(error){
-            console.log('error: ',error);
           });
+
+
           //Get product information block
           axios.post('/getProduct',
             querystring.stringify({
@@ -127,7 +129,7 @@ export default class App extends React.Component {
                 "Content-Type": "application/x-www-form-urlencoded"
               }
             }).then(function(response) {
-              console.log("response for product",response);
+              //create product information
               e.setState({image:response.data.Results[0].ImageUrl,
                           client:client,
                           clientError:'',
@@ -138,6 +140,9 @@ export default class App extends React.Component {
                           productPageUrl:response.data.Results[0].ProductPageUrl,
                           });
                 });
+
+
+                //get all 1st page of all reviews
                 axios.post('/paginateAll',
                          {
                             clientName:client,
@@ -145,11 +150,9 @@ export default class App extends React.Component {
                             pageNumber:0
                          }
                          ).then(function(response) {
-                //set state for product details.
-                          console.log("PAGINATION ROUTE SUCCEEDED???",response.data);
+                           //set state for reviews to display
                            e.setState({displayingReviews:response.data.Results})
                        }).catch(function(error){
-                         console.log('error: ',error);
                        });
       }
     }
@@ -157,108 +160,45 @@ export default class App extends React.Component {
 
 
 
-    //handle pagination
-    paginationClick(e,type){
-      this.setState({pagination:e})
-      console.log("PAGINATION TYPE**********",type);
-      var self=this;
-      switch(type){
-        case 'Native Reviews':
-        axios.post('/paginateNative',
-                 {
-                    clientName:this.state.client,
-                    productId:this.state.productId,
-                    pageNumber:e
 
-                 }
-                 ).then(function(response) {
-        //set state for product details.
-                  console.log("Native Reviews response here*******", response);
-                   self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults})
-               }).catch(function(error){
-                 console.log('error: ',error);
-               });
-        break;
-        case 'Family Reviews':
-        axios.post('/paginateFamily',
-                 {
-                    clientName:this.state.client,
-                    productId:this.state.productId,
-                    pageNumber:e
-
-                 }
-                 ).then(function(response) {
-        //set state for product details.
-                   self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults})
-               }).catch(function(error){
-                 console.log('error: ',error);
-               });
-        break;
-        case 'Syndicated Reviews':
-        axios.post('/paginateDisplayableSyndicated',
-                 {
-                    clientName:this.state.client,
-                    productId:this.state.productId,
-                    pageNumber:e
-
-                 }
-                 ).then(function(response) {
-        //set state for product details.
-                   self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults})
-               }).catch(function(error){
-                 console.log('error: ',error);
-               });
-        default:
-        axios.post('/paginateAll',
-                 {
-                    clientName:this.state.client,
-                    productId:this.state.productId,
-                    pageNumber:e
-
-                 }
-                 ).then(function(response) {
-        //set state for product details.
-                  console.log("PAGINATION ROUTE SUCCEEDED???",response.data);
-                   self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults})
-               }).catch(function(error){
-                 console.log('error: ',error);
-               });
-      }
-      //api call to change page!
-      console.log("current page number",e);
-    }
+      //run this function when the source object is set in the state
       getSyndicationData(){
-        //Get synication Dashboard
+
       var self=this;
+      //Get synication Dashboard
       axios.post('/syndicationDashboard',
                {
                   clientName:this.state.client,
                   sourceObject: this.state.sourceObject
                }
                ).then(function(response) {
-      //set state for product details.
-                 console.log("syndicationDashboard call was successful!!",response.data, self);
                  self.setState({syndicationObject:response.data, loadingSyndicated:false}, self.getBlocked);
              }).catch(function(error){
                console.log('error: ',error);
                 self.setState({loadingSyndicated:false, errorSyndicated:true});
              });
-      axios.post('/familyDashboard',
-                {
-                  clientName:this.state.client,
-                  sourceObject: this.state.sourceObject
-                }
-                ).then(function(response) {
-               //set state for product details.
-                console.log("Family Dashboard call was successful!!",response.data);
-                let familyObject=[];
-                familyObject.push(response.data);
-                self.setState({familyObject:familyObject, loadingFamily:false});
-                }).catch(function(error){
-                  console.log('error: ',error);
-                });
-  }
 
+        //run the family dashboard ONLY if the family object contains something.
+        if(this.state.sourceObject.family.length > 0){
+            //get family dashboard data
+            axios.post('/familyDashboard',
+                      {
+                        clientName:this.state.client,
+                        sourceObject: this.state.sourceObject
+                      }
+                      ).then(function(response) {
+                      let familyObject=[];
+                      familyObject.push(response.data);
+                      self.setState({familyObject:familyObject, loadingFamily:false});
+                      }).catch(function(error){
+                        self.setState({loadingFamily:false, errorFamily:true});
+                      });
+        //if there's nothing there then turn off the loader
+        }else{
+          this.setState({loadingFamily:false});
+        }
+  }
+    //run blocked reviews once the syndicationObject and SourceObject have been set in the state.
     getBlocked(){
 
                     //BOB's Blocked Calls here*******
@@ -268,7 +208,6 @@ export default class App extends React.Component {
                                 syndicationObject: this.state.syndicationObject
 
                              }).then(function(response) {
-                    //set state for product details.
                               console.log("Blocked Reviews route here*******",response.data);
                            }).catch(function(error){
                              console.log('error: ',error);
@@ -280,7 +219,6 @@ export default class App extends React.Component {
 
                                     }
                                     ).then(function(response) {
-                           //set state for product details.
                                      console.log("Blocked Dashboard response route here*******",response.data);
                                   }).catch(function(error){
                                     console.log('error: ',error);
@@ -293,7 +231,7 @@ export default class App extends React.Component {
 
 
 
-
+  //check the form to ensure it is filled out correctly
   checkForm(){
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
@@ -313,6 +251,7 @@ export default class App extends React.Component {
   //logic to filter reviews in snapshot
   switchReviews(reviews, familyId){
       var self=this;
+      this.setState({pagination:1})
     switch(reviews) {
         case "native":
         axios.post('/paginateNative',
@@ -323,8 +262,6 @@ export default class App extends React.Component {
 
                  }
                  ).then(function(response) {
-        //set state for product details.
-                  console.log("RESPONSE FROM NATIVE TAB**********************", response);
                   self.setState({displayingReviews:response.data.Results, reviewFilter:"Native Reviews", total:response.data.TotalResults})
                }).catch(function(error){
                  console.log('error: ',error);
@@ -339,10 +276,9 @@ export default class App extends React.Component {
 
                  }
                  ).then(function(response) {
-        //set state for product details.
                   self.setState({displayingReviews:response.data.Results, reviewFilter:"Family Reviews", total:response.data.TotalResults})
                }).catch(function(error){
-                 console.log('error: ',error);
+
                });
             break;
         case "blocked":
@@ -357,7 +293,6 @@ export default class App extends React.Component {
 
                    }
                    ).then(function(response) {
-          //set state for product details.
                     self.setState({displayingReviews:response.data.Results, reviewFilter:"Syndicated Reviews", total:response.data.TotalResults})
                  }).catch(function(error){
                    console.log('error: ',error);
@@ -372,20 +307,85 @@ export default class App extends React.Component {
 
                    }
                    ).then(function(response) {
-          //set state for product details.
-                    console.log("RESULTS FROM ALLLLLL REVIEWS HERE*********", response);
                     self.setState({displayingReviews:response.data.Results, reviewFilter:"All Displayable Reviews", total:response.data.TotalResults})
                  }).catch(function(error){
                    console.log('error: ',error);
                  });
     }
   }
-  switchTabs(tab){
-  this.setState({activeTab:tab});
+  // switchTabs(tab){
+  // this.setState({activeTab:tab});
+  // }
+
+
+
+
+  //handle pagination when user changes the page
+  paginationClick(e,type){
+    var self=this;
+    //add 1 to the page because of 0 index
+    var page=e + 1;
+    //handle each type of review data
+    switch(type){
+      case 'Native Reviews':
+      axios.post('/paginateNative',
+               {
+                  clientName:this.state.client,
+                  productId:this.state.productId,
+                  pageNumber:e
+
+               }
+               ).then(function(response) {
+                 self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults, pagination:page})
+             }).catch(function(error){
+               console.log('error: ',error);
+             });
+      break;
+      case 'Family Reviews':
+      axios.post('/paginateFamily',
+               {
+                  clientName:this.state.client,
+                  productId:this.state.productId,
+                  pageNumber:e
+
+               }
+               ).then(function(response) {
+                 self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults, pagination:page})
+             }).catch(function(error){
+               console.log('error: ',error);
+             });
+      break;
+      case 'Syndicated Reviews':
+      axios.post('/paginateDisplayableSyndicated',
+               {
+                  clientName:this.state.client,
+                  productId:this.state.productId,
+                  pageNumber:e
+
+               }
+               ).then(function(response) {
+                 self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults, pagination:page})
+             }).catch(function(error){
+               console.log('error: ',error);
+             });
+      default:
+      axios.post('/paginateAll',
+               {
+                  clientName:this.state.client,
+                  productId:this.state.productId,
+                  pageNumber:e
+
+               }
+               ).then(function(response) {
+                 self.setState({displayingReviews:response.data.Results, total:response.data.TotalResults, pagination:page})
+             }).catch(function(error){
+               console.log('error: ',error);
+             });
+    }
   }
 
+
   render() {
-  console.log("PAGE THAT I'm on",this.state.pagination);
   //data to send to components
     let clientFilledOut;
     let prodFilledOut;

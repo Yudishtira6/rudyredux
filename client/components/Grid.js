@@ -22,7 +22,6 @@ class Grid extends React.Component {
     }
 
   handlePage(i){
-    console.log("clicked",i);
     this.props.pagination(i, this.props.title);
    }
   clickHandler(reviewText,reviewId, user, locale, source, rating, title, color){
@@ -74,11 +73,11 @@ render(){
                   </div>
                 );
   }
-console.log(this.props);
+
   if(this.props.data.length>=1){
 
   //create the pages
-console.log("TOTAL RESULTS AT GRID", this.props.results);
+
 
 
   //loop through data and build out grid
@@ -105,7 +104,7 @@ return(
             {Items}
 			    </tbody>
 		     </table>
-         <Pages paginate={this.handlePage} totalResults={this.props.results}/>
+         <Pages paginate={this.handlePage} page={this.props.page} totalResults={this.props.results}/>
         </div>
         );
   }

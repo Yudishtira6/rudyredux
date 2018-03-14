@@ -34,7 +34,6 @@ export default class SnapShot extends React.Component {
       if (this.props.data.familyIds.length>=1){
        familyIds=this.props.data.familyIds.length;
       }
-    console.log("snapshot DATA", this.props.data);
     let snapShot=(
                     <div className="snap-container">
                       <div onClick={this.switchNative} className="snap-details native">

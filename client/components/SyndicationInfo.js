@@ -7,7 +7,6 @@ export default class SyndicationInfo extends Component {
     super(props);
   }
   render() {
-    console.log("Syndication Lenght",this.props.data.length);
     let slideNumber;
     if(this.props.data.length<4){
       slideNumber=this.props.data.length;
@@ -23,21 +22,22 @@ export default class SyndicationInfo extends Component {
     };
 
     let sourceData=<p className="no-data">No Source Data Found</p>;
-    console.log("SYNDICATION DATA HERE!!!!", this.props.data);
     if(this.props.data.length>0 && !this.props.loading && !this.props.error){
     sourceData=this.props.data.map((source)=>{
-          console.log(source);
           let modCodes=source.modCodes.map((code)=>{
-            return(<span key={code} className="code">{code}</span>)
+            return <span key={code} className="code">{code}</span>
           });
+          let matchingStrategy=source.matchStragegy.map((item)=>{
+            return <span key={item} className="code">{item}</span>
+          })
           return (
                   <div key={source.productId} className="source-data">
                     <img className="source-image" src={source.companyLogo}/>
                     <h6>{source.sourceName} <span>{source.productId}</span></h6>
-                    <span className="syndication-id"></span>
                     <h6>Stop Codes {modCodes}</h6>
                     <h6>Locales <span>{source.locales}</span></h6>
-                    <h6>Syndication Delay <span>{source.syndicationDelay}</span></h6>
+                    <h6>Syndication Delay <span>{source.syndicationDelay} days</span></h6>
+                    <h6> Matching Strategies {matchingStrategy} </h6>
                     <h3></h3>
                   </div>
                 );

@@ -8,21 +8,20 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activePage: 1
+      activePage:this.props.page
     };
   this.handlePageChange=this.handlePageChange.bind(this);
   }
 
   handlePageChange(pageNumber) {
-    console.log(`active page is ${pageNumber}`);
     this.props.paginate(pageNumber-1);
-    this.setState({activePage: pageNumber});
+    this.setState({activePage: this.props.page});
   }
 
   render() {
     return (
         <Pagination
-          activePage={this.state.activePage}
+          activePage={this.props.page}
           itemsCountPerPage={100}
           totalItemsCount={this.props.totalResults}
           pageRangeDisplayed={5}
