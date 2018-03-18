@@ -207,10 +207,12 @@ export default class App extends React.Component {
                     axios.post('/blockedReviews',
                              {
                                 sourceObject:this.state.sourceObject,
-                                syndicationObject: this.state.syndicationObject
+                                syndicationObject: this.state.syndicationObject,
+                                productId:this.state.productId,
+                                client:this.state.client
 
                              }).then(function(response) {
-                              console.log("Blocked Reviews route here*******",response.data);
+                              console.log("Blocked Reviews route here*******",response.data, this.state.productId, this.state.client);
                            }).catch(function(error){
                              console.log('error: ',error);
                            });

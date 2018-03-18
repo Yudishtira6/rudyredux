@@ -15,12 +15,12 @@ class Grid extends React.Component {
                   rating:'',
                   title:'',
                   }
-    // this.handlePage=this.handlePage.bind(this);
+    this.handlePage=this.handlePage.bind(this);
     this.clickHandler=this.clickHandler.bind(this);
     this.closeReview=this.closeReview.bind(this);
     }
 
-  handlePage=(i)=>{
+  handlePage(i){
     this.props.pagination(i, this.props.title);
    }
   clickHandler(reviewText,reviewId, user, locale, source, rating, title, color){
