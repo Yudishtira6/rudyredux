@@ -51155,12 +51155,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
   }
   //run blocked reviews once the syndicationObject and SourceObject have been set in the state.
   getBlocked() {
-
     //BOB's Blocked Calls here*******
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedReviews', {
       sourceObject: this.state.sourceObject,
       syndicationObject: this.state.syndicationObject
-
     }).then(function (response) {
       console.log("Blocked Reviews route here*******", response.data);
     }).catch(function (error) {
@@ -51168,7 +51166,9 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     });
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedDashboard', {
       sourceObject: this.state.sourceObject,
-      syndicationObject: this.state.syndicationObject
+      syndicationObject: this.state.syndicationObject,
+      clientName: this.state.client,
+      productId: this.state.productId
 
     }).then(function (response) {
       console.log("Blocked Dashboard response route here*******", response.data);
