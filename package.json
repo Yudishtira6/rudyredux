@@ -31,6 +31,6 @@
   "scripts": {
     "webpack": "webpack",
     "start": "npm run webpack && nodemon --exec babel-node -- bin/www",
-    "build": "webpack"
+    "build": "webpack -p"
   }
 }
