@@ -176,11 +176,79 @@ router.route('/syndicationDashboard').post(function(req,res){
 // blocked dashboard
 router.route('/blockedDashboard').post(function(req,res) {
   // get user inputs
+  console.log('*****');
   console.log('Hiting blockedDashboard . . .');
   var syndicationObject = req.body.syndicationObject;
-  var source = req.body.sourceObject
+  var source = req.body.sourceObject;
+  var clientName = req.body.clientName;
+  var productId = req.body.productId;
   console.log('source: ', source);
   console.log('syndicationObject: ',syndicationObject);
+  console.log('clientName: ',clientName,'productId: ',productId);
+  var blockedDashboardObject = {};
+  var totalSyndicatedNative = 0;
+  var len = source["syndication"].length;
+  var callsLeft = len;
+  // need to iterate through the syndication sources - get review totals to add to get total synd
+  // need to make total review call (isSyndicated = true, limit 1) - to get display syndicated
+  // blocked = total - display
+  // Goal is to get number, not actual reviews - that is for blockedReviews route
+  // Will use countdown strategy employed for familes - easier b/c it is limit 1
+  // may roll this into dashboard
+  let displaySyndOpt = {
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&filter=IsSyndicated:true&keyproperty=syndication&limit=1',
+    headers: {
+        'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+  // console.log('hagopt: ',hagopt);
+  rp(displaySyndOpt)
+    .then(function (displayResults) {
+      console.log('****')
+      console.log('displayResults["TotalResults"]: ', displayResults["TotalResults"]);
+      console.log('****')
+      blockedDashboardObject['totalSyndicatedDisplay'] = displayResults["TotalResults"];
+      console.log('blockedDashboardObject: ',blockedDashboardObject);
+      for(let i=0;i<len;i++){
+          var syndClient = source["syndication"][i][0];
+          var syndProduct = source["syndication"][i][1];
+          console.log('syndClient: ',syndClient);
+          console.log('productId: ', syndProduct);
+              let hagopt = {
+                uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+syndClient+'&ApiVersion=5.4&filter=productid:'+syndProduct+'&limit=1&excludeFamily=true',
+                headers: {
+                    'User-Agent': 'Request-Promise'
+                },
+                json: true // Automatically parses the JSON string in the response
+              };
+              rp(hagopt)
+                .then(function (hagsynd) {
+                  console.log('hagsynd["TotalResults"]: ', hagsynd["TotalResults"]);
+                  totalSyndicatedNative += hagsynd["TotalResults"];
+                  blockedDashboardObject['totalSyndicatedNative'] = totalSyndicatedNative;
+                  callsLeft--
+                  console.log('blockedDashboardObject: ',blockedDashboardObject,' callsLeft: ',callsLeft);
+                  if (callsLeft<=0){
+                    console.log('blockedDashboardObject res json call hit');
+                    blockedDashboardObject['blockedSyndicated'] = blockedDashboardObject['totalSyndicatedNative'] - blockedDashboardObject['totalSyndicatedDisplay'];
+                    console.log('callsLeft: ',callsLeft);
+                    console.log('blockedDashboardObject: ',blockedDashboardObject);
+                    res.json(blockedDashboardObject);
+                  }
+                })
+                .catch(function (err) {
+                    // API call failed
+                    console.log('/blockedDashboard hagrid call failed');
+                    console.log('error: ',err);
+              });
+      }
+
+    })
+    .catch(function (err) {
+      // API call failed...
+  });
+  
   /*
   var familyDisplayObject = {};
   var totalFamilyResults = 0;
@@ -333,7 +401,7 @@ router.route('/paginateNative').post(function(req,res){
   var productId = req.body.productId;
   var pageNumber = req.body.pageNumber;
   let pagopt = {
-    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&excludeFamily=truelimit=100&offset='+(pageNumber*100),
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&excludeFamily=true&limit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -362,7 +430,7 @@ router.route('/paginateFamily').post(function(req,res){
   var familyProductId = req.body.familyProductId;
   var pageNumber = req.body.pageNumber;
   let pagopt = {
-    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+familyProductId+'&excludeFamily=truelimit=100&offset='+(pageNumber*100),
+    uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+familyProductId+'&excludeFamily=true&limit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },

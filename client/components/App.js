@@ -171,7 +171,7 @@ export default class App extends React.Component {
       axios.post('/syndicationDashboard',
                {
                   clientName:this.state.client,
-                  sourceObject: this.state.sourceObject
+                  sourceObject: this.state.sourceObject,
                }
                ).then(function(response) {
                  self.setState({syndicationObject:response.data, loading:false, loadingSyndicated:false}, self.getBlocked);
@@ -202,15 +202,11 @@ export default class App extends React.Component {
 }
     //run blocked reviews once the syndicationObject and SourceObject have been set in the state.
     getBlocked(){
-
                     //BOB's Blocked Calls here*******
                     axios.post('/blockedReviews',
                              {
                                 sourceObject:this.state.sourceObject,
                                 syndicationObject: this.state.syndicationObject,
-                                productId:this.state.productId,
-                                client:this.state.client
-
                              }).then(function(response) {
                               console.log("Blocked Reviews route here*******",response.data, this.state.productId, this.state.client);
                            }).catch(function(error){
@@ -219,7 +215,9 @@ export default class App extends React.Component {
                            axios.post('/blockedDashboard',
                                     {
                                        sourceObject:this.state.sourceObject,
-                                       syndicationObject: this.state.syndicationObject
+                                       syndicationObject: this.state.syndicationObject,
+                                       clientName:this.state.client,
+                                       productId:this.state.productId
 
                                     }
                                     ).then(function(response) {
