@@ -116,6 +116,7 @@ export default class App extends React.Component {
                           snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
                         });
           }).catch(function(error){
+              console.log('dashboard error', error);
           });
 
 
@@ -153,6 +154,7 @@ export default class App extends React.Component {
                            //set state for reviews to display
                            e.setState({displayingReviews:response.data.Results})
                        }).catch(function(error){
+                          console.log('pagination error', error);
                        });
       }
     }
@@ -172,7 +174,7 @@ export default class App extends React.Component {
                   sourceObject: this.state.sourceObject
                }
                ).then(function(response) {
-                 self.setState({syndicationObject:response.data, loadingSyndicated:false}, self.getBlocked);
+                 self.setState({syndicationObject:response.data, loading:false, loadingSyndicated:false}, self.getBlocked);
              }).catch(function(error){
                console.log('error: ',error);
                 self.setState({loadingSyndicated:false, errorSyndicated:true});
@@ -195,9 +197,9 @@ export default class App extends React.Component {
                       });
         //if there's nothing there then turn off the loader
         }else{
-          this.setState({loadingFamily:false});
+          this.setState({loadingFamily:false, familyObject:[]});
         }
-  }
+}
     //run blocked reviews once the syndicationObject and SourceObject have been set in the state.
     getBlocked(){
 

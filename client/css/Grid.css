@@ -154,6 +154,17 @@ th, td {
   font-weight: bold;
 }
 
+.fa-question-circle {
+  position: absolute;
+  top: 6px;
+  right: 11px;
+  color: #cccccc;
+}
+
+.fa-question-circle:hover {
+  color: white;
+}
+
 .active-page {
   display: inline-block;
   list-style: none;
@@ -186,6 +197,7 @@ th, td {
   margin-top: -100px;
   margin-left: -500px;
   border-radius: 10px;
+  box-shadow: 1px 2px 7px 0px black;
 }
 
 .review-text {
