@@ -21,6 +21,7 @@ export default class App extends React.Component {
                   loadingSyndicated:false,
                   loadingFamily:false,
                   loadingBlocked:false,
+                  snapBlockedLoading:false,
                   syndicatedReviews:[],
                   familyReviews:[],
                   nativeReviews:[],
@@ -80,7 +81,7 @@ export default class App extends React.Component {
     //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
     if(client && productId && productId!==this.state.productId){
         //set loaders and defaults
-        this.setState({loading:true, loadingFamily:true, loadingBlocked:true, loadingSyndicated:true,reviewFilter:"All Displayable Reviews",pagination:1});
+        this.setState({loading:true, snapBlockedLoading:true, loadingFamily:true, loadingSyndicated:true,reviewFilter:"All Displayable Reviews",pagination:1});
 
 
         //Get oracle data.
@@ -90,7 +91,20 @@ export default class App extends React.Component {
                productId: productId
              }
              ).then(function(response) {
-               e.setState({sourceObject:response.data}, e.getSyndicationData);
+               console.log("SOURCE OBJECT RIGHT HERE",response.data);
+               if(response.data.family.length > 0 && response.data.syndication.length > 0){
+                e.setState({sourceObject:response.data}, e.getSyndicationData);
+               }else if(response.data.syndication.length === 0 && response.data.family.length > 0){
+                console.log("RUNNING THE NO SYNDICATED BLOCK HERE");
+                e.setState({sourceObject:response.data, loadingSyndicated:false, snapBlockedLoading:false}, e.getSyndicationData);
+               }else if( response.data.syndication.length > 0 && response.data.family.length === 0){
+                console.log("RUNNING THE NO FAMILY BLOCK HERE");
+                e.setState({sourceObject:response.data, loadingFamily:false}, e.getSyndicationData);
+               }else{
+                console.log("NO SOURCE DATA FOUND IN THERE");
+                e.setState({sourceObject:response.data, loadingFamily:false, snapBlockedLoading:false, loadingSyndicated:false});
+                }
+
            }).catch(function(error){
            });
 
@@ -114,6 +128,8 @@ export default class App extends React.Component {
                           snapFamily:response.data.dashboard.familyReviews,
                           snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
                           snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
+                          snapSyndicated:0,
+                          snapStopped:0
                         });
           }).catch(function(error){
               console.log('dashboard error', error);
@@ -180,8 +196,6 @@ export default class App extends React.Component {
                 self.setState({loadingSyndicated:false, errorSyndicated:true});
              });
 
-        //run the family dashboard ONLY if the family object contains something.
-        if(this.state.sourceObject.family.length > 0){
             //get family dashboard data
             axios.post('/familyDashboard',
                       {
@@ -195,13 +209,11 @@ export default class App extends React.Component {
                       }).catch(function(error){
                         self.setState({loadingFamily:false, errorFamily:true});
                       });
-        //if there's nothing there then turn off the loader
-        }else{
-          this.setState({loadingFamily:false, familyObject:[]});
-        }
+
 }
     //run blocked reviews once the syndicationObject and SourceObject have been set in the state.
     getBlocked(){
+                    var self=this;
                     //BOB's Blocked Calls here*******
                     axios.post('/blockedReviews',
                              {
@@ -221,10 +233,12 @@ export default class App extends React.Component {
 
                                     }
                                     ).then(function(response) {
-                                     console.log("Blocked Dashboard response route here*******",response.data);
+                                     console.log("Blocked Dashboard response route here*******",response.data, response.data.totalSyndicatedNative);
+                                     self.setState({snapStopped:response.data.blockedSyndicated, snapSyndicated:response.data.totalSyndicatedNative, snapBlockedLoading:false});
                                   }).catch(function(error){
                                     console.log('error: ',error);
                                   });
+
     }
 
 
@@ -436,7 +450,7 @@ export default class App extends React.Component {
                   <ProductInfo data={productData}/>
                   <SyndicatedInfo data={syndicationObject} loading={this.state.loadingSyndicated} error={this.state.errorSyndicated}/>
                   <FamilyInfo data={this.state.familyObject} loading={this.state.loadingFamily} error={this.state.errorFamily} paginateFamily={this.switchReviews}/>
-                  <SnapShot display={this.switchReviews} loading={this.state.loading} data={snapShot}/>
+                  <SnapShot display={this.switchReviews} blockedLoading={this.state.snapBlockedLoading} loading={this.state.loading} data={snapShot}/>
                   <Grid page={this.state.pagination} results={this.state.total} pagination={this.paginationClick} title={this.state.reviewFilter} productId={this.state.productId} data={this.state.displayingReviews}/>
                 </div>
               );

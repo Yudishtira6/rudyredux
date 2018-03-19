@@ -34,6 +34,30 @@ export default class SnapShot extends React.Component {
       if (this.props.data.familyIds.length>=1){
        familyIds=this.props.data.familyIds.length;
       }
+    let totalSyndicated=  (
+                          <div className="sub-one">
+                              <h4>{this.props.data.syndicated}</h4>
+                              <h4>Total Syndicated</h4>
+                          </div>
+                          );
+    let blocked= (
+                    <div className="sub-two">
+                        <h4>{this.props.data.stopped}</h4>
+                        <h4>Blocked Syndicated</h4>
+                    </div>
+                );
+    if(this.props.blockedLoading){
+      totalSyndicated=(
+                        <div className="sub-one">
+                            <p>Doing Science...</p>
+                        </div>
+                      );
+      blocked= (
+                <div className="sub-two">
+                    <p>Doing Science...</p>
+                </div>
+                )
+    }
     let snapShot=(
                     <div className="snap-container">
                       <div onClick={this.switchNative} className="snap-details native">
@@ -55,14 +79,8 @@ export default class SnapShot extends React.Component {
                               <h2>{this.props.data.displayableSyndicated}</h2>
                               <h2>DISPLAYED SYNDICATED REVIEWS</h2>
                           </div>
-                          <div className="sub-one">
-                              <h4>{this.props.data.syndicated}</h4>
-                              <h4>Total Syndicated</h4>
-                          </div>
-                          <div className="sub-two">
-                              <h4>{this.props.data.stopped}</h4>
-                              <h4>Blocked Syndicated</h4>
-                          </div>
+                        {totalSyndicated}
+                        {blocked}
                       </div>
                       <div onClick={this.switchFamily} className="snap-details family">
                           <div className="main family">

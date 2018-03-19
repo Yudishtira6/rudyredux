@@ -51003,6 +51003,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       loadingSyndicated: false,
       loadingFamily: false,
       loadingBlocked: false,
+      snapBlockedLoading: false,
       syndicatedReviews: [],
       familyReviews: [],
       nativeReviews: [],
@@ -51062,14 +51063,26 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
     if (client && productId && productId !== this.state.productId) {
       //set loaders and defaults
-      this.setState({ loading: true, loadingFamily: true, loadingBlocked: true, loadingSyndicated: true, reviewFilter: "All Displayable Reviews", pagination: 1 });
+      this.setState({ loading: true, snapBlockedLoading: true, loadingFamily: true, loadingSyndicated: true, reviewFilter: "All Displayable Reviews", pagination: 1 });
 
       //Get oracle data.
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/oracle', {
         clientName: client,
         productId: productId
       }).then(function (response) {
-        e.setState({ sourceObject: response.data }, e.getSyndicationData);
+        console.log("SOURCE OBJECT RIGHT HERE", response.data);
+        if (response.data.family.length > 0 && response.data.syndication.length > 0) {
+          e.setState({ sourceObject: response.data }, e.getSyndicationData);
+        } else if (response.data.syndication.length === 0 && response.data.family.length > 0) {
+          console.log("RUNNING THE NO SYNDICATED BLOCK HERE");
+          e.setState({ sourceObject: response.data, loadingSyndicated: false, snapBlockedLoading: false }, e.getSyndicationData);
+        } else if (response.data.syndication.length > 0 && response.data.family.length === 0) {
+          console.log("RUNNING THE NO FAMILY BLOCK HERE");
+          e.setState({ sourceObject: response.data, loadingFamily: false }, e.getSyndicationData);
+        } else {
+          console.log("NO SOURCE DATA FOUND IN THERE");
+          e.setState({ sourceObject: response.data, loadingFamily: false, snapBlockedLoading: false, loadingSyndicated: false });
+        }
       }).catch(function (error) {});
 
       //Get Dashboard information
@@ -51089,7 +51102,9 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
           snapNative: response.data.dashboard.nativeReviews,
           snapFamily: response.data.dashboard.familyReviews,
           snapRatingOnlyReviews: response.data.dashboard.ratingsOnlyReviews,
-          snapDisplayableNative: response.data.dashboard.displayableNativeReviews
+          snapDisplayableNative: response.data.dashboard.displayableNativeReviews,
+          snapSyndicated: 0,
+          snapStopped: 0
         });
       }).catch(function (error) {
         console.log('dashboard error', error);
@@ -51145,37 +51160,25 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       self.setState({ loadingSyndicated: false, errorSyndicated: true });
     });
 
-    //run the family dashboard ONLY if the family object contains something.
-    if (this.state.sourceObject.family.length > 0) {
-      //get family dashboard data
-      __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/familyDashboard', {
-        clientName: this.state.client,
-        sourceObject: this.state.sourceObject
-      }).then(function (response) {
-        let familyObject = [];
-        familyObject.push(response.data);
-        self.setState({ familyObject: familyObject, loadingFamily: false });
-      }).catch(function (error) {
-        self.setState({ loadingFamily: false, errorFamily: true });
-      });
-      //if there's nothing there then turn off the loader
-    } else {
-      this.setState({ loadingFamily: false, familyObject: [] });
-    }
+    //get family dashboard data
+    __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/familyDashboard', {
+      clientName: this.state.client,
+      sourceObject: this.state.sourceObject
+    }).then(function (response) {
+      let familyObject = [];
+      familyObject.push(response.data);
+      self.setState({ familyObject: familyObject, loadingFamily: false });
+    }).catch(function (error) {
+      self.setState({ loadingFamily: false, errorFamily: true });
+    });
   }
   //run blocked reviews once the syndicationObject and SourceObject have been set in the state.
   getBlocked() {
+    var self = this;
     //BOB's Blocked Calls here*******
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedReviews', {
       sourceObject: this.state.sourceObject,
-<<<<<<< HEAD
-      syndicationObject: this.state.syndicationObject,
-      productId: this.state.productId,
-      client: this.state.client
-
-=======
       syndicationObject: this.state.syndicationObject
->>>>>>> f215d9bebb9228b0ba2730a5bfebedcdebb795b2
     }).then(function (response) {
       console.log("Blocked Reviews route here*******", response.data, this.state.productId, this.state.client);
     }).catch(function (error) {
@@ -51188,7 +51191,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       productId: this.state.productId
 
     }).then(function (response) {
-      console.log("Blocked Dashboard response route here*******", response.data);
+      console.log("Blocked Dashboard response route here*******", response.data, response.data.totalSyndicatedNative);
+      self.setState({ snapStopped: response.data.blockedSyndicated, snapSyndicated: response.data.totalSyndicatedNative, snapBlockedLoading: false });
     }).catch(function (error) {
       console.log('error: ', error);
     });
@@ -56421,7 +56425,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__ProductInfo__["a" /* default */], { data: productData }),
       __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_9__SyndicationInfo__["a" /* default */], { data: syndicationObject, loading: this.state.loadingSyndicated, error: this.state.errorSyndicated }),
       __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__FamilyInfo__["a" /* default */], { data: this.state.familyObject, loading: this.state.loadingFamily, error: this.state.errorFamily, paginateFamily: this.switchReviews }),
-      __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__SnapShot__["a" /* default */], { display: this.switchReviews, loading: this.state.loading, data: snapShot }),
+      __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__SnapShot__["a" /* default */], { display: this.switchReviews, blockedLoading: this.state.snapBlockedLoading, loading: this.state.loading, data: snapShot }),
       __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__Grid__["a" /* default */], { page: this.state.pagination, results: this.state.total, pagination: this.paginationClick, title: this.state.reviewFilter, productId: this.state.productId, data: this.state.displayingReviews })
     );
   }
@@ -60115,6 +60119,54 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         if (this.props.data.familyIds.length >= 1) {
             familyIds = this.props.data.familyIds.length;
         }
+        let totalSyndicated = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { className: 'sub-one' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'h4',
+                null,
+                this.props.data.syndicated
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'h4',
+                null,
+                'Total Syndicated'
+            )
+        );
+        let blocked = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { className: 'sub-two' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'h4',
+                null,
+                this.props.data.stopped
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'h4',
+                null,
+                'Blocked Syndicated'
+            )
+        );
+        if (this.props.blockedLoading) {
+            totalSyndicated = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'sub-one' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'p',
+                    null,
+                    'Doing Science...'
+                )
+            );
+            blocked = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'sub-two' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'p',
+                    null,
+                    'Doing Science...'
+                )
+            );
+        }
         let snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
             { className: 'snap-container' },
@@ -60181,34 +60233,8 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                         'DISPLAYED SYNDICATED REVIEWS'
                     )
                 ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'sub-one' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'h4',
-                        null,
-                        this.props.data.syndicated
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'h4',
-                        null,
-                        'Total Syndicated'
-                    )
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'sub-two' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'h4',
-                        null,
-                        this.props.data.stopped
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'h4',
-                        null,
-                        'Blocked Syndicated'
-                    )
-                )
+                totalSyndicated,
+                blocked
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
