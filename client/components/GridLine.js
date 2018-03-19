@@ -54,7 +54,6 @@ export default class GridLine extends React.Component{
               <td>{this.props.data.ProductId}</td>
               <td>{this.props.data.Rating}</td>
               <td>{this.props.data.ModerationStatus}</td>
-              <td className={reason}>{codes}</td>
               <td>{date}</td>
   		      </tr>
 

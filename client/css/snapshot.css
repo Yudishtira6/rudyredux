@@ -92,7 +92,7 @@
 }
 
 .sub-main:hover {
-  background: #e6e6e6;
+  background: #f4f3f3;
 }
 
 .total {
@@ -137,4 +137,8 @@
 
 .family {
   border-bottom: 2px solid #247dd8;
+}
+
+.family:hover {
+  background: #f4f3f3;
 }

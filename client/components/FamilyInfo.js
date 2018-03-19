@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import _ from 'underscore';
 import $ from 'jquery';
+import { Link } from 'react-router';
 
 export default class FamilyInfo extends Component {
   constructor(props){
     super(props);
     this.triggerFamily=this.triggerFamily.bind(this);
   }
+
   triggerFamily(e){
 
-    //get family ID when clicking on dashboard
+    //populate the specific family product when clicking on the dashboard.
     this.props.paginateFamily('family',e.target.innerHTML.split(' ')[0])
   }
   render() {
@@ -79,13 +81,13 @@ export default class FamilyInfo extends Component {
     //inject error message if error is present
     }else if(this.props.error){
       familyProducts=(<div className="error-message">
-                    <img src="https://yt3.ggpht.com/a-/AJLlDp2Q_yE_9epRWRApU2gu-v1XZrxtr4ZkKeXDQw=s900-mo-c-c0xffffffff-rj-k-no"/>
-                    <p>Something went wrong... Please try again</p>
-                  </div>
-                  );
+                        <img src="https://yt3.ggpht.com/a-/AJLlDp2Q_yE_9epRWRApU2gu-v1XZrxtr4ZkKeXDQw=s900-mo-c-c0xffffffff-rj-k-no"/>
+                        <p>Something went wrong... Please try again</p>
+                      </div>
+                      );
     //no families were found
     }else if(!this.props.loading && !this.props.error){
-    familyProducts=<p className="no-data">NO FAMILIES FOUND</p>
+      familyProducts=<p className="no-data">NO FAMILIES FOUND</p>
     }
 
 

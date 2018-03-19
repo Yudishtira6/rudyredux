@@ -154,6 +154,17 @@ th, td {
   font-weight: bold;
 }
 
+.fa-question-circle {
+  position: absolute;
+  top: 6px;
+  right: 11px;
+  color: #cccccc;
+}
+
+.fa-question-circle:hover {
+  color: white;
+}
+
 .active-page {
   display: inline-block;
   list-style: none;
@@ -186,6 +197,7 @@ th, td {
   margin-top: -100px;
   margin-left: -500px;
   border-radius: 10px;
+  box-shadow: 1px 2px 7px 0px black;
 }
 
 .review-text {
@@ -205,4 +217,84 @@ th, td {
   height: 100%;
   background: grey;
   background-color: #0e0d0d61;
+}
+
+/*blocked section******/
+
+.modal-blocked {
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  background: grey;
+  background-color: #0e0d0d61;
+  z-index: 6;
+}
+
+.blocked-container {
+  background: white;
+  position: fixed;
+  width: 1000px;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -500px;
+  z-index: 50;
+  border-radius: 10px;
+  box-shadow: 1px 2px 7px 0px black;
+  max-height: 32rem;
+  overflow-x: scroll;
+}
+
+.blocked-header {
+  padding: .5rem;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  color: white;
+  background-color: black;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.close-blocked {
+  top: -5px;
+  right: 7px;
+  color: white;
+  position: absolute;
+  top: -3px;
+  right: 2px;
+  z-index: 1000;
+}
+
+.blocked-container p {
+  border-bottom: 1px solid lightgray;
+  padding: 13px 10px;
+}
+
+.blocked-container p:last-of-type {
+  border-bottom: none;
+}
+
+.blocked-container p:first-of-type {
+  margin-top: 66px;
+}
+
+.mod-code {
+  display: block;
+  margin-left: 2rem;
+}
+
+.reason-codes {
+  display: block;
+  margin-left: 1rem;
+}
+
+.reason {
+  color: #ff1d1d;
+}
+
+.blocked-mod {
+  color: #ff1d1d;
 }

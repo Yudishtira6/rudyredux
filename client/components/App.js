@@ -4,6 +4,7 @@ import querystring from 'querystring';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Blocked from './Blocked';
 import FamilyInfo from './FamilyInfo';
 import Grid from './Grid';
 import ProductInfo from './ProductInfo';
@@ -21,6 +22,7 @@ export default class App extends React.Component {
                   loadingSyndicated:false,
                   loadingFamily:false,
                   loadingBlocked:false,
+                  snapBlockedLoading:false,
                   syndicatedReviews:[],
                   familyReviews:[],
                   nativeReviews:[],
@@ -46,12 +48,15 @@ export default class App extends React.Component {
                   errorSyndicated:false,
                   errorFamily:false,
                   productPageUrl:'',
-                  // activeTab:"product",
                   reviewFilter:"All Displayable Reviews",
                   sourceObject:[],
-                  // make key the product id
                   syndicationObject:[],
-                  familyObject:[]
+                  familyObject:[],
+                  modBlocked:[],
+                  syndBlocked:[],
+                  localeBlocked:[],
+                  blocked:false,
+
 
                   };
 
@@ -62,13 +67,16 @@ export default class App extends React.Component {
     this.paginationClick=this.paginationClick.bind(this);
     this.getSyndicationData=this.getSyndicationData.bind(this);
     this.getBlocked=this.getBlocked.bind(this);
+    this.closeBlocked=this.closeBlocked.bind(this);
   }
   //when user clicks "go", run getReviews function
   onClick(e){
     e.preventDefault();
     this.getReviews(this);
   }
-
+  closeBlocked(){
+    this.setState({blocked:!this.state.blocked});
+  }
   //user clicks the go button to request reviews
   getReviews(e){
     //set default headers for axios functions
@@ -77,10 +85,20 @@ export default class App extends React.Component {
     let client=document.getElementById('client').value;
     let productId=document.getElementById('prodid').value;
     this.checkForm();
+
     //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
     if(client && productId && productId!==this.state.productId){
         //set loaders and defaults
-        this.setState({loading:true, loadingFamily:true, loadingBlocked:true, loadingSyndicated:true,reviewFilter:"All Displayable Reviews",pagination:1});
+        this.setState({loading:true,
+                       snapBlockedLoading:true,
+                       loadingFamily:true,
+                       loadingSyndicated:true,
+                       reviewFilter:"All Displayable Reviews",
+                       pagination:1,
+                       modBlocked:[],
+                       syndBlocked:[],
+                       localeBlocked:[],
+                       });
 
 
         //Get oracle data.
@@ -90,34 +108,49 @@ export default class App extends React.Component {
                productId: productId
              }
              ).then(function(response) {
-               e.setState({sourceObject:response.data}, e.getSyndicationData);
-           }).catch(function(error){
-           });
+               console.log("SOURCE OBJECT RIGHT HERE",response.data);
+                 if(response.data.family.length > 0 && response.data.syndication.length > 0){
+                  e.setState({sourceObject:response.data}, e.getSyndicationData);
 
+                 }else if(response.data.syndication.length === 0 && response.data.family.length > 0){
+                  console.log("RUNNING THE NO SYNDICATED BLOCK HERE");
+                  e.setState({sourceObject:response.data, loadingSyndicated:false, snapBlockedLoading:false, syndicationObject:[]}, e.getSyndicationData);
 
-          //Get Dashboard information
-          axios.post('/dashboard',
-          querystring.stringify({
-            clientName: client,
-            productId: productId,
-          }), {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            }
-          }).then(function(response) {
-          //create dashboard
-            e.setState({  snapTotal:response.data.dashboard.totalReviews,
-                          total:response.data.dashboard.totalReviews,
-                          loading:false,
-                          snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
-                          snapNative:response.data.dashboard.nativeReviews,
-                          snapFamily:response.data.dashboard.familyReviews,
-                          snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
-                          snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
-                        });
-          }).catch(function(error){
-          });
+                 }else if( response.data.syndication.length > 0 && response.data.family.length === 0){
+                  console.log("RUNNING THE NO FAMILY BLOCK HERE");
+                  e.setState({sourceObject:response.data, loadingFamily:false, familyObject:[]}, e.getSyndicationData);
 
+                 }else{
+                  console.log("NO SOURCE DATA FOUND IN THERE");
+                  e.setState({sourceObject:response.data, loadingFamily:false, snapBlockedLoading:false, loadingSyndicated:false, syndicationObject:[], familyObject:[]});
+                  }
+
+              }).catch(function(error){
+              });
+              console.log("ABOUT TO GET DASHBOARD DATA");
+              //Get Dashboard information
+              axios.post('/dashboard',
+              {
+                clientName: client,
+                productId: productId,
+              }
+               ).then(function(response) {
+                  console.log("DASHBOARD GETTING SET**********", response.data.dashboard);
+              //create dashboard
+                e.setState({  snapTotal:response.data.dashboard.totalReviews,
+                              total:response.data.dashboard.totalReviews,
+                              loading:false,
+                              snapDisplayableSyndicated:response.data.dashboard.displayableSyndicatedReviews,
+                              snapNative:response.data.dashboard.nativeReviews,
+                              snapFamily:response.data.dashboard.familyReviews,
+                              snapRatingOnlyReviews:response.data.dashboard.ratingsOnlyReviews,
+                              snapDisplayableNative:response.data.dashboard.displayableNativeReviews,
+                              snapSyndicated:0,
+                              snapStopped:0
+                            });
+              }).catch(function(error){
+                  console.log('dashboard error', error);
+              });
 
           //Get product information block
           axios.post('/getProduct',
@@ -153,6 +186,7 @@ export default class App extends React.Component {
                            //set state for reviews to display
                            e.setState({displayingReviews:response.data.Results})
                        }).catch(function(error){
+                          console.log('pagination error', error);
                        });
       }
     }
@@ -172,14 +206,12 @@ export default class App extends React.Component {
                   sourceObject: this.state.sourceObject,
                }
                ).then(function(response) {
-                 self.setState({syndicationObject:response.data, loadingSyndicated:false}, self.getBlocked);
+                 self.setState({syndicationObject:response.data, loading:false, loadingSyndicated:false}, self.getBlocked);
              }).catch(function(error){
                console.log('error: ',error);
                 self.setState({loadingSyndicated:false, errorSyndicated:true});
              });
 
-        //run the family dashboard ONLY if the family object contains something.
-        if(this.state.sourceObject.family.length > 0){
             //get family dashboard data
             axios.post('/familyDashboard',
                       {
@@ -193,20 +225,23 @@ export default class App extends React.Component {
                       }).catch(function(error){
                         self.setState({loadingFamily:false, errorFamily:true});
                       });
-        //if there's nothing there then turn off the loader
-        }else{
-          this.setState({loadingFamily:false});
-        }
-  }
+
+}
     //run blocked reviews once the syndicationObject and SourceObject have been set in the state.
     getBlocked(){
+                    var self=this;
                     //BOB's Blocked Calls here*******
                     axios.post('/blockedReviews',
                              {
                                 sourceObject:this.state.sourceObject,
-                                syndicationObject: this.state.syndicationObject,
+                                syndicationObject: this.state.syndicationObject
+
                              }).then(function(response) {
                               console.log("Blocked Reviews route here*******",response.data);
+                              self.setState({modBlocked:response.data.modBlocked,
+                                             syndBlocked:response.data.syndDelayBlocked,
+                                             localeBlocked:response.data.localeBlocked
+                                            }, self.sortBlocked);
                            }).catch(function(error){
                              console.log('error: ',error);
                            });
@@ -219,15 +254,13 @@ export default class App extends React.Component {
 
                                     }
                                     ).then(function(response) {
-                                     console.log("Blocked Dashboard response route here*******",response.data);
+                                     console.log("Blocked Dashboard response route here*******",response.data, response.data.totalSyndicatedNative);
+                                     self.setState({snapStopped:response.data.blockedSyndicated, snapSyndicated:response.data.totalSyndicatedNative, snapBlockedLoading:false});
                                   }).catch(function(error){
                                     console.log('error: ',error);
                                   });
+
     }
-
-
-
-
 
 
 
@@ -398,7 +431,7 @@ export default class App extends React.Component {
 
     let snapShot={native:this.state.snapNative,
                   syndicated:this.state.snapSyndicated,
-                  ratingOnly:this.state.snapRatingOnly,
+                  ratingOnly:this.state.snapRatingOnlyReviews,
                   stopped:this.state.snapStopped,
                   displayableSyndicated:this.state.snapDisplayableSyndicated,
                   family:this.state.snapFamily,
@@ -434,7 +467,8 @@ export default class App extends React.Component {
                   <ProductInfo data={productData}/>
                   <SyndicatedInfo data={syndicationObject} loading={this.state.loadingSyndicated} error={this.state.errorSyndicated}/>
                   <FamilyInfo data={this.state.familyObject} loading={this.state.loadingFamily} error={this.state.errorFamily} paginateFamily={this.switchReviews}/>
-                  <SnapShot display={this.switchReviews} loading={this.state.loading} data={snapShot}/>
+                  <SnapShot blockedFunction={this.closeBlocked} display={this.switchReviews} blockedLoading={this.state.snapBlockedLoading} loading={this.state.loading} data={snapShot}/>
+                  <Blocked blockedFunction={this.closeBlocked} blocked={this.state.blocked} modBlocked={this.state.modBlocked} syndBlocked={this.state.syndBlocked} localeBlocked={this.state.localeBlocked}/>
                   <Grid page={this.state.pagination} results={this.state.total} pagination={this.paginationClick} title={this.state.reviewFilter} productId={this.state.productId} data={this.state.displayingReviews}/>
                 </div>
               );

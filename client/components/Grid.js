@@ -2,7 +2,6 @@ import React from 'react';
 import GridLine from './GridLine';
 import Pages from './Pages';
 
-//WHOLE GRID OF DATA
 class Grid extends React.Component {
     constructor(props) {
           super(props);
@@ -55,7 +54,7 @@ render(){
   let reviewText;
   if(this.state.clicked){
     reviewText=(
-                  <div onClick={this.closeReview} className="review-modal">
+                  <div className="review-modal">
                     <div className="review-text-container">
                       <button onClick={this.closeReview} type="button" className="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -86,7 +85,7 @@ render(){
   });
   }
 return(
-      <div>
+      <div ref='reviews'>
         <h1 id="displayableReviewsTitle">{this.props.title}</h1>
         {reviewText}
         <table className="tableMain" id="displayableReviews">
@@ -98,7 +97,6 @@ return(
               <th>SOURCE PRODUCT ID</th>
               <th>RATING</th>
               <th>STATUS</th>
-              <th>BLOCKING REASON</th>
               <th>SUBMISSION TIME</th>
             </tr>
             {Items}

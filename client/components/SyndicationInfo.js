@@ -44,9 +44,9 @@ export default class SyndicationInfo extends Component {
         });
     }else if(this.props.loading && !this.props.error){
       sourceData=(<div className="loader-top">
-                     <i className="fa left fa-circle" aria-hidden="true"></i>
-                     <i className="fa middle fa-circle" aria-hidden="true"></i>
-                     <i className="fa right fa-circle" aria-hidden="true"></i>
+                      <i className="fas left fa-circle"></i>
+                      <i className="fas middle fa-circle"></i>
+                      <i className="fas right fa-circle"></i>
                      <p> Calculating...</p>
                   </div>)
     }else if(this.props.error){

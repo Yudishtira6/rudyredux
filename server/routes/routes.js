@@ -248,7 +248,7 @@ router.route('/blockedDashboard').post(function(req,res) {
     .catch(function (err) {
       // API call failed...
   });
-  
+
   /*
   var familyDisplayObject = {};
   var totalFamilyResults = 0;
@@ -574,7 +574,7 @@ router.route('/blockedReviews').post(function(req,res){
               console.log('there are less than or equal to 100 delayed reviews returned - no need for a loop');
               blockedReviews["syndDelayBlocked"]=hagdelay["Results"];
             }
-            
+
 
 // start locale block code
 
@@ -699,11 +699,11 @@ router.route('/dashboard').post(function(req,res) {
       console.log('hitting batchoneoptions . . .');
       console.log('synRev["BatchedResults"]["q0"]["TotalResults"]: ',synRev["BatchedResults"]["q0"]["TotalResults"]);
       // console.log('synRev["BatchedResults"]["q1"]["Results"][0]["ProductStatistics"]["ReviewStatistics"]["TotalReviewCount"]: ',synRev["BatchedResults"]["q1"]["Results"][0]["ProductStatistics"]["ReviewStatistics"]["TotalReviewCount"]);
-      syndDisplayTotal = synRev["BatchedResults"]["q0"]["TotalResults"];
-      allReviewDisplayTotal = synRev["BatchedResults"]["q1"]["Results"][0]["ProductStatistics"]["ReviewStatistics"]["TotalReviewCount"];
+      var syndDisplayTotal = synRev["BatchedResults"]["q0"]["TotalResults"];
+      var allReviewDisplayTotal = synRev["BatchedResults"]["q1"]["Results"][0]["ProductStatistics"]["ReviewStatistics"]["TotalReviewCount"];
       // console.log('synRev: ',JSON.stringify(prodData));
-      console.log('syndDisplayTotal: ',syndDisplayTotal);
-      console.log('allReviewDisplayTotal: ',allReviewDisplayTotal);
+      console.log('syndDisplayTotal(displayed syndicated reviews): ',syndDisplayTotal);
+      console.log('allReviewDisplayTotal(total displayed reviews): ',allReviewDisplayTotal);
       // nested batch2Option
       // batch call #2 - q0 num native reviews (reviews with content + ratingsOnly)
       // q1 num ratingsOnly native reviews
@@ -718,14 +718,23 @@ router.route('/dashboard').post(function(req,res) {
       rp(batch2Options)
         .then(function (conRat) {
           console.log('conRat: ',JSON.stringify(conRat));
-          nativeDisplayTotal = conRat["BatchedResults"]["q0"]["TotalResults"];
-          if (conRat["BatchedResults"]["q1"]["Results"].length>0){
-              nativeRatingsOnlyTotal = conRat["BatchedResults"]["q1"]["Results"][0]["ReviewStatistics"]["TotalReviewCount"];
+          var nativeDisplayTotal = conRat["BatchedResults"]["q0"]["TotalResults"];
+          console.log("total native displayed reviews(content + ratings only): ", nativeDisplayTotal);
+          console.log('conRat["BatchedResults"]["q1"]["TotalResults"]: ',conRat["BatchedResults"]["q1"]["TotalResults"]);
+          var nativeRatingsOnlyTotal = conRat["BatchedResults"]["q1"]["TotalResults"];
+          /*
+          if (conRat["BatchedResults"]["q1"]["TotalResults"]>){
+              console.log("hitting if ratings only reviews present");
+              console.log('conRat["BatchedResults"]["q1"]["Results"].length: ',conRat["BatchedResults"]["q1"]["Results"].length);
+              console.log('conRat["BatchedResults"]["q1"]["Results"]: ',conRat["BatchedResults"]["q1"]["Results"]);
+              var nativeRatingsOnlyTotal = conRat["BatchedResults"]["q1"]["Results"][0]["ReviewStatistics"]["TotalReviewCount"];
+              console.log("ratings only displayed reviews: ", nativeRatingsOnlyTotal);
           } else {
-            nativeRatingsOnlyTotal = 0;
-          }
-          nativeContentTotal = nativeDisplayTotal - nativeRatingsOnlyTotal;
-          famDisplayTotal = allReviewDisplayTotal - nativeDisplayTotal - syndDisplayTotal;
+            var nativeRatingsOnlyTotal = 0;
+            console.log("ratings only displayed reviews: ", nativeRatingsOnlyTotal);
+          */
+          var nativeContentTotal = nativeDisplayTotal - nativeRatingsOnlyTotal;
+          var famDisplayTotal = allReviewDisplayTotal - nativeDisplayTotal - syndDisplayTotal;
           console.log('nativeContentTotal: ',nativeContentTotal);
           console.log('nativeDisplayTotal: ',nativeDisplayTotal);
           console.log('nativeRatingsOnlyTotal: ',nativeRatingsOnlyTotal);
