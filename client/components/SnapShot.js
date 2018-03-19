@@ -26,9 +26,11 @@ export default class SnapShot extends React.Component {
     this.props.display('all','product');
     }
     switchBlocked(){
-    this.props.display('blocked','syndicated');
+    this.props.blockedFunction();
     }
+
     render(){
+    console.log("SNAPSHOT DATA HERE",this.props);
     let familyIds=0;
 
       if (this.props.data.familyIds.length>=1){
@@ -41,7 +43,7 @@ export default class SnapShot extends React.Component {
                           </div>
                           );
     let blocked= (
-                    <div className="sub-two">
+                    <div onClick={this.switchBlocked} className="sub-two">
                         <h4>{this.props.data.stopped}</h4>
                         <h4>Blocked Syndicated</h4>
                     </div>
@@ -74,8 +76,8 @@ export default class SnapShot extends React.Component {
                               <h4>Ratings-only Native</h4>
                           </div>
                       </div>
-                      <div onClick={this.switchSyndicated} className="snap-details syndicated">
-                          <div className="main syndicated">
+                      <div  className="snap-details syndicated">
+                          <div onClick={this.switchSyndicated} className="main syndicated">
                               <h2>{this.props.data.displayableSyndicated}</h2>
                               <h2>DISPLAYED SYNDICATED REVIEWS</h2>
                           </div>

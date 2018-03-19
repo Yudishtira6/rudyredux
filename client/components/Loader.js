@@ -3,9 +3,9 @@ import React from 'react';
 const loader=()=>{
     return(
             <div className="loader">
-               <i className="fa left fa-circle" aria-hidden="true"></i>
-               <i className="fa middle fa-circle" aria-hidden="true"></i>
-               <i className="fa right fa-circle" aria-hidden="true"></i>
+              <i className="fas left fa-circle"></i>
+              <i className="fas middle fa-circle"></i>
+              <i className="fas right fa-circle"></i>
             </div>
           );
     }
