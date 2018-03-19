@@ -69,7 +69,7 @@ export default class SnapShot extends React.Component {
                           </div>
                           <div className="sub-one native-bottom">
                               <h4>{this.props.data.native}</h4>
-                              <h4>Total Native</h4>
+                              <h4>Content Native</h4>
                           </div>
                           <div className="sub-two">
                               <h4>{this.props.data.ratingOnly}</h4>

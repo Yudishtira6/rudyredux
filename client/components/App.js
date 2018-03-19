@@ -401,6 +401,7 @@ export default class App extends React.Component {
              }).catch(function(error){
                console.log('error: ',error);
              });
+      break;
       default:
       axios.post('/paginateAll',
                {
