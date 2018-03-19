@@ -458,6 +458,205 @@ router.route('/blockedReviews').post(function(req,res){
   var syndicationObject = req.body.syndicationObject;
   console.log('source: ',source);
   console.log('syndicationObject: ',syndicationObject);
+  var len = syndicationObject.length;
+  var callsLeft = len;
+  var blockedReviews = {};
+  for (let i=0;i<len;i++){
+    console.log('syndClient: ',syndicationObject[i]["sourceName"]);
+    console.log('syndProduct: ',syndicationObject[i]["productId"]);
+    console.log('modCodes: ',syndicationObject[i]["modCodes"]);
+    console.log('syndicationDelay: ',syndicationObject[i]["syndicationDelay"]);
+    console.log('locales: ',syndicationObject[i]["locales"]);
+    // modcode blocked
+    var hagmodopt = {
+      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ModeratorCode:'+syndicationObject[i]["modCodes"].join()+'&attributes=moderatorCodes&limit=100',
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: true // Automatically parses the JSON string in the response
+    };
+    console.log('hagmodopt: ',hagmodopt);
+    rp(hagmodopt)
+      .then(function (hagmod) {
+        console.log('blocked Moderator Reviews');
+        console.log('hagmod: ',hagmod);
+        if(hagmod["TotalResults"]>100){
+          console.log('there are more than 100 modblocked reviews returned - need to loop through');
+          var modloop = hagmod["TotalResults"]/100;
+          var hagmodResultsObject = hagmod["Results"];
+          console.log('loop number: ',modloop);
+          var modCallsLeft = modloop;
+          for(let j=1;j<modloop;j++){
+            var hagmodloopopt = {
+              uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ModeratorCode:'+syndicationObject[i]["modCodes"].join()+'&attributes=moderatorCodes&limit=100&offset='+(j*100),
+              headers: {
+                  'User-Agent': 'Request-Promise'
+              },
+              json: true // Automatically parses the JSON string in the response
+            };
+            console.log('hagmodloopopt: ',hagmodloopopt);
+            rp(hagmodloopopt)
+              .then(function(hagmodloop){
+                hagmodResultsObject.push.apply(hagmodResultsObject, hagmodloop["Results"]);
+                modCallsLeft--
+                console.log('hagmodResultsObject: ',hagmodResultsObject,' modCallsLeft: ',modCallsLeft);
+                if (modCallsLeft<=0){
+                  console.log('end of hagmodloop hit');
+                  console.log('modCallsLeft: ',modCallsLeft);
+                  console.log('hagmodResultsObject: ',hagmodResultsObject);
+                  blockedReviews["modBlocked"]=hagmodResultsObject;
+                }
+              })
+              .catch(function (err) {
+                // API call failed...
+              });
+          }
+
+        } else {
+          console.log('there are less than or equal to 100 modblocked reviews returned - no need for a loop');
+          blockedReviews["modBlocked"]=hagmod["Results"];
+        }
+// start synd delay code block
+
+        // get synddelay blocked
+        console.log('Hitting syndication delay call ...');
+        var days=syndicationObject[i]["syndicationDelay"]; // Days you want to subtract
+        var date = new Date();
+        var last = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000));
+        console.log('days: ',days);
+        console.log('date: ',date);
+        console.log('last: ',last);
+        var hagdelayopt = {
+          uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=submissiontime:gt:'+parseInt(last.getTime()/1000)+'&attributes=moderatorCodes&limit=100',
+          headers: {
+              'User-Agent': 'Request-Promise'
+          },
+          json: true // Automatically parses the JSON string in the response
+        };
+        console.log('hagdelayopt: ',hagdelayopt);
+        rp(hagdelayopt)
+          .then(function (hagdelay) {
+            console.log('sydication delay Reviews');
+            console.log('hagdelay: ',hagdelay);
+            if(hagdelay["TotalResults"]>100){
+              console.log('there are more than 100 delayed reviews returned - need to loop through');
+              var delayloop = hagdelay["TotalResults"]/100;
+              var hagdelayResultsObject = hagdelay["Results"];
+              console.log('loop number: ',delayloop);
+              var delayCallsLeft = delayloop;
+              for(let k=1;k<delayloop;k++){
+                var hagdelayloopopt = {
+                  uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=submissiontime:gt:'+parseInt(last.getTime()/1000)+'&attributes=moderatorCodes&limit=100&offset='+(k*100),
+                  headers: {
+                      'User-Agent': 'Request-Promise'
+                  },
+                  json: true // Automatically parses the JSON string in the response
+                };
+                console.log('hagdelayloopopt: ',hagdelayloopopt);
+                rp(hagdelayloopopt)
+                  .then(function(hagdelayloop){
+                    hagdelayResultsObject.push.apply(hagdelayResultsObject, hagdelayloop["Results"]);
+                    delayCallsLeft--
+                    console.log('hagdelayResultsObject: ',hagdelayResultsObject,' delayCallsLeft: ',delayCallsLeft);
+                    if (delayCallsLeft<=0){
+                      console.log('end of hagdelayloop hit');
+                      console.log('delayCallsLeft: ',delayCallsLeft);
+                      console.log('hagdelayResultsObject: ',hagdelayResultsObject);
+                      blockedReviews["syndDelayBlocked"]=hagdelayResultsObject;
+                    }
+                  })
+                  .catch(function (err) {
+                    // API call failed...
+                  });
+              }
+
+            } else {
+              console.log('there are less than or equal to 100 delayed reviews returned - no need for a loop');
+              blockedReviews["syndDelayBlocked"]=hagdelay["Results"];
+            }
+            
+
+// start locale block code
+
+        // get locale blocked
+        console.log('Hitting locale blocked call ...');
+        console.log('Locale: ',syndicationObject[i]["locales"]);
+        var haglocaleopt = {
+          uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ContentLocale:neq:'+syndicationObject[i]["locales"].join()+'&attributes=moderatorCodes&limit=100',
+          headers: {
+              'User-Agent': 'Request-Promise'
+          },
+          json: true // Automatically parses the JSON string in the response
+        };
+        console.log('haglocaleopt: ',haglocaleopt);
+        rp(haglocaleopt)
+          .then(function (haglocale) {
+            console.log('blocked locale Reviews');
+            console.log('haglocale: ',haglocale);
+            if(haglocale["TotalResults"]>100){
+              console.log('there are more than 100 locale reviews returned - need to loop through');
+              var localeloop = haglocale["TotalResults"]/100;
+              var haglocaleResultsObject = haglocale["Results"];
+              console.log('loop number: ',localeloop);
+              var localeCallsLeft = localeloop;
+              for(let l=1;l<localeloop;l++){
+                var haglocaleloopopt = {
+                  uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=test&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ContentLocale:neq:'+syndicationObject[i]["locales"].join()+'&attributes=moderatorCodes&limit=100&offset='+(k*100),
+                  headers: {
+                      'User-Agent': 'Request-Promise'
+                  },
+                  json: true // Automatically parses the JSON string in the response
+                };
+                console.log('haglocaleloopopt: ',haglocaleloopopt);
+                rp(haglocaleloopopt)
+                  .then(function(haglocaleloop){
+                    haglocaleResultsObject.push.apply(haglocaleResultsObject, haglocaleloop["Results"]);
+                    localeCallsLeft--
+                    console.log('hagdelayResultsObject: ',haglocaleResultsObject,' localeCallsLeft: ',localeCallsLeft);
+                    if (localeCallsLeft<=0){
+                      console.log('end of haglocaleloop hit');
+                      console.log('localeCallsLeft: ',localeCallsLeft);
+                      console.log('haglocaleResultsObject: ',haglocaleResultsObject);
+                      blockedReviews["localeBlocked"]=haglocaleResultsObject;
+                    }
+                  })
+                  .catch(function (err) {
+                    // API call failed...
+                  });
+              }
+
+            } else {
+              console.log('there are less than or equal to 100 locale blocked reviews returned - no need for a loop');
+              blockedReviews["localeBlocked"]=haglocale["Results"];
+            }
+
+            callsLeft--
+            console.log('blockedReviews: ',blockedReviews,' callsLeft: ',callsLeft);
+            if (callsLeft<=0){
+              console.log('blockedReviews res json call hit');
+              console.log('callsLeft: ',callsLeft);
+              console.log('blockedReviews: ',blockedReviews);
+              res.json(blockedReviews);
+            }
+            })
+          .catch(function (err) {
+                // API call failed...
+          });
+
+
+// end locale block code
+            })
+          .catch(function (err) {
+                // API call failed...
+          });
+
+
+// end synd delay code block
+    })
+    .catch(function (err) {
+          // API call failed...
+    });
+  }
   /*
   let pagopt = {
     uri: 'http://hagrid-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+familyProductId+'&excludeFamily=truelimit=100&offset='+(pageNumber*100),
