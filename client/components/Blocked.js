@@ -96,7 +96,7 @@ export default class Blocked extends Component {
             return <span className="mod-code">{codeDef}</span>
           });
         return (
-                <p key={review.Id}>* Review ID: {review.Id} from {review.SourceClient} is blocked because of a <span className="reason">MODERATION STOP CODE.</span> <span className="reason-codes">Codes associated with review (blocker in red):</span> {modCode}</p>
+                <p key={review.Id}>* Review ID: {review.Id} from {review.SourceClient} is blocked because of a <span className="reason">MODERATION STOP CODE.</span> <span className="reason-codes">Codes associated with review:</span> {modCode}</p>
                 );
       });
     }

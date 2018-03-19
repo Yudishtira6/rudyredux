@@ -51334,6 +51334,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
         }).catch(function (error) {
           console.log('error: ', error);
         });
+        break;
       default:
         __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/paginateAll', {
           clientName: this.state.client,
@@ -57677,7 +57678,7 @@ class Blocked extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'span',
             { className: 'reason-codes' },
-            'Codes associated with review (blocker in red):'
+            'Codes associated with review:'
           ),
           ' ',
           modCode
@@ -59832,6 +59833,7 @@ class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
   handlePage(i) {
     this.props.pagination(i, this.props.title);
+    console.log("PAGINATION TYPE TITLE*****", this.props.title);
   }
   clickHandler(reviewText, reviewId, user, locale, source, rating, title, color) {
     this.setState({ clicked: true, reviewText: reviewText, reviewId: reviewId, user: user, locale: locale, source: source, rating: rating, title: title });
@@ -60418,7 +60420,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'h4',
                         null,
-                        'Total Native'
+                        'Content Native'
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

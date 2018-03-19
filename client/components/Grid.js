@@ -22,6 +22,7 @@ class Grid extends React.Component {
 
   handlePage(i){
     this.props.pagination(i, this.props.title);
+    console.log("PAGINATION TYPE TITLE*****", this.props.title)
    }
   clickHandler(reviewText,reviewId, user, locale, source, rating, title, color){
     this.setState({clicked:true,reviewText:reviewText, reviewId:reviewId, user:user, locale:locale, source:source, rating:rating, title:title});
