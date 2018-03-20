@@ -126,6 +126,7 @@ router.route('/syndicationDashboard').post(function(req,res){
       }
       console.log('this works just as expected!');
       edgeBody = body;
+      console.log('edgeBody["data"]: ',edgeBody["data"]);
       request({
         method : 'GET',
         url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/displays/cvspharamcy',
@@ -143,7 +144,7 @@ router.route('/syndicationDashboard').post(function(req,res){
         // iterate through syndication sources
         // for(let i=0,len=source["syndication"].length;i<len;i++){
           // var syndClient = source["syndication"][i][0];
-          var syndClient = 'bengay'
+          var syndClient = 'bengay';
           console.log('syndClient: ',syndClient);
           var displayObject = body["data"];
           var goal = displayObject[Object.keys(displayObject).find(key => key.toLowerCase() === syndClient.toLowerCase())];
