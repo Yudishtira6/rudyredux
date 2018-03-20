@@ -58060,6 +58060,14 @@ class Blocked extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       });
     }
     let blockedContainer;
+    // 
+    // if(this.props.syndBlocked || this.props.localeBlocked || this.props.modBlocked){
+    //   blockedContent=(<div>
+    //                     {locale}
+    //                     {mod}
+    //                     {delay}
+    //                   </div>);
+    // }
     if (this.props.blocked) {
       blockedContainer = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',

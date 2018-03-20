@@ -48,7 +48,7 @@ export default class SnapShot extends React.Component {
                 );
     if(this.props.blockedLoading){
       totalSyndicated=(
-                        <div className="sub-one">
+                        <div onClick={this.switchSyndicated} className="sub-one">
                             <p>Doing Science...</p>
                         </div>
                       );

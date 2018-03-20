@@ -109,6 +109,7 @@ export default class Blocked extends Component {
       });
     }
     let blockedContainer;
+
     if(this.props.blocked){
       blockedContainer=(
                       <div className="modal-blocked">

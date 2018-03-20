@@ -94,7 +94,7 @@
   padding-top: 27px;
   padding-bottom: 16px;
   background-color: #f4f3f3;
-  cursor: pointer;
+  cursor: default;
 }
 
 .sub-main h4 {
@@ -147,6 +147,7 @@
 
 .family {
   border-bottom: 2px solid #247dd8;
+  cursor: default;
 }
 
 .family:hover {
