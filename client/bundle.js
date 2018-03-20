@@ -51423,11 +51423,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       });
 
       //Get oracle data.
+      console.log("HITTING ORACLE ROUTE********");
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/oracle', {
         clientName: client,
         productId: productId
       }).then(function (response) {
-        console.log("SOURCE OBJECT RIGHT HERE", response.data);
+
+        console.log("******ORACLE ROUTE SUCCEEDED!!!!", response);
         if (response.data.family.length > 0 && response.data.syndication.length > 0) {
           e.setState({ sourceObject: response.data }, e.getSyndicationData);
         } else if (response.data.syndication.length === 0 && response.data.family.length > 0) {
@@ -51441,13 +51443,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
           e.setState({ sourceObject: response.data, loadingFamily: false, snapBlockedLoading: false, loadingSyndicated: false, syndicationObject: [], familyObject: [] });
         }
       }).catch(function (error) {});
-      console.log("ABOUT TO GET DASHBOARD DATA");
+      console.log("ABOUT TO GET DASHBOARD DATA*********");
       //Get Dashboard information
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/dashboard', {
         clientName: client,
         productId: productId
       }).then(function (response) {
-        console.log("DASHBOARD GETTING SET**********", response.data.dashboard);
+        console.log("********DASHBOARD SUCCEEEDED!!!", response.data.dashboard);
         //create dashboard
         e.setState({ snapTotal: response.data.dashboard.totalReviews,
           total: response.data.dashboard.totalReviews,
@@ -51465,6 +51467,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       });
 
       //Get product information block
+      console.log("ABOUT TO RUN GET PRODUCT ROUTE***********");
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/getProduct', __WEBPACK_IMPORTED_MODULE_2_querystring___default.a.stringify({
         clientName: client,
         productId: productId
@@ -51473,6 +51476,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       }).then(function (response) {
+        console.log("********GET PRODUCT ROUTE SUCCEEEDED!!!!!", response);
         //create product information
         e.setState({ image: response.data.Results[0].ImageUrl,
           client: client,
@@ -51486,11 +51490,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       });
 
       //get all 1st page of all reviews
+      console.log("ABOUT TO GET PAGINATE ALL ROUTE!!!***********");
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/paginateAll', {
         clientName: client,
         productId: productId,
         pageNumber: 0
       }).then(function (response) {
+        console.log("*************PAGINATE ALL ROUTE SUCCEEDED!!!!");
         //set state for reviews to display
         e.setState({ displayingReviews: response.data.Results });
       }).catch(function (error) {
@@ -51504,10 +51510,12 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
 
     var self = this;
     //Get synication Dashboard
+    console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********");
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/syndicationDashboard', {
       clientName: this.state.client,
       sourceObject: this.state.sourceObject
     }).then(function (response) {
+      console.log("**********SYNDICATION DASHBOARD SUCCEEEDED!!!!!!", response);
       self.setState({ syndicationObject: response.data, loading: false, loadingSyndicated: false }, self.getBlocked);
     }).catch(function (error) {
       console.log('error: ', error);
@@ -51515,10 +51523,12 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     });
 
     //get family dashboard data
+    console.log("ABOUT TO RUN THE FAMILY DASHBOARD************");
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/familyDashboard', {
       clientName: this.state.client,
       sourceObject: this.state.sourceObject
     }).then(function (response) {
+      console.log("**********FAMILY DASHBOARD SUCCEED!!!!!");
       let familyObject = [];
       familyObject.push(response.data);
       self.setState({ familyObject: familyObject, loadingFamily: false });
@@ -51530,12 +51540,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
   getBlocked() {
     var self = this;
     //BOB's Blocked Calls here*******
+    console.log("ABOUT TO RUN BLOCKED REVIEWS CALL*******");
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedReviews', {
       sourceObject: this.state.sourceObject,
       syndicationObject: this.state.syndicationObject
 
     }).then(function (response) {
-      console.log("Blocked Reviews route here*******", response.data);
+      console.log("********BLOCKED REVIEWS SUCCEEDE!!!!", response.data);
       self.setState({ modBlocked: response.data.modBlocked,
         syndBlocked: response.data.syndDelayBlocked,
         localeBlocked: response.data.localeBlocked
@@ -51543,6 +51554,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     }).catch(function (error) {
       console.log('error: ', error);
     });
+    console.log("ABOUT TO RUN DASHBOARD BLOCKED ROUTE***********");
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedDashboard', {
       sourceObject: this.state.sourceObject,
       syndicationObject: this.state.syndicationObject,
@@ -51550,7 +51562,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       productId: this.state.productId
 
     }).then(function (response) {
-      console.log("Blocked Dashboard response route here*******", response.data, response.data.totalSyndicatedNative);
+      console.log("*********BLOCKED DASHBOARD SUCCEEEDED!!!!!!!", response.data, response.data.totalSyndicatedNative);
       self.setState({ snapStopped: response.data.blockedSyndicated, snapSyndicated: response.data.totalSyndicatedNative, snapBlockedLoading: false });
     }).catch(function (error) {
       console.log('error: ', error);
