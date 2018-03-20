@@ -243,7 +243,7 @@ th, td {
   z-index: 50;
   border-radius: 10px;
   box-shadow: 1px 2px 7px 0px black;
-  max-height: 32rem;
+  max-height: 25rem;
   overflow-x: scroll;
 }
 
@@ -297,4 +297,19 @@ th, td {
 
 .blocked-mod {
   color: #ff1d1d;
+}
+
+.close:hover {
+  color: #ff5858;
+}
+
+.disclaimer {
+  position: absolute;
+  top: 48px;
+  right: 16px;
+  font-size: 13px;
+}
+
+.review-number {
+  color: #40d079
 }

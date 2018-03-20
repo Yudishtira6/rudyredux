@@ -57568,10 +57568,14 @@ class Blocked extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
           'p',
           { key: review.Id },
           '* Review ID: ',
-          review.Id,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'span',
+            { className: 'review-number' },
+            review.Id
+          ),
           ' from ',
           review.SourceClient,
-          ' is blocked because of ',
+          ' is blocked because of Invalid',
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'span',
             { className: 'reason' },
@@ -57665,7 +57669,11 @@ class Blocked extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
           'p',
           { key: review.Id },
           '* Review ID: ',
-          review.Id,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'span',
+            { className: 'review-number' },
+            review.Id
+          ),
           ' from ',
           review.SourceClient,
           ' is blocked because of a ',
@@ -57692,10 +57700,14 @@ class Blocked extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
           'p',
           { key: review.Id },
           '* Review ID: ',
-          review.Id,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'span',
+            { className: 'review-number' },
+            review.Id
+          ),
           ' from ',
           review.sourceClient,
-          ' is blocked because of a ',
+          ' is blocked because of ',
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'span',
             { className: 'reason' },
@@ -57719,6 +57731,11 @@ class Blocked extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
             'h3',
             { className: 'blocked-header' },
             'Blocked Reviews'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'span',
+            { className: 'disclaimer' },
+            '**Note: Reviews can appear in the list multiple times because of different blocking reasons'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'button',
@@ -58149,6 +58166,11 @@ class FamilyInfo extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'ul',
             { className: 'keys' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'p',
+              null,
+              'Select a productID below to display reviews'
+            ),
             keys
           )
         );
@@ -60460,7 +60482,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { onClick: this.switchFamily, className: 'snap-details family' },
+                { className: 'snap-details family' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'main family' },
@@ -60561,7 +60583,7 @@ class SyndicationInfo extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     let sourceData = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'p',
       { className: 'no-data' },
-      'No Source Data Found'
+      'No Syndication Data Found'
     );
     if (this.props.data.length > 0 && !this.props.loading && !this.props.error) {
       sourceData = this.props.data.map(source => {

@@ -16,7 +16,7 @@ export default class Blocked extends Component {
     if(this.props.localeBlocked){
      locale=this.props.localeBlocked.map((review)=>{
         return (
-                <p key={review.Id}>* Review ID: {review.Id} from {review.SourceClient} is blocked because of <span className="reason">LOCALE:</span> {review.ContentLocale}</p>
+                <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of Invalid<span className="reason">LOCALE:</span> {review.ContentLocale}</p>
                 );
       });
     }
@@ -96,7 +96,7 @@ export default class Blocked extends Component {
             return <span className="mod-code">{codeDef}</span>
           });
         return (
-                <p key={review.Id}>* Review ID: {review.Id} from {review.SourceClient} is blocked because of a <span className="reason">MODERATION STOP CODE.</span> <span className="reason-codes">Codes associated with review:</span> {modCode}</p>
+                <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of a <span className="reason">MODERATION STOP CODE.</span> <span className="reason-codes">Codes associated with review:</span> {modCode}</p>
                 );
       });
     }
@@ -104,7 +104,7 @@ export default class Blocked extends Component {
      delay=this.props.syndBlocked.map((review)=>{
         var date=moment(review.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
         return (
-                <p key={review.Id}>* Review ID: {review.Id} from {review.sourceClient} is blocked because of a <span className="reason">SYNDICATION DELAY</span>. It was submitted on {date}  </p>
+                <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.sourceClient} is blocked because of <span className="reason">SYNDICATION DELAY</span>. It was submitted on {date}  </p>
                 );
       });
     }
@@ -114,6 +114,7 @@ export default class Blocked extends Component {
                       <div className="modal-blocked">
                         <div className="blocked-container">
                           <h3 className="blocked-header">Blocked Reviews</h3>
+                          <span className="disclaimer">**Note: Reviews can appear in the list multiple times because of different blocking reasons</span>
                           <button onClick={this.closeBlocked} type="button" className="close close-blocked" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>

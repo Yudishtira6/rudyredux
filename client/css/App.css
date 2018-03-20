@@ -83,10 +83,6 @@ form {
   border-bottom: 5px solid #01b08e;
 }
 
-.nav-component:hover .header-review-number {
-  background: #E76D25;
-}
-
 .nav-component h3 {
   line-height: 80px;
   font-size: 1rem;
@@ -109,6 +105,13 @@ form {
   list-style: none;
   width: 100%;
   text-align: left;
+}
+
+.keys p {
+  font-size: 10px;
+  text-align: center;
+  margin: 0;
+  text-decoration: underline;
 }
 
 .keys li {

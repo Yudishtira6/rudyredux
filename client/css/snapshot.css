@@ -20,7 +20,7 @@
 .snap-details {
   display: grid;
   grid-template-columns: repeat(2, [col] 1fr);
-  border: 1px solid black;
+  border: 1px solid #d6d6d6;
   align-items: stretch;
 }
 
@@ -47,9 +47,14 @@
   align-self: stretch;
   text-align: center;
   padding-top: 1rem;
-  border-right: 1px solid black;
+  border-right: 1px solid #d6d6d6;
   background-color: #f4f3f3;
   cursor: pointer;
+}
+
+.sub-one p {
+  padding-top: 6px;
+  padding-bottom: 8px;
 }
 
 .sub-one:hover {
@@ -69,6 +74,11 @@
   cursor: pointer;
 }
 
+.sub-two p {
+  padding-top: 6px;
+  padding-bottom: 8px;
+}
+
 .sub-two:hover {
   background: #e6e6e6;
 }
@@ -81,7 +91,7 @@
   align-self: stretch;
   text-align: center;
   grid-column: col / span 2;
-  padding-top: 26px;
+  padding-top: 27px;
   padding-bottom: 16px;
   background-color: #f4f3f3;
   cursor: pointer;

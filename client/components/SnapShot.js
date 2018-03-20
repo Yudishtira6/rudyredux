@@ -84,7 +84,7 @@ export default class SnapShot extends React.Component {
                         {totalSyndicated}
                         {blocked}
                       </div>
-                      <div onClick={this.switchFamily} className="snap-details family">
+                      <div className="snap-details family">
                           <div className="main family">
                               <h2>{this.props.data.family}</h2>
                               <h2>DISPLAYED FAMILY REVIEWS</h2>
