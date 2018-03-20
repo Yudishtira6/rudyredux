@@ -3,15 +3,15 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var rp = require('request-promise');
-var nativeContentTotal = 0;
-var nativeRatingsOnlyTotal = 0;
-var nativeDisplayTotal = 0;
-var syndDisplayTotal = 0;
-var famDisplayTotal = 0;
-var allReviewDisplayTotal = 0;
-var switchboardArray = [];
-var fs = require('fs')
-var path = require('path')
+//var nativeContentTotal = 0;
+//var nativeRatingsOnlyTotal = 0;
+//var nativeDisplayTotal = 0;
+//var syndDisplayTotal = 0;
+//var famDisplayTotal = 0;
+//var allReviewDisplayTotal = 0;
+//var switchboardArray = [];
+//var fs = require('fs')
+//var path = require('path')
 
 router.get('/', function(req, res){
   res.render('index')
@@ -755,6 +755,7 @@ router.route('/dashboard').post(function(req,res) {
     });
 });
 
+/*
 // On user input - detailed call to get syndication data
 router.route('/insertTest')
 .post(function(req,res) {
@@ -1345,4 +1346,5 @@ router.get('/getAll', function(req, res) {
  var data = [{clientName:"cvsPharmacy",productId:911321}];
  res.json(data)
 });
+*/
 module.exports = router;
