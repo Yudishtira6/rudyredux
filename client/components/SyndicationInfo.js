@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Slider from 'react-slick';
 import SourceData from './SourceData';
-import Loader from './loader';
+
 export default class SyndicationInfo extends Component {
   constructor(props){
     super(props);

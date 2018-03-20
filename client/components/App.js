@@ -29,7 +29,7 @@ export default class App extends React.Component {
                   displayingReviews:[],
                   ratingsOnlyReviews:[],
                   blockedReviews:[],
-                  image:"https://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg",
+                  image:"http://moziru.com/images/narwhal-clipart-cute-4.jpg",
                   productName:"Product name",
                   snapNative:0,
                   snapSyndicated:0,

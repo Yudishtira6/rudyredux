@@ -1,7 +1,5 @@
 import React from 'react';
-
-
-import Loader from './loader';
+import Loader from './Loader';
 export default class SnapShot extends React.Component {
     constructor(props) {
     super(props);

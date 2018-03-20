@@ -74,11 +74,11 @@ export default class FamilyInfo extends Component {
     //inject loader to family dashboard
     }else if(this.props.loading && !this.props.error){
       familyProducts=(<div className="loader-top">
-                     <i className="fa left fa-circle" aria-hidden="true"></i>
-                     <i className="fa middle fa-circle" aria-hidden="true"></i>
-                     <i className="fa right fa-circle" aria-hidden="true"></i>
-                     <p> Calculating...</p>
-                  </div>)
+                        <i className="fas left fa-circle"></i>
+                        <i className="fas middle fa-circle"></i>
+                        <i className="fas right fa-circle"></i>
+                        <p> Calculating...</p>
+                      </div>)
     //inject error message if error is present
     }else if(this.props.error){
       familyProducts=(<div className="error-message">
