@@ -102,13 +102,15 @@ export default class App extends React.Component {
 
 
         //Get oracle data.
+        console.log("HITTING ORACLE ROUTE********");
         axios.post('/oracle',
              {
                clientName: client,
                productId: productId
              }
              ).then(function(response) {
-               console.log("SOURCE OBJECT RIGHT HERE",response.data);
+
+               console.log("******ORACLE ROUTE SUCCEEDED!!!!", response);
                  if(response.data.family.length > 0 && response.data.syndication.length > 0){
                   e.setState({sourceObject:response.data}, e.getSyndicationData);
 
@@ -127,7 +129,7 @@ export default class App extends React.Component {
 
               }).catch(function(error){
               });
-              console.log("ABOUT TO GET DASHBOARD DATA");
+              console.log("ABOUT TO GET DASHBOARD DATA*********");
               //Get Dashboard information
               axios.post('/dashboard',
               {
@@ -135,7 +137,7 @@ export default class App extends React.Component {
                 productId: productId,
               }
                ).then(function(response) {
-                  console.log("DASHBOARD GETTING SET**********", response.data.dashboard);
+                  console.log("********DASHBOARD SUCCEEEDED!!!", response.data.dashboard);
               //create dashboard
                 e.setState({  snapTotal:response.data.dashboard.totalReviews,
                               total:response.data.dashboard.totalReviews,
@@ -153,6 +155,7 @@ export default class App extends React.Component {
               });
 
           //Get product information block
+          console.log("ABOUT TO RUN GET PRODUCT ROUTE***********")
           axios.post('/getProduct',
             querystring.stringify({
               clientName: client,
@@ -162,6 +165,7 @@ export default class App extends React.Component {
                 "Content-Type": "application/x-www-form-urlencoded"
               }
             }).then(function(response) {
+              console.log("********GET PRODUCT ROUTE SUCCEEEDED!!!!!", response);
               //create product information
               e.setState({image:response.data.Results[0].ImageUrl,
                           client:client,
@@ -176,6 +180,7 @@ export default class App extends React.Component {
 
 
                 //get all 1st page of all reviews
+                console.log("ABOUT TO GET PAGINATE ALL ROUTE!!!***********");
                 axios.post('/paginateAll',
                          {
                             clientName:client,
@@ -183,6 +188,7 @@ export default class App extends React.Component {
                             pageNumber:0
                          }
                          ).then(function(response) {
+                          console.log("*************PAGINATE ALL ROUTE SUCCEEDED!!!!")
                            //set state for reviews to display
                            e.setState({displayingReviews:response.data.Results})
                        }).catch(function(error){
@@ -200,12 +206,14 @@ export default class App extends React.Component {
 
       var self=this;
       //Get synication Dashboard
+      console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********")
       axios.post('/syndicationDashboard',
                {
                   clientName:this.state.client,
                   sourceObject: this.state.sourceObject,
                }
                ).then(function(response) {
+                  console.log("**********SYNDICATION DASHBOARD SUCCEEEDED!!!!!!",response);
                  self.setState({syndicationObject:response.data, loading:false, loadingSyndicated:false}, self.getBlocked);
              }).catch(function(error){
                console.log('error: ',error);
@@ -213,12 +221,14 @@ export default class App extends React.Component {
              });
 
             //get family dashboard data
+              console.log("ABOUT TO RUN THE FAMILY DASHBOARD************");
             axios.post('/familyDashboard',
                       {
                         clientName:this.state.client,
                         sourceObject: this.state.sourceObject
                       }
                       ).then(function(response) {
+                      console.log("**********FAMILY DASHBOARD SUCCEED!!!!!");
                       let familyObject=[];
                       familyObject.push(response.data);
                       self.setState({familyObject:familyObject, loadingFamily:false});
@@ -231,13 +241,14 @@ export default class App extends React.Component {
     getBlocked(){
                     var self=this;
                     //BOB's Blocked Calls here*******
+                    console.log("ABOUT TO RUN BLOCKED REVIEWS CALL*******");
                     axios.post('/blockedReviews',
                              {
                                 sourceObject:this.state.sourceObject,
                                 syndicationObject: this.state.syndicationObject
 
                              }).then(function(response) {
-                              console.log("Blocked Reviews route here*******",response.data);
+                              console.log("********BLOCKED REVIEWS SUCCEEDE!!!!",response.data);
                               self.setState({modBlocked:response.data.modBlocked,
                                              syndBlocked:response.data.syndDelayBlocked,
                                              localeBlocked:response.data.localeBlocked
@@ -245,6 +256,7 @@ export default class App extends React.Component {
                            }).catch(function(error){
                              console.log('error: ',error);
                            });
+                            console.log("ABOUT TO RUN DASHBOARD BLOCKED ROUTE***********");
                            axios.post('/blockedDashboard',
                                     {
                                        sourceObject:this.state.sourceObject,
@@ -254,7 +266,7 @@ export default class App extends React.Component {
 
                                     }
                                     ).then(function(response) {
-                                     console.log("Blocked Dashboard response route here*******",response.data, response.data.totalSyndicatedNative);
+                                     console.log("*********BLOCKED DASHBOARD SUCCEEEDED!!!!!!!",response.data, response.data.totalSyndicatedNative);
                                      self.setState({snapStopped:response.data.blockedSyndicated, snapSyndicated:response.data.totalSyndicatedNative, snapBlockedLoading:false});
                                   }).catch(function(error){
                                     console.log('error: ',error);
