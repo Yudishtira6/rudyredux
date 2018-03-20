@@ -21,7 +21,7 @@ export default class SyndicationInfo extends Component {
       slidesToShow:1,
     };
 
-    let sourceData=<p className="no-data">No Source Data Found</p>;
+    let sourceData=<p className="no-data">No Syndication Data Found</p>;
     if(this.props.data.length>0 && !this.props.loading && !this.props.error){
     sourceData=this.props.data.map((source)=>{
           let modCodes=source.modCodes.map((code)=>{

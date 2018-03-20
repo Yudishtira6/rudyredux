@@ -64,6 +64,7 @@ export default class FamilyInfo extends Component {
                     <span className="family-id">{total}</span>
                   </div>
                   <ul className="keys">
+                    <p>Select a productID below to display reviews</p>
                     {keys}
                   </ul>
                 </div>
