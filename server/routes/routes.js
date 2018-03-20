@@ -38,7 +38,7 @@ router.route('/oracle').post(function(req,res){
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
   var source = {};
   var options = {
-    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=narwhal-jzzvybcdxam4',
+    uri: 'https://oracle-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=narwhal-jzzvybcdxam4',
     headers: {
         'User-Agent': 'Request-Promise'
     },
