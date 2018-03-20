@@ -38,7 +38,7 @@ router.route('/oracle').post(function(req,res){
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
   var source = {};
   var options = {
-    uri: 'https://oracle-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=narwhal-jzzvybcdxam4',
+    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=narwhal-jzzvybcdxam4',
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -97,11 +97,11 @@ router.route('/oracle').post(function(req,res){
 router.route('/syndicationDashboard').post(function(req,res){
   console.log('**************')
   console.log('Hitting /syndicationDashboard');
-  var clientName = req.body.clientName;
-  var source = req.body.sourceObject;
-  console.log('clientName: ',clientName);
-  console.log('source: ',source);
-  if (source['syndication'].length){
+  // var clientName = req.body.clientName;
+  // var source = req.body.sourceObject;
+  // console.log('clientName: ',clientName);
+  // console.log('source: ',source);
+  // if (source['syndication'].length){
     let HmacAuthRequestor = require('hmac-auth');
     let myRequestLib = require('request');
     let yourAPIKey = 'narwhal';
@@ -110,11 +110,11 @@ router.route('/syndicationDashboard').post(function(req,res){
     let request = hmacAuth.getClient(myRequestLib);
     var edgeArray = [];
     var edgeBody = {};
-    console.log('/syndicationDashboard - clientName: ',clientName);
-    console.log('/syndicationDashboard - source: ',source);
+    // console.log('/syndicationDashboard - clientName: ',clientName);
+    // console.log('/syndicationDashboard - source: ',source);
     request({
       method : 'GET',
-      url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
+      url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/edges/to/cvspharamcy',
       timeout : 3000,
       json: true
     }, function (err, response, body) {
@@ -128,7 +128,7 @@ router.route('/syndicationDashboard').post(function(req,res){
       edgeBody = body;
       request({
         method : 'GET',
-        url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/displays/'+clientName,
+        url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/displays/cvspharamcy',
         timeout : 3000,
         json: true
       }, function (err, response, body) {
@@ -141,8 +141,9 @@ router.route('/syndicationDashboard').post(function(req,res){
         console.log('** SB Display this works just as expected!');
 
         // iterate through syndication sources
-        for(let i=0,len=source["syndication"].length;i<len;i++){
-          var syndClient = source["syndication"][i][0];
+        // for(let i=0,len=source["syndication"].length;i<len;i++){
+          // var syndClient = source["syndication"][i][0];
+          var syndClient = 'bengay'
           console.log('syndClient: ',syndClient);
           var displayObject = body["data"];
           var goal = displayObject[Object.keys(displayObject).find(key => key.toLowerCase() === syndClient.toLowerCase())];
@@ -153,15 +154,15 @@ router.route('/syndicationDashboard').post(function(req,res){
           var edgeObject = edgeBody["data"].find(x => x.sourceClientId === syndClient);
           var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":goal["sourceDisplayName"],"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
           edgeArray.push(drakeEdge);
-        }
+        // }
         console.log('edgeArray: ',edgeArray);
         res.json(edgeArray);
     });
     });
-  } else {
-    console.log('There is no syndication sources so no need to make the call');
-    res.json({})
-  }
+  // } else {
+    // console.log('There is no syndication sources so no need to make the call');
+    // res.json({})
+  // }
 });
 
 // blocked dashboard

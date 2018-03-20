@@ -85,7 +85,16 @@ export default class App extends React.Component {
     let client=document.getElementById('client').value.replace(/\s/g,'');
     let productId=document.getElementById('prodid').value.replace(/\s/g,'');
     this.checkForm();
-
+    axios.post('/syndicationDashboard',
+             {
+             }
+             ).then(function(response) {
+                console.log("**********SYNDICATION DASHBOARD SUCCEEEDED!!!!!!",response);
+               self.setState({syndicationObject:response.data, loading:false, loadingSyndicated:false}, self.getBlocked);
+           }).catch(function(error){
+             console.log('error: ',error);
+              self.setState({loadingSyndicated:false, errorSyndicated:true});
+           });
     //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
     if(client && productId && productId!==this.state.productId){
         //set loaders and defaults
