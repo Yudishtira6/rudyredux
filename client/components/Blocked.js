@@ -104,7 +104,7 @@ export default class Blocked extends Component {
      delay=this.props.syndBlocked.map((review)=>{
         var date=moment(review.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
         return (
-                <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.sourceClient} is blocked because of <span className="reason">SYNDICATION DELAY</span>. It was submitted on {date}  </p>
+                <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of <span className="reason">SYNDICATION DELAY</span>. It was submitted on {date}  </p>
                 );
       });
     }

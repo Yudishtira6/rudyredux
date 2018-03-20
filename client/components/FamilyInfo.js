@@ -15,7 +15,7 @@ export default class FamilyInfo extends Component {
     this.props.paginateFamily('family',e.target.innerHTML.split(' ')[0])
   }
   render() {
-    var colors=["#4cc4f6","#fcb150","#12a8ab","#007aff","#e84c64","#01b08d","#e94cb9","#884ce9","#4ce9af","#4ee94c","#e9864c","#cae94c"];
+    var colors=["#4cc4f6","#fcb150","#12a8ab","#007aff","#e84c64","#01b08d","#e94cb9","#884ce9","#4ce9af","#4ee94c","#e9864c","#cae94c","#ad1111","#28ad11","#119dad","#8111ad","#ad11a7","#ad1166","#cff700","#f7b900","#f79600","#f7ddde"];
     let familyProducts=<p className="no-data">NO FAMILIES YET</p>
     //when there is family data, and the page isn't loading, and does not have errors map through the family object, and create a segment of the donut graph, and a key.
     if(this.props.data.length > 0 && !this.props.loading && !this.props.error){

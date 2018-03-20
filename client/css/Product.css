@@ -98,6 +98,7 @@
   padding-bottom: 56px;
   margin-left: 44px;
   position: relative;
+  overflow-x: scroll;
 }
 
 .source-data h3 {
@@ -114,11 +115,12 @@
 .slick-slide h6 {
   font-weight: bold;
   overflow-wrap: break-word;
+  text-align: left;
+  margin-left: 2rem;
 }
 
 .slick-slide h6 span {
   font-weight: lighter;
-  margin-left: .5rem;
 }
 
 .slick-prev {

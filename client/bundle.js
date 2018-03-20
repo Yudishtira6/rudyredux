@@ -57706,7 +57706,7 @@ class Blocked extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
             review.Id
           ),
           ' from ',
-          review.sourceClient,
+          review.SourceClient,
           ' is blocked because of ',
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'span',
@@ -58078,7 +58078,7 @@ class FamilyInfo extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     this.props.paginateFamily('family', e.target.innerHTML.split(' ')[0]);
   }
   render() {
-    var colors = ["#4cc4f6", "#fcb150", "#12a8ab", "#007aff", "#e84c64", "#01b08d", "#e94cb9", "#884ce9", "#4ce9af", "#4ee94c", "#e9864c", "#cae94c"];
+    var colors = ["#4cc4f6", "#fcb150", "#12a8ab", "#007aff", "#e84c64", "#01b08d", "#e94cb9", "#884ce9", "#4ce9af", "#4ee94c", "#e9864c", "#cae94c", "#ad1111", "#28ad11", "#119dad", "#8111ad", "#ad11a7", "#ad1166", "#cff700", "#f7b900", "#f79600", "#f7ddde"];
     let familyProducts = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'p',
       { className: 'no-data' },
@@ -59846,7 +59846,8 @@ class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       locale: '',
       source: '',
       rating: '',
-      title: ''
+      title: '',
+      page: ''
     };
     this.handlePage = this.handlePage.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
@@ -59857,11 +59858,16 @@ class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     this.props.pagination(i, this.props.title);
     console.log("PAGINATION TYPE TITLE*****", this.props.title);
   }
-  clickHandler(reviewText, reviewId, user, locale, source, rating, title, color) {
-    this.setState({ clicked: true, reviewText: reviewText, reviewId: reviewId, user: user, locale: locale, source: source, rating: rating, title: title });
+  clickHandler(reviewText, reviewId, user, locale, source, rating, title, page) {
+    let syndPage;
+    console.log("PAGE AT GRID HERE:********", page);
+    if (page) {
+      syndPage = page;
+    }
+    this.setState({ clicked: true, reviewText: reviewText, reviewId: reviewId, user: user, locale: locale, source: source, rating: rating, title: title, page: syndPage });
   }
   closeReview() {
-    this.setState({ clicked: false, reviewText: '', reviewId: '', user: '', locale: '', source: '', rating: '', title: '' });
+    this.setState({ clicked: false, reviewText: '', reviewId: '', user: '', locale: '', source: '', rating: '', title: '', page: '' });
   }
 
   render() {
@@ -59886,6 +59892,19 @@ class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     }
     let Items;
     let reviewText;
+    let page;
+    if (this.state.page) {
+      page = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'span',
+        { className: 'source-page-link' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'a',
+          { href: this.state.page, target: '_blank' },
+          this.state.source,
+          ' Page'
+        )
+      );
+    }
     if (this.state.clicked) {
       reviewText = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
@@ -59944,7 +59963,8 @@ class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
             'p',
             { className: 'review-text' },
             this.state.reviewText
-          )
+          ),
+          page
         )
       );
     }
@@ -60041,7 +60061,8 @@ class GridLine extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick() {
-    this.props.clickHandler(this.props.data.ReviewText, this.props.data.Id, this.props.data.UserNickname, this.props.data.ContentLocale, this.props.data.SourceClient, this.props.data.Rating, this.props.data.Title);
+    console.log("CLICKING ON THE REVIEW", this.props.data.SyndicationSource.ContentLink);
+    this.props.clickHandler(this.props.data.ReviewText, this.props.data.Id, this.props.data.UserNickname, this.props.data.ContentLocale, this.props.data.SourceClient, this.props.data.Rating, this.props.data.Title, this.props.data.SyndicationSource.ContentLink);
   }
   render() {
     // set css classes dynamically depending on what type of review.

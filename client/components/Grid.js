@@ -14,6 +14,7 @@ class Grid extends React.Component {
                   source:'',
                   rating:'',
                   title:'',
+                  page:'',
                   }
     this.handlePage=this.handlePage.bind(this);
     this.clickHandler=this.clickHandler.bind(this);
@@ -24,11 +25,16 @@ class Grid extends React.Component {
     this.props.pagination(i, this.props.title);
     console.log("PAGINATION TYPE TITLE*****", this.props.title)
    }
-  clickHandler(reviewText,reviewId, user, locale, source, rating, title, color){
-    this.setState({clicked:true,reviewText:reviewText, reviewId:reviewId, user:user, locale:locale, source:source, rating:rating, title:title});
+  clickHandler(reviewText,reviewId, user, locale, source, rating, title, page){
+    let syndPage;
+    console.log("PAGE AT GRID HERE:********",page)
+    if(page){
+      syndPage=page;
+    }
+    this.setState({clicked:true,reviewText:reviewText, reviewId:reviewId, user:user, locale:locale, source:source, rating:rating, title:title, page:syndPage});
   }
   closeReview(){
-  this.setState({clicked:false, reviewText:'', reviewId:'',user:'',locale:'',source:'',rating:'',title:''});
+  this.setState({clicked:false, reviewText:'', reviewId:'',user:'',locale:'',source:'',rating:'',title:'', page:''});
   }
 
 render(){
@@ -53,6 +59,10 @@ render(){
   }
   let Items;
   let reviewText;
+  let page;
+  if(this.state.page){
+    page=<span className="source-page-link"><a href={this.state.page} target="_blank">{this.state.source} Page</a></span>;
+  }
   if(this.state.clicked){
     reviewText=(
                   <div className="review-modal">
@@ -69,6 +79,7 @@ render(){
                       {rating}
                       <h5 className="review-title">{this.state.title}</h5>
                       <p className="review-text">{this.state.reviewText}</p>
+                      {page}
                     </div>
                   </div>
                 );
