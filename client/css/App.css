@@ -64,23 +64,12 @@ form {
   display: inline-block;
   border-bottom: 5px solid #f4f3f3;
   padding-top: .5rem;
-  cursor: pointer;
 }
 
 .nav-component:first-child {
   padding-left: 1rem;
   box-sizing: border-box;
   border-bottom-left-radius: 10px;
-}
-
-.nav-component:first-child:hover {
-  border-bottom-left-radius: 10px;
-  border-top-left-radius: 10px;
-}
-
-.nav-component:hover {
-  background: #e6e6e6;
-  border-bottom: 5px solid #01b08e;
 }
 
 .nav-component h3 {
@@ -145,7 +134,7 @@ form {
 .chart-text {
   position: absolute;
   top: 118px;
-  margin-left: 136px;
+  margin-left: 147px;
   color: black;
   word-wrap: break-word;
   width: 82px;

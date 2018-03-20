@@ -51404,8 +51404,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     //set default headers for axios functions
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-    let client = document.getElementById('client').value;
-    let productId = document.getElementById('prodid').value;
+    let client = document.getElementById('client').value.replace(/\s/g, '');
+    let productId = document.getElementById('prodid').value.replace(/\s/g, '');
     this.checkForm();
 
     //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
@@ -58060,14 +58060,7 @@ class Blocked extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       });
     }
     let blockedContainer;
-    // 
-    // if(this.props.syndBlocked || this.props.localeBlocked || this.props.modBlocked){
-    //   blockedContent=(<div>
-    //                     {locale}
-    //                     {mod}
-    //                     {delay}
-    //                   </div>);
-    // }
+
     if (this.props.blocked) {
       blockedContainer = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
@@ -60217,6 +60210,7 @@ class Grid extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   clickHandler(reviewText, reviewId, user, locale, source, rating, title, page) {
     let syndPage;
     console.log("PAGE AT GRID HERE:********", page);
+    console.log(page);
     if (page) {
       syndPage = page;
     }
@@ -60417,8 +60411,15 @@ class GridLine extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick() {
-    console.log("CLICKING ON THE REVIEW", this.props.data.SyndicationSource.ContentLink);
-    this.props.clickHandler(this.props.data.ReviewText, this.props.data.Id, this.props.data.UserNickname, this.props.data.ContentLocale, this.props.data.SourceClient, this.props.data.Rating, this.props.data.Title, this.props.data.SyndicationSource.ContentLink);
+    console.log("CLICKING ON A REVIEW EHRE***** HERES THE DATA", this.props);
+    let page = '';
+    if (this.props.data.SyndicationSource) {
+      console.log("YES ITS HERE");
+      this.props.clickHandler(this.props.data.ReviewText, this.props.data.Id, this.props.data.UserNickname, this.props.data.ContentLocale, this.props.data.SourceClient, this.props.data.Rating, this.props.data.Title, this.props.data.SyndicationSource.ContentLink);
+    } else {
+      console.log("NOPE NO CONTENT LINK HERE***");
+      this.props.clickHandler(this.props.data.ReviewText, this.props.data.Id, this.props.data.UserNickname, this.props.data.ContentLocale, this.props.data.SourceClient, this.props.data.Rating, this.props.data.Title);
+    }
   }
   render() {
     // set css classes dynamically depending on what type of review.
@@ -60770,7 +60771,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         if (this.props.blockedLoading) {
             totalSyndicated = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: 'sub-one' },
+                { onClick: this.switchSyndicated, className: 'sub-one' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'p',
                     null,

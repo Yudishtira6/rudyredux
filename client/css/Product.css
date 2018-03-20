@@ -1,7 +1,7 @@
 .tiles {
   margin-top: 2rem;
   display: inline-block;
-  width: 30%;
+  width: 387px;
   text-align: center;
   box-sizing: border-box;
   background-color: #f4f3f3;
@@ -15,7 +15,7 @@
 
 .product-container {
   margin-left: 0;
-  margin-right: 12px;
+  margin-right: -13px;
 }
 
 .product-title {
@@ -53,7 +53,7 @@
 
 .syndication-container {
   height: 317px;
-  width: 33%;
+  width: 396px;
   display: inline-block;
   margin-left: 28px;
   background: black;
@@ -85,7 +85,7 @@
   text-align: center;
   padding: 1rem;
   color: white;
-  background-color: #247dd8;
+  background-color: #a63ce8;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
@@ -96,7 +96,7 @@
 
 .family-container {
   padding-bottom: 56px;
-  margin-left: 44px;
+  margin-left: 15px;
   position: relative;
   overflow-x: scroll;
 }

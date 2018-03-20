@@ -28,6 +28,7 @@ class Grid extends React.Component {
   clickHandler(reviewText,reviewId, user, locale, source, rating, title, page){
     let syndPage;
     console.log("PAGE AT GRID HERE:********",page)
+    console.log(page);
     if(page){
       syndPage=page;
     }

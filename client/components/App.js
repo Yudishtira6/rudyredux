@@ -82,8 +82,8 @@ export default class App extends React.Component {
     //set default headers for axios functions
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-    let client=document.getElementById('client').value;
-    let productId=document.getElementById('prodid').value;
+    let client=document.getElementById('client').value.replace(/\s/g,'');
+    let productId=document.getElementById('prodid').value.replace(/\s/g,'');
     this.checkForm();
 
     //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
