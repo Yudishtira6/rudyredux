@@ -51563,7 +51563,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
 
     }).then(function (response) {
       console.log("*********BLOCKED DASHBOARD SUCCEEEDED!!!!!!!", response.data, response.data.totalSyndicatedNative);
-      self.setState({ snapStopped: response.data.blockedSyndicated, snapSyndicated: response.data.totalSyndicatedNative, snapBlockedLoading: true });
+      self.setState({ snapStopped: response.data.blockedSyndicated, snapSyndicated: response.data.totalSyndicatedNative, snapBlockedLoading: false });
     }).catch(function (error) {
       console.log('error: ', error);
     });
@@ -60781,52 +60781,8 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
             )
         );
         if (this.props.blockedLoading) {
-            totalSyndicated = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                { onClick: this.switchSyndicated, className: 'sub-one' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { id: 'container' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { id: 'beaker' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'div',
-                            { id: 'liquid' },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' })
-                        )
-                    )
-                )
-            );
-            blocked = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                { className: 'sub-two' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { id: 'container' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { id: 'beaker' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'div',
-                            { id: 'liquid' },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'bubble' })
-                        )
-                    )
-                )
-            );
+            totalSyndicated = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { onClick: this.switchSyndicated, className: 'sub-one' });
+            blocked = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'sub-two' });
         }
         let snapShot = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',

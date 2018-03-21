@@ -267,7 +267,7 @@ export default class App extends React.Component {
                                     }
                                     ).then(function(response) {
                                      console.log("*********BLOCKED DASHBOARD SUCCEEEDED!!!!!!!",response.data, response.data.totalSyndicatedNative);
-                                     self.setState({snapStopped:response.data.blockedSyndicated, snapSyndicated:response.data.totalSyndicatedNative, snapBlockedLoading:true});
+                                     self.setState({snapStopped:response.data.blockedSyndicated, snapSyndicated:response.data.totalSyndicatedNative, snapBlockedLoading:false});
                                   }).catch(function(error){
                                     console.log('error: ',error);
                                   });
