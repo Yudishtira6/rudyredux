@@ -139,7 +139,7 @@ router.route('/syndicationDashboard').post(function(req,res){
             res.json(displayErr);
           }
           if(displayBody){
-            console.log('** SB Display this works just as expected!');
+            console.log('** SB Display this works just as expected! ');
             // iterate through syndication sources
             for(let i=0,len=source["syndication"].length;i<len;i++){
               var syndClient = source["syndication"][i][0];
