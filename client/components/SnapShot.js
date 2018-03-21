@@ -49,12 +49,36 @@ export default class SnapShot extends React.Component {
     if(this.props.blockedLoading){
       totalSyndicated=(
                         <div onClick={this.switchSyndicated} className="sub-one">
-                            <p>Doing Science...</p>
+                        <div id="container">
+                          <div id="beaker">
+                          <div id="liquid">
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                          </div>
+                          </div>
+                          </div>
                         </div>
                       );
       blocked= (
                 <div className="sub-two">
-                    <p>Doing Science...</p>
+                <div id="container">
+                  <div id="beaker">
+                  <div id="liquid">
+                    <div className="bubble"></div>
+                    <div className="bubble"></div>
+                    <div className="bubble"></div>
+                    <div className="bubble"></div>
+                    <div className="bubble"></div>
+                    <div className="bubble"></div>
+                    <div className="bubble"></div>
+                  </div>
+                  </div>
+                  </div>
                 </div>
                 )
     }

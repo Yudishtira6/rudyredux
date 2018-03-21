@@ -85,7 +85,7 @@ export default class App extends React.Component {
     let client=document.getElementById('client').value.replace(/\s/g,'');
     let productId=document.getElementById('prodid').value.replace(/\s/g,'');
     this.checkForm();
-    
+
     //initiate loader and functions for reviews only if there is a value for client and product ID and it's not the same product.
     if(client && productId && productId!==this.state.productId){
         //set loaders and defaults
@@ -267,7 +267,7 @@ export default class App extends React.Component {
                                     }
                                     ).then(function(response) {
                                      console.log("*********BLOCKED DASHBOARD SUCCEEEDED!!!!!!!",response.data, response.data.totalSyndicatedNative);
-                                     self.setState({snapStopped:response.data.blockedSyndicated, snapSyndicated:response.data.totalSyndicatedNative, snapBlockedLoading:false});
+                                     self.setState({snapStopped:response.data.blockedSyndicated, snapSyndicated:response.data.totalSyndicatedNative, snapBlockedLoading:true});
                                   }).catch(function(error){
                                     console.log('error: ',error);
                                   });
