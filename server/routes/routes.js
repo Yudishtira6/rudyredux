@@ -38,7 +38,7 @@ router.route('/oracle').post(function(req,res){
   console.log('clientName: ',req.body.clientName,'productId: ',req.body.productId);
   var source = {};
   var options = {
-    uri: 'https://oracle-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/1/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=narwhal-jzzvybcdxam4',
+    uri: 'http://oracle-bazaar-int.prod.us-east-1.nexus.bazaarvoice.com/api/3/product/'+req.body.clientName+'/'+req.body.productId+'/sources?apikey=narwhal-jzzvybcdxam4',
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -115,7 +115,7 @@ router.route('/syndicationDashboard').post(function(req,res){
     console.log('/syndicationDashboard - source: ',source);
     request({
       method : 'GET',
-      url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
+      url : 'https://sb2-bazaar-int.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
       timeout : 3000,
       json: true
     }, function (err, response, body) {
@@ -129,7 +129,7 @@ router.route('/syndicationDashboard').post(function(req,res){
       edgeBody = body;
       request({
         method : 'GET',
-        url : 'https://sb2-bazaar.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/displays/'+clientName,
+        url : 'https://sb2-bazaar-int.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/displays/'+clientName,
         timeout : 3000,
         json: true
       }, function (err, response, body) {
