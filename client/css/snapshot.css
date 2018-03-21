@@ -155,6 +155,16 @@
 }
 
 .svg-box {
-  width: 50px;
+  width: 34px;
   margin: auto;
+  fill: #23af00;
+  transition: .3s;
+}
+
+.beaker-hidden {
+  position: relative;
+  z-index: 5;
+  width: 0;
+  height: 0;
+  transform: .3s;
 }

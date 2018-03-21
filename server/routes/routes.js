@@ -14,7 +14,7 @@ router.route('/getProduct').post(function(req,res){
   var clientName = req.body.clientName;
   var productId = req.body.productId;
   var options = {
-    uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=narwhal&clientName='+req.body.clientName+'&filter=id:'+req.body.productId,
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/products.json?apiVersion=5.4&appKey=narwhal&clientName='+req.body.clientName+'&filter=id:'+req.body.productId,
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -67,12 +67,12 @@ router.route('/oracle').post(function(req,res){
             if ((data.products[i]['sources'][0]) === ('FAMILY')) {
               var innerFamily = [];
               family.push(innerFamily)
-              innerFamily.push((data.products[i]['client']), (data.products[i]['internalId']))
+              innerFamily.push((data.products[i]['client']), (data.products[i]['externalId']))
             }
-            else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC') || (data.products[i]['sources'][0]) === ('internal_ID')) {
+            else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC') || (data.products[i]['sources'][0]) === ('external_ID')) {
               var innerSyndication = [];
               syndication.push(innerSyndication)
-              innerSyndication.push((data.products[i]['client']), (data.products[i]['internalId']))
+              innerSyndication.push((data.products[i]['client']), (data.products[i]['externalId']))
             }
             source.syndication = syndication;
             source.family = family;
@@ -187,7 +187,7 @@ router.route('/blockedDashboard').post(function(req,res) {
   // Will use countdown strategy employed for familes - easier b/c it is limit 1
   // may roll this into dashboard
   let displaySyndOpt = {
-    uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&filter=IsSyndicated:true&keyproperty=syndication&limit=1',
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&filter=IsSyndicated:true&keyproperty=syndication&limit=1',
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -207,7 +207,7 @@ router.route('/blockedDashboard').post(function(req,res) {
           console.log('syndClient: ',syndClient);
           console.log('productId: ', syndProduct);
               let hagopt = {
-                uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+syndClient+'&ApiVersion=5.4&filter=productid:'+syndProduct+'&limit=1&excludeFamily=true',
+                uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+syndClient+'&ApiVersion=5.4&filter=productid:'+syndProduct+'&limit=1&excludeFamily=true',
                 headers: {
                     'User-Agent': 'Request-Promise'
                 },
@@ -256,7 +256,7 @@ router.route('/familyDashboard').post(function(req,res) {
   for (let i = 0;i<len;i++){
     // make hagrid calls to get review totals
     let hagopt = {
-      uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+source.family[i][0]+'&ApiVersion=5.4&filter=productid:'+source.family[i][1]+'&limit=1&excludeFamily=true',
+      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+source.family[i][0]+'&ApiVersion=5.4&filter=productid:'+source.family[i][1]+'&limit=1&excludeFamily=true',
       headers: {
           'User-Agent': 'Request-Promise'
       },
@@ -295,7 +295,7 @@ router.route('/paginateAll').post(function(req,res){
   var productId = req.body.productId;
   var pageNumber = req.body.pageNumber;
   let pagopt = {
-    uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&limit=100&offset='+(pageNumber*100),
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&keyproperty=syndication&limit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -324,7 +324,7 @@ router.route('/paginateDisplayableSyndicated').post(function(req,res){
   var productId = req.body.productId;
   var pageNumber = req.body.pageNumber;
   let pagopt = {
-    uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&filter=IsSyndicated:true&keyproperty=syndication&limit=100&offset='+(pageNumber*100),
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&filter=IsSyndicated:true&keyproperty=syndication&limit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -353,7 +353,7 @@ router.route('/paginateNative').post(function(req,res){
   var productId = req.body.productId;
   var pageNumber = req.body.pageNumber;
   let pagopt = {
-    uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&excludeFamily=true&limit=100&offset='+(pageNumber*100),
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+productId+'&excludeFamily=true&limit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -382,7 +382,7 @@ router.route('/paginateFamily').post(function(req,res){
   var familyProductId = req.body.familyProductId;
   var pageNumber = req.body.pageNumber;
   let pagopt = {
-    uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+familyProductId+'&excludeFamily=true&limit=100&offset='+(pageNumber*100),
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+clientName+'&ApiVersion=5.4&filter=productid:'+familyProductId+'&excludeFamily=true&limit=100&offset='+(pageNumber*100),
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -421,7 +421,7 @@ router.route('/blockedReviews').post(function(req,res){
     console.log('locales: ',syndicationObject[i]["locales"]);
     // modcode blocked
     var hagmodopt = {
-      uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ModeratorCode:'+syndicationObject[i]["modCodes"].join()+'&attributes=moderatorCodes&limit=100',
+      uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ModeratorCode:'+syndicationObject[i]["modCodes"].join()+'&attributes=moderatorCodes&limit=100',
       headers: {
           'User-Agent': 'Request-Promise'
       },
@@ -440,7 +440,7 @@ router.route('/blockedReviews').post(function(req,res){
           var modCallsLeft = modloop;
           for(let j=1;j<modloop;j++){
             var hagmodloopopt = {
-              uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ModeratorCode:'+syndicationObject[i]["modCodes"].join()+'&attributes=moderatorCodes&limit=100&offset='+(j*100),
+              uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ModeratorCode:'+syndicationObject[i]["modCodes"].join()+'&attributes=moderatorCodes&limit=100&offset='+(j*100),
               headers: {
                   'User-Agent': 'Request-Promise'
               },
@@ -479,7 +479,7 @@ router.route('/blockedReviews').post(function(req,res){
         console.log('date: ',date);
         console.log('last: ',last);
         var hagdelayopt = {
-          uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=submissiontime:gt:'+parseInt(last.getTime()/1000)+'&attributes=moderatorCodes&limit=100',
+          uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=submissiontime:gt:'+parseInt(last.getTime()/1000)+'&attributes=moderatorCodes&limit=100',
           headers: {
               'User-Agent': 'Request-Promise'
           },
@@ -498,7 +498,7 @@ router.route('/blockedReviews').post(function(req,res){
               var delayCallsLeft = delayloop;
               for(let k=1;k<delayloop;k++){
                 var hagdelayloopopt = {
-                  uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=submissiontime:gt:'+parseInt(last.getTime()/1000)+'&attributes=moderatorCodes&limit=100&offset='+(k*100),
+                  uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=submissiontime:gt:'+parseInt(last.getTime()/1000)+'&attributes=moderatorCodes&limit=100&offset='+(k*100),
                   headers: {
                       'User-Agent': 'Request-Promise'
                   },
@@ -534,7 +534,7 @@ router.route('/blockedReviews').post(function(req,res){
         console.log('Hitting locale blocked call ...');
         console.log('Locale: ',syndicationObject[i]["locales"]);
         var haglocaleopt = {
-          uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ContentLocale:neq:'+syndicationObject[i]["locales"].join()+'&attributes=moderatorCodes&limit=100',
+          uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ContentLocale:neq:'+syndicationObject[i]["locales"].join()+'&attributes=moderatorCodes&limit=100',
           headers: {
               'User-Agent': 'Request-Promise'
           },
@@ -553,7 +553,7 @@ router.route('/blockedReviews').post(function(req,res){
               var localeCallsLeft = localeloop;
               for(let l=1;l<localeloop;l++){
                 var haglocaleloopopt = {
-                  uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ContentLocale:neq:'+syndicationObject[i]["locales"].join()+'&attributes=moderatorCodes&limit=100&offset='+(k*100),
+                  uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ContentLocale:neq:'+syndicationObject[i]["locales"].join()+'&attributes=moderatorCodes&limit=100&offset='+(k*100),
                   headers: {
                       'User-Agent': 'Request-Promise'
                   },
@@ -619,7 +619,7 @@ router.route('/dashboard').post(function(req,res) {
   console.log('clientName: ', clientName,'productId: ', productId);
   // batch call #1 - q0 syndicated total, q1 - review display total
   var batchOneOptions = {
-    uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhal&clientname='+clientName+'&keyproperty=syndication&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+productId+'&filter.q0=issyndicated:true&limit.q0=1&resource.q1=statistics&filter.q1=productid:'+productId+'&stats.q1=reviews',
+    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhal&clientname='+clientName+'&keyproperty=syndication&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+productId+'&filter.q0=issyndicated:true&limit.q0=1&resource.q1=statistics&filter.q1=productid:'+productId+'&stats.q1=reviews',
     headers: {
         'User-Agent': 'Request-Promise'
     },
@@ -640,7 +640,7 @@ router.route('/dashboard').post(function(req,res) {
       // batch call #2 - q0 num native reviews (reviews with content + ratingsOnly)
       // q1 num ratingsOnly native reviews
       var batch2Options = {
-        uri: 'http://hagrid-bazaar-internal.prod.us-east-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhal&clientname='+clientName+'&excludeFamily=true&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+productId+'&limit.q0=1&resource.q1=reviews&filter.q1=productid:'+productId+'&limit.q1=1&filter.q1=isRatingsOnly:true',
+        uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/batch.json?appkey=narwhal&clientname='+clientName+'&excludeFamily=true&ApiVersion=5.4&resource.q0=reviews&filter.q0=productid:'+productId+'&limit.q0=1&resource.q1=reviews&filter.q1=productid:'+productId+'&limit.q1=1&filter.q1=isRatingsOnly:true',
         headers: {
             'User-Agent': 'Request-Promise'
         },
