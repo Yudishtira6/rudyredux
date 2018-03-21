@@ -86,6 +86,7 @@ router.route('/oracle').post(function(req,res){
     })
     .catch(function (err) {
         // API call failed...
+        console.log('Oracle Call Failed!!!!: ',err);
     });
 });
 
