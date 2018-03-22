@@ -110,58 +110,53 @@ router.route('/syndicationDashboard').post(function(req,res){
     let hmacAuth = new HmacAuthRequestor(yourAPIKey, yourSecretKey, myRequestLib);
     let request = hmacAuth.getClient(myRequestLib);
     var edgeArray = [];
+    var edgeBody = {};
     console.log('/syndicationDashboard - clientName: ',clientName);
     console.log('/syndicationDashboard - source: ',source);
     request({
       method : 'GET',
-      url : 'http://sb2-int.bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
+      url : 'https://sb2-bazaar-int.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
       timeout : 3000,
       json: true
-    }, function (edgeErr, edgeResponse, edgeBody) {
-        if(edgeErr){
-          // API call failed
-          console.log('/syndicationDashboard sb2 hmac edges call failed');
-          console.log('error: ',edgeErr);
-          res.json(edgeErr);
-        }
-      if(edgeBody){
-        console.log('edgeBody returned data as expected!');
-        request({
-          method : 'GET',
-          url : 'http://sb2-int.bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/v3/displays/'+clientName,
-          timeout : 3000,
-          json: true
-        }, function (displayErr, displayResponse, displayBody) {
-          if(displayErr){
-            // API call failed
-            console.log('/syndicationDashboard sb2 hmac display call failed');
-            console.log('error: ',displayErr);
-            res.json(displayErr);
-          }
-          if(displayBody){
-
-            console.log('** SB Display this works just as expected!');
-            // iterate through syndication sources
-            for(let i=0,len=source["syndication"].length;i<len;i++){
-              var syndClient = source["syndication"][i][0];
-              console.log('syndClient: ',syndClient);
-              var displayObject = displayBody["data"];
-              var goal = displayObject[Object.keys(displayObject).find(key => key.toLowerCase() === syndClient.toLowerCase())];
-              console.log('Switchboard Display body["data"]['+syndClient+']: ',goal);
-              console.log('sourceDisplayName: ', goal["sourceDisplayName"]);
-              console.log('logoImageName: ',goal["logoImageName"]);
-              console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
-              var edgeObject = edgeBody["data"].find(x => x.sourceClientId === syndClient);
-              var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":goal["sourceDisplayName"],"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
-              edgeArray.push(drakeEdge);
-            }
-            console.log('edgeArray: ',edgeArray);
-            res.json(edgeArray);
-          }
-
-        });
+    }, function (err, response, body) {
+      if(err){
+        // API call failed
+        console.log('/syndicationDashboard sb2 hmac edges call failed');
+        console.log('error: ',err);
+        res.json(err);
       }
-
+      console.log('this works just as expected!');
+      edgeBody = body;
+      request({
+        method : 'GET',
+        url : 'https://sb2-bazaar-int.prod.eu-west-1.nexus.bazaarvoice.com/api/v3/displays/'+clientName,
+        timeout : 3000,
+        json: true
+      }, function (err, response, body) {
+        if(err){
+          // API call failed
+          console.log('/syndicationDashboard sb2 hmac display call failed');
+          console.log('error: ',err);
+          res.json(err);
+        }
+        console.log('** SB Display this works just as expected!');
+        // iterate through syndication sources
+        for(let i=0,len=source["syndication"].length;i<len;i++){
+          var syndClient = source["syndication"][i][0];
+          console.log('syndClient: ',syndClient);
+          var displayObject = body["data"];
+          var goal = displayObject[Object.keys(displayObject).find(key => key.toLowerCase() === syndClient.toLowerCase())];
+          console.log('Switchboard Display body["data"]['+syndClient+']: ',goal);
+          console.log('sourceDisplayName: ', goal["sourceDisplayName"]);
+          console.log('logoImageName: ',goal["logoImageName"]);
+          console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
+          var edgeObject = edgeBody["data"].find(x => x.sourceClientId === syndClient);
+          var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":goal["sourceDisplayName"],"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
+          edgeArray.push(drakeEdge);
+        }
+        console.log('edgeArray: ',edgeArray);
+        res.json(edgeArray);
+    });
     });
   } else {
     console.log('There is no syndication sources so no need to make the call');
