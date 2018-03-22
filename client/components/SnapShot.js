@@ -137,7 +137,7 @@ export default class SnapShot extends React.Component {
                           type="rotate"
                           from="0 50 50"
                           to="180 90 10"
-                          dur="6s"
+                          dur="3s"
                           repeatCount="indefinite"/>
                           </circle>
                         <circle cx="34.33" cy="62.47" r="4.5" fill="#333333" >
@@ -146,7 +146,7 @@ export default class SnapShot extends React.Component {
                           type="rotate"
                             from="0 50 50"
                           to="180 90 10"
-                          dur="4s"
+                          dur="2s"
                           repeatCount="indefinite"/>
                           </circle>
                         <circle cx="34.33" cy="62.47" r="4.5" fill="#2d2d2d">
@@ -155,7 +155,7 @@ export default class SnapShot extends React.Component {
                           type="rotate"
                            from="0 50 50"
                           to="180 90 10"
-                          dur="6s"
+                          dur="1s"
                           repeatCount="indefinite"/>
                           </circle>
                         <circle cx="22.33" cy="59.47" r="1.5">
@@ -164,7 +164,7 @@ export default class SnapShot extends React.Component {
                           type="rotate"
                          from="0 50 50"
                           to="180 90 10"
-                          dur="8s"
+                          dur="2s"
                           repeatCount="indefinite"/>
                           </circle>
                          <circle cx="10.33" cy="59.47" r="1.5" fill="#333333">
@@ -173,7 +173,7 @@ export default class SnapShot extends React.Component {
                           type="rotate"
                            from="0 50 50"
                           to="180 90 10"
-                          dur="6s"
+                          dur="2s"
                           repeatCount="indefinite"/>
                           </circle>
                         <circle cx="43.5" cy="88.5" r="3.5">
@@ -182,7 +182,7 @@ export default class SnapShot extends React.Component {
                           type="rotate"
                             from="0 50 50"
                           to="180 90 10"
-                          dur="5s"
+                          dur="1s"
                           repeatCount="indefinite"/>
                           </circle>
                         <circle cx="64.5" cy="73.5" r="1.5"  fill="black">
@@ -191,7 +191,7 @@ export default class SnapShot extends React.Component {
                           type="rotate"
                             from="0 50 50"
                           to="180 90 10"
-                          dur="4s"
+                          dur="1s"
                           repeatCount="indefinite"/>
                         </circle>
                       </g>

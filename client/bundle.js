@@ -60898,7 +60898,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     type: 'rotate',
                     from: '0 50 50',
                     to: '180 90 10',
-                    dur: '6s',
+                    dur: '3s',
                     repeatCount: 'indefinite' })
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -60909,7 +60909,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     type: 'rotate',
                     from: '0 50 50',
                     to: '180 90 10',
-                    dur: '4s',
+                    dur: '2s',
                     repeatCount: 'indefinite' })
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -60920,7 +60920,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     type: 'rotate',
                     from: '0 50 50',
                     to: '180 90 10',
-                    dur: '6s',
+                    dur: '1s',
                     repeatCount: 'indefinite' })
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -60931,7 +60931,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     type: 'rotate',
                     from: '0 50 50',
                     to: '180 90 10',
-                    dur: '8s',
+                    dur: '2s',
                     repeatCount: 'indefinite' })
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -60942,7 +60942,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     type: 'rotate',
                     from: '0 50 50',
                     to: '180 90 10',
-                    dur: '6s',
+                    dur: '2s',
                     repeatCount: 'indefinite' })
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -60953,7 +60953,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     type: 'rotate',
                     from: '0 50 50',
                     to: '180 90 10',
-                    dur: '5s',
+                    dur: '1s',
                     repeatCount: 'indefinite' })
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -60964,7 +60964,7 @@ class SnapShot extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     type: 'rotate',
                     from: '0 50 50',
                     to: '180 90 10',
-                    dur: '4s',
+                    dur: '1s',
                     repeatCount: 'indefinite' })
                 )
               )

@@ -118,12 +118,12 @@ router.route('/syndicationDashboard').post(function(req,res){
       timeout : 3000,
       json: true
     }, function (edgeErr, edgeResponse, edgeBody) {
-      if(edgeErr){
-        // API call failed
-        console.log('/syndicationDashboard sb2 hmac edges call failed');
-        console.log('error: ',edgeErr);
-        res.json(edgeErr);
-      }
+        if(edgeErr){
+          // API call failed
+          console.log('/syndicationDashboard sb2 hmac edges call failed');
+          console.log('error: ',edgeErr);
+          res.json(edgeErr);
+        }
       if(edgeBody){
         console.log('edgeBody returned data as expected!');
         request({
@@ -139,19 +139,27 @@ router.route('/syndicationDashboard').post(function(req,res){
             res.json(displayErr);
           }
           if(displayBody){
-            console.log('** SB Display this works just as expected! 2');
+
+            console.log('** SB Display this works just as expected!');
             // iterate through syndication sources
             for(let i=0,len=source["syndication"].length;i<len;i++){
               var syndClient = source["syndication"][i][0];
               console.log('syndClient: ',syndClient);
-              var displayObject = displayBody["data"];
+              var displayObject;
+              var sourceDisplayname;
+              if(diplayBody["data"]){
+                displayObject = displayBody["data"];
+              }
+              if(goal["sourceDisplayName"]){
+                sourceDisplayName=goal["sourceDisplayName"];
+              }
               var goal = displayObject[Object.keys(displayObject).find(key => key.toLowerCase() === syndClient.toLowerCase())];
-              console.log('Switchboard Display body["data"]['+syndClient+']: ',goal);
-              console.log('sourceDisplayName: ', goal["sourceDisplayName"]);
-              console.log('logoImageName: ',goal["logoImageName"]);
-              console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
+              // console.log('Switchboard Display body["data"]['+syndClient+']: ',goal);
+              // console.log('sourceDisplayName: ', goal["sourceDisplayName"]);
+              // console.log('logoImageName: ',goal["logoImageName"]);
+              // console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
               var edgeObject = edgeBody["data"].find(x => x.sourceClientId === syndClient);
-              var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":goal["sourceDisplayName"],"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
+              var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":sourceDisplayname,"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
               edgeArray.push(drakeEdge);
             }
             console.log('edgeArray: ',edgeArray);
