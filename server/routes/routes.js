@@ -146,7 +146,7 @@ router.route('/syndicationDashboard').post(function(req,res){
               var syndClient = source["syndication"][i][0];
               console.log('syndClient: ',syndClient);
               var displayObject;
-              var sourceDisplayname;
+              var sourceDisplayName;
               if(displayBody["data"]){
                 displayObject = displayBody["data"];
               }
@@ -159,7 +159,7 @@ router.route('/syndicationDashboard').post(function(req,res){
               // console.log('logoImageName: ',goal["logoImageName"]);
               // console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
               var edgeObject = edgeBody["data"].find(x => x.sourceClientId === syndClient);
-              var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":sourceDisplayname,"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
+              var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":sourceDisplayName,"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
               edgeArray.push(drakeEdge);
             }
             console.log('edgeArray: ',edgeArray);
