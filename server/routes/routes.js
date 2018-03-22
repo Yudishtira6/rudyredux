@@ -147,7 +147,7 @@ router.route('/syndicationDashboard').post(function(req,res){
               console.log('syndClient: ',syndClient);
               var displayObject;
               var sourceDisplayname;
-              if(diplayBody["data"]){
+              if(displayBody["data"]){
                 displayObject = displayBody["data"];
               }
               if(goal["sourceDisplayName"]){
