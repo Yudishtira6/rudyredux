@@ -168,3 +168,10 @@
   height: 0;
   transform: .3s;
 }
+
+.beaker-syndication {
+  width: 122px;
+  position: absolute;
+  top: 30px;
+  left: 134px;
+}

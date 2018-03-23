@@ -11,6 +11,7 @@ import ProductInfo from './ProductInfo';
 import SnapShot from './SnapShot';
 import SyndicatedInfo from './SyndicationInfo';
 
+import { Provider } from 'unstated';
 
 export default class App extends React.Component {
   constructor() {

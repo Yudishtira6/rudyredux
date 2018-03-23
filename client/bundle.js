@@ -51322,6 +51322,9 @@ const Routes = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ProductInfo__ = __webpack_require__(247);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__SnapShot__ = __webpack_require__(248);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__SyndicationInfo__ = __webpack_require__(250);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_unstated__ = __webpack_require__(269);
+
+
 
 
 
@@ -61476,13 +61479,110 @@ class SyndicationInfo extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       sourceData = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'loader-top' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fas left fa-circle' }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fas middle fa-circle' }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fas right fa-circle' }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'p',
-          null,
-          ' Calculating...'
+          'div',
+          { className: 'svg-box beaker-syndication' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'svg',
+            { id: 'Layer_1', 'data-name': 'Layer 1', xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 47.83 66.97' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'defs',
+              null,
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'mask',
+                { id: 'liquidMask' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('path', { d: 'M59.87,52.6a1.8,1.8,0,0,1,.24.21A9.22,9.22,0,0,1,61,54.53a16.46,16.46,0,0,0,1.73,1.74,6.87,6.87,0,0,1,.83,1.49,49.42,49.42,0,0,0,4,6.19,5.25,5.25,0,0,1,1.13,2.59,1.89,1.89,0,0,1-.22,1,2.69,2.69,0,0,1-1.76,1.05,33.16,33.16,0,0,1-7.44.83l-14.88,0H36.93a29.36,29.36,0,0,1-4.81,0c-1.15-.19-2.9.09-3.8-0.71a3.33,3.33,0,0,1-1-2.11,4.87,4.87,0,0,1,.2-2.07A8.9,8.9,0,0,1,28.26,63,56.34,56.34,0,0,1,38.68,49.91a2.76,2.76,0,0,1,.67-0.52A4,4,0,0,1,41,49.2a13.05,13.05,0,0,0,3.38-.92,4.59,4.59,0,0,1,3.43,0c0.44,0.22.81,0.55,1.26,0.76,1.53,0.72,3.21-.37,4.76-0.33a7.4,7.4,0,0,1,4.42,2.24c0.21,0.29.32,0.64,0.55,0.91A6,6,0,0,0,59.87,52.6Z', transform: 'translate(-24.17 -23.03)' }),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'g',
+                  { id: 'bubblegroup', fill: '#000000' },
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'circle',
+                    { cx: '16.33', cy: '53.47', r: '4.5' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('animateTransform', { attributeType: 'xml',
+                      attributeName: 'transform',
+                      type: 'rotate',
+                      from: '0 50 50',
+                      to: '180 90 10',
+                      dur: '6s',
+                      repeatCount: 'indefinite' })
+                  ),
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'circle',
+                    { cx: '34.33', cy: '62.47', r: '4.5', fill: '#333333' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('animateTransform', { attributeType: 'xml',
+                      attributeName: 'transform',
+                      type: 'rotate',
+                      from: '0 50 50',
+                      to: '180 90 10',
+                      dur: '4s',
+                      repeatCount: 'indefinite' })
+                  ),
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'circle',
+                    { cx: '34.33', cy: '62.47', r: '4.5', fill: '#2d2d2d' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('animateTransform', { attributeType: 'xml',
+                      attributeName: 'transform',
+                      type: 'rotate',
+                      from: '0 50 50',
+                      to: '180 90 10',
+                      dur: '6s',
+                      repeatCount: 'indefinite' })
+                  ),
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'circle',
+                    { cx: '22.33', cy: '59.47', r: '1.5' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('animateTransform', { attributeType: 'xml',
+                      attributeName: 'transform',
+                      type: 'rotate',
+                      from: '0 50 50',
+                      to: '180 90 10',
+                      dur: '8s',
+                      repeatCount: 'indefinite' })
+                  ),
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'circle',
+                    { cx: '10.33', cy: '59.47', r: '1.5', fill: '#333333' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('animateTransform', { attributeType: 'xml',
+                      attributeName: 'transform',
+                      type: 'rotate',
+                      from: '0 50 50',
+                      to: '180 90 10',
+                      dur: '6s',
+                      repeatCount: 'indefinite' })
+                  ),
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'circle',
+                    { cx: '43.5', cy: '88.5', r: '3.5' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('animateTransform', { attributeType: 'xml',
+                      attributeName: 'transform',
+                      type: 'rotate',
+                      from: '0 50 50',
+                      to: '180 90 10',
+                      dur: '5s',
+                      repeatCount: 'indefinite' })
+                  ),
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'circle',
+                    { cx: '64.5', cy: '73.5', r: '1.5', fill: 'black' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('animateTransform', { attributeType: 'xml',
+                      attributeName: 'transform',
+                      type: 'rotate',
+                      from: '0 50 50',
+                      to: '180 90 10',
+                      dur: '4s',
+                      repeatCount: 'indefinite' })
+                  )
+                )
+              )
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('path', { d: 'M24.17,64.72c0.33-.91.62-1.83,1-2.72a9.87,9.87,0,0,1,1.09-1.88c2.47-3.33,5-6.65,7.47-10q2.21-3,4.4-5.91c0.63-.85,1.25-1.7,1.85-2.57A1.21,1.21,0,0,0,40.21,41c0-4-.08-8-0.12-11.94a5.73,5.73,0,0,0-2-4.25c-0.82-.77-0.71-1.27.31-1.78H57.13c0.86,0.62,1,1,.3,1.66a6.08,6.08,0,0,0-2,4.85c0.1,3.76.17,7.52,0.29,11.28A2.21,2.21,0,0,0,56.15,42c1.78,2.49,3.61,5,5.41,7.43,1.43,2,2.85,3.93,4.29,5.89S68.71,59.07,70,61A8.94,8.94,0,0,1,72,66.52c-0.15,3.05-2.84,5.31-6.61,5.47H64.79q-17,0-34,0c-3.23,0-5.83-1.91-6.41-4.62a4.57,4.57,0,0,0-.17-0.5V64.72ZM41,24.86a8.35,8.35,0,0,1,1.38,4.86q0,5.79,0,11.58a1.88,1.88,0,0,1-.26,1c-0.42.67-.9,1.31-1.38,2l-4.4,5.91c-1.68,2.26-3.38,4.51-5,6.78-1.3,1.77-2.65,3.52-3.84,5.34a6,6,0,0,0-1,4.62A3.77,3.77,0,0,0,29.71,70a10.14,10.14,0,0,0,2,.15l32.36,0a11.11,11.11,0,0,0,1.83-.12c1.84-.31,3.14-1.11,3.62-2.67a5.27,5.27,0,0,0-1-4.7c-1.73-2.51-3.57-5-5.37-7.45L59,49.42c-1.67-2.29-3.36-4.57-5-6.87a2.46,2.46,0,0,1-.47-1.28c-0.13-3.78-.24-7.56-0.29-11.34a12.6,12.6,0,0,1,.31-2.9,13.74,13.74,0,0,1,.87-2.17H41Z', transform: 'translate(-24.17 -23.03)' }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'g',
+              { id: 'maskedliquid', mask: 'url(#liquidMask)' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('path', { d: 'M59.87,52.6a1.8,1.8,0,0,1,.24.21A9.22,9.22,0,0,1,61,54.53a16.46,16.46,0,0,0,1.73,1.74,6.87,6.87,0,0,1,.83,1.49,49.42,49.42,0,0,0,4,6.19,5.25,5.25,0,0,1,1.13,2.59,1.89,1.89,0,0,1-.22,1,2.69,2.69,0,0,1-1.76,1.05,33.16,33.16,0,0,1-7.44.83l-14.88,0H36.93a29.36,29.36,0,0,1-4.81,0c-1.15-.19-2.9.09-3.8-0.71a3.33,3.33,0,0,1-1-2.11,4.87,4.87,0,0,1,.2-2.07A8.9,8.9,0,0,1,28.26,63,56.34,56.34,0,0,1,38.68,49.91a2.76,2.76,0,0,1,.67-0.52A4,4,0,0,1,41,49.2a13.05,13.05,0,0,0,3.38-.92,4.59,4.59,0,0,1,3.43,0c0.44,0.22.81,0.55,1.26,0.76,1.53,0.72,3.21-.37,4.76-0.33a7.4,7.4,0,0,1,4.42,2.24c0.21,0.29.32,0.64,0.55,0.91A6,6,0,0,0,59.87,52.6Z', transform: 'translate(-24.17 -23.03)' })
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('path', { d: 'M18,27', transform: 'translate(-24.17 -23.03)' })
+          )
         )
       );
     } else if (this.props.error) {
@@ -64181,6 +64281,321 @@ const SourceData = ({ data }) => {
 };
 
 /* unused harmony default export */ var _unused_webpack_default_export = (SourceData);
+
+/***/ }),
+/* 269 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Container */
+/* unused harmony export Subscribe */
+/* unused harmony export Provider */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_create_react_context__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_create_react_context___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_create_react_context__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
+
+
+
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StateContext = __WEBPACK_IMPORTED_MODULE_1_create_react_context___default()(null);
+
+var Container = function () {
+  function Container() {
+    _classCallCheck(this, Container);
+
+    this._listeners = [];
+  }
+
+  Container.prototype.setState = function setState(state) {
+    this.state = Object.assign({}, this.state, state);
+    this._listeners.forEach(function (fn) {
+      return fn();
+    });
+  };
+
+  Container.prototype.subscribe = function subscribe(fn) {
+    this._listeners.push(fn);
+  };
+
+  Container.prototype.unsubscribe = function unsubscribe(fn) {
+    this._listeners = this._listeners.filter(function (f) {
+      return f !== fn;
+    });
+  };
+
+  return Container;
+}();
+
+var DUMMY_STATE = {};
+
+var Subscribe = function (_React$Component) {
+  _inherits(Subscribe, _React$Component);
+
+  function Subscribe() {
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, Subscribe);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = {}, _this.instances = [], _this.onUpdate = function () {
+      _this.setState(DUMMY_STATE);
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  Subscribe.prototype.componentWillReceiveProps = function componentWillReceiveProps() {
+    this._unsubscribe();
+  };
+
+  Subscribe.prototype.componentWillUnmount = function componentWillUnmount() {
+    this._unsubscribe();
+  };
+
+  Subscribe.prototype._unsubscribe = function _unsubscribe() {
+    var _this2 = this;
+
+    this.instances.forEach(function (container) {
+      container.unsubscribe(_this2.onUpdate);
+    });
+  };
+
+  Subscribe.prototype._createInstances = function _createInstances(map, containers) {
+    var _this3 = this;
+
+    if (map === null) {
+      throw new Error('You must wrap your <Subscribe> components with a <Provider>');
+    }
+
+    var safeMap = map;
+    var instances = containers.map(function (Container) {
+      var instance = safeMap.get(Container);
+
+      if (!instance) {
+        instance = new Container();
+        safeMap.set(Container, instance);
+      }
+
+      instance.unsubscribe(_this3.onUpdate);
+      instance.subscribe(_this3.onUpdate);
+
+      return instance;
+    });
+
+    this.instances = instances;
+    return instances;
+  };
+
+  Subscribe.prototype.render = function render() {
+    var _this4 = this;
+
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      StateContext.Consumer,
+      null,
+      function (map) {
+        return _this4.props.children.apply(null, _this4._createInstances(map, _this4.props.to));
+      }
+    );
+  };
+
+  return Subscribe;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+Subscribe.propTypes = {
+  to: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.array.isRequired,
+  children: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func.isRequired
+};
+
+
+function Provider(props) {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    StateContext.Consumer,
+    null,
+    function (parentMap) {
+      var childMap = new Map(parentMap);
+
+      if (props.inject) {
+        props.inject.forEach(function (instance) {
+          childMap.set(instance.constructor, instance);
+        });
+      }
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        StateContext.Provider,
+        { value: childMap },
+        props.children
+      );
+    }
+  );
+}
+
+
+
+
+/***/ }),
+/* 270 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function createEventEmitter(value) {
+  var handlers = [];
+  return {
+    on: function on(handler) {
+      handlers.push(handler);
+    },
+    off: function off(handler) {
+      handlers = handlers.filter(function (h) {
+        return h !== handler;
+      });
+    },
+    get: function get() {
+      return value;
+    },
+    set: function set(newValue) {
+      value = newValue;
+      handlers.forEach(function (handler) {
+        return handler(value);
+      });
+    }
+  };
+}
+
+function onlyChild(children) {
+  return Array.isArray(children) ? children[0] : children;
+}
+
+var uniqueId = 0;
+
+function createReactContext(defaultValue) {
+  var _Provider$childContex, _Consumer$contextType;
+
+  var contextProp = '__create-react-context-' + uniqueId++ + '__';
+
+  var Provider = function (_Component) {
+    _inherits(Provider, _Component);
+
+    function Provider() {
+      var _temp, _this, _ret;
+
+      _classCallCheck(this, Provider);
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.emitter = createEventEmitter(_this.props.value), _temp), _possibleConstructorReturn(_this, _ret);
+    }
+
+    Provider.prototype.getChildContext = function getChildContext() {
+      var _ref;
+
+      return _ref = {}, _ref[contextProp] = this.emitter, _ref;
+    };
+
+    Provider.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+      if (this.props.value !== nextProps.value) {
+        this.emitter.set(nextProps.value);
+      }
+    };
+
+    Provider.prototype.render = function render() {
+      return this.props.children;
+    };
+
+    return Provider;
+  }(_react.Component);
+
+  Provider.childContextTypes = (_Provider$childContex = {}, _Provider$childContex[contextProp] = _propTypes2.default.object.isRequired, _Provider$childContex);
+
+  var Consumer = function (_Component2) {
+    _inherits(Consumer, _Component2);
+
+    function Consumer() {
+      var _temp2, _this2, _ret2;
+
+      _classCallCheck(this, Consumer);
+
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      return _ret2 = (_temp2 = (_this2 = _possibleConstructorReturn(this, _Component2.call.apply(_Component2, [this].concat(args))), _this2), _this2.state = {
+        value: _this2.getValue()
+      }, _this2.onUpdate = function () {
+        _this2.setState({
+          value: _this2.getValue()
+        });
+      }, _temp2), _possibleConstructorReturn(_this2, _ret2);
+    }
+
+    Consumer.prototype.componentDidMount = function componentDidMount() {
+      if (this.context[contextProp]) {
+        this.context[contextProp].on(this.onUpdate);
+      }
+    };
+
+    Consumer.prototype.componentWillUnmount = function componentWillUnmount() {
+      if (this.context[contextProp]) {
+        this.context[contextProp].off(this.onUpdate);
+      }
+    };
+
+    Consumer.prototype.getValue = function getValue() {
+      if (this.context[contextProp]) {
+        return this.context[contextProp].get();
+      } else {
+        return defaultValue;
+      }
+    };
+
+    Consumer.prototype.render = function render() {
+      return onlyChild(this.props.children)(this.state.value);
+    };
+
+    return Consumer;
+  }(_react.Component);
+
+  Consumer.contextTypes = (_Consumer$contextType = {}, _Consumer$contextType[contextProp] = _propTypes2.default.object, _Consumer$contextType);
+
+
+  return {
+    Provider: Provider,
+    Consumer: Consumer
+  };
+}
+
+exports.default = createReactContext;
+module.exports = exports['default'];
 
 /***/ })
 /******/ ]);
