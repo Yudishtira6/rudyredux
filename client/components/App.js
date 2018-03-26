@@ -209,11 +209,11 @@ export default class App extends React.Component {
 
       var self=this;
       //Get synication Dashboard
-      console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********")
+      console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********", this.state.client);
       axios.post('/syndicationDashboard',
                {
-                  clientName:this.state.client,
-                  sourceObject: this.state.sourceObject,
+                  clientName:self.state.client,
+                  sourceObject: self.state.sourceObject,
                }
                ).then(function(response) {
                   console.log("**********SYNDICATION DASHBOARD SUCCEEEDED!!!!!!",response);
@@ -227,8 +227,8 @@ export default class App extends React.Component {
               console.log("ABOUT TO RUN THE FAMILY DASHBOARD************");
             axios.post('/familyDashboard',
                       {
-                        clientName:this.state.client,
-                        sourceObject: this.state.sourceObject
+                        clientName:self.state.client,
+                        sourceObject: self.state.sourceObject
                       }
                       ).then(function(response) {
                       console.log("**********FAMILY DASHBOARD SUCCEED!!!!!");
@@ -247,8 +247,8 @@ export default class App extends React.Component {
                     console.log("ABOUT TO RUN BLOCKED REVIEWS CALL*******");
                     axios.post('/blockedReviews',
                              {
-                                sourceObject:this.state.sourceObject,
-                                syndicationObject: this.state.syndicationObject
+                                sourceObject:self.state.sourceObject,
+                                syndicationObject: self.state.syndicationObject
 
                              }).then(function(response) {
                               console.log("********BLOCKED REVIEWS SUCCEEDE!!!!",response.data);
@@ -263,10 +263,10 @@ export default class App extends React.Component {
                             console.log("ABOUT TO RUN DASHBOARD BLOCKED ROUTE***********");
                            axios.post('/blockedDashboard',
                                     {
-                                       sourceObject:this.state.sourceObject,
-                                       syndicationObject: this.state.syndicationObject,
-                                       clientName:this.state.client,
-                                       productId:this.state.productId
+                                       sourceObject:self.state.sourceObject,
+                                       syndicationObject: self.state.syndicationObject,
+                                       clientName:self.state.client,
+                                       productId:self.state.productId
 
                                     }
                                     ).then(function(response) {

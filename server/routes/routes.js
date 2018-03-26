@@ -138,10 +138,10 @@ router.route('/syndicationDashboard').post(function(req,res){
         request(displayOptions)
           .then(function (displayBody) {
             console.log('** SB Display this works just as expected!');
-            console.log("*****************************************DisplayBODY keys HERE*************");
-              for (let key in displayBody["data"]){
-                console.log('sb2 display keys: ',key)
-              }
+            // console.log("*****************************************DisplayBODY keys HERE*************");
+            //   for (let key in displayBody["data"]){
+            //     console.log('sb2 display keys: ',key)
+            //   }
             // iterate through syndication sources
             for(let i=0,len=source["syndication"].length;i<len;i++){
               console.log('loop index #: ',i);
