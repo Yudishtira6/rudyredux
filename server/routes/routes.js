@@ -30,6 +30,7 @@ router.route('/getProduct').post(function(req,res){
         // API call failed
         console.log('/getProductDetails hagrid call failed');
         console.log('error: ',err);
+        res.json(err);
     });
 });
 
@@ -47,7 +48,7 @@ router.route('/oracle').post(function(req,res){
   console.log(' Oracle options: ',options);
   rp(options)
     .then(function (data) {
-      console.log('Oracle call data',JSON.stringify(data));
+      //console.log('Oracle call data',JSON.stringify(data));
       console.log('Oracle call data["products"].length: ',data["products"].length)
       // set local function vars that will be set to the global source object
       var family = [];
@@ -55,8 +56,8 @@ router.route('/oracle').post(function(req,res){
       // set data
       var hero = data.products;
       var len = hero.length;
-      console.log('hero: ',hero);
-      console.log('len: ',len);
+      //console.log('hero: ',hero);
+      //console.log('len: ',len);
       // need error handling for product with no families and no syndication
       if(len==0){
         // no syndication and no family
@@ -87,6 +88,7 @@ router.route('/oracle').post(function(req,res){
     .catch(function (err) {
         // API call failed...
         console.log('Oracle Call Failed!!!!: ',err);
+        res.json(err);
     });
 });
 
@@ -100,11 +102,11 @@ router.route('/syndicationDashboard').post(function(req,res){
   console.log('Hitting /syndicationDashboard');
   var clientName = req.body.clientName;
   var source = req.body.sourceObject;
-  console.log('clientName: ',clientName);
-  console.log('source: ',source);
+  //console.log('clientName: ',clientName);
+  //console.log('source: ',source);
   if (source['syndication'].length){
     let HmacAuthRequestor = require('hmac-auth');
-    let myRequestLib = require('request');
+    let myRequestLib = require('request-promise');
     let yourAPIKey = 'narwhal';
     let yourSecretKey = '7egc3s36ck9wjpg63y6r72csebq2k9chhxepa4z3ts9t';
     let hmacAuth = new HmacAuthRequestor(yourAPIKey, yourSecretKey, myRequestLib);
@@ -113,6 +115,72 @@ router.route('/syndicationDashboard').post(function(req,res){
     var edgeBody = {};
     console.log('/syndicationDashboard - clientName: ',clientName);
     console.log('/syndicationDashboard - source: ',source);
+    var edgeOptions = {
+      uri: 'https://sb2-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: true // Automatically parses the JSON string in the response
+    };
+    console.log('edgeOptions: ',edgeOptions);
+    request(edgeOptions)
+      .then(function (edgeBody) {
+        console.log('sb2 edges call works just as expected!');
+        console.log('now making sb2 display call ...');
+        var displayOptions = {
+          uri: 'https://sb2-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/v3/displays/'+clientName,
+          headers: {
+              'User-Agent': 'Request-Promise'
+          },
+          json: true // Automatically parses the JSON string in the response
+        };
+        console.log('displayOptions: ',displayOptions);
+        request(displayOptions)
+          .then(function (displayBody) {
+            console.log('** SB Display this works just as expected!');
+            console.log("*****************************************DisplayBODY keys HERE*************");
+              for (let key in displayBody["data"]){
+                console.log('sb2 display keys: ',key)
+              }
+            // iterate through syndication sources
+            for(let i=0,len=source["syndication"].length;i<len;i++){
+              console.log('loop index #: ',i);
+              var syndClient = source["syndication"][i][0];
+              console.log('syndClient: ',syndClient);
+              var displayObject = displayBody["data"];
+              var goal = displayObject[Object.keys(displayObject).find(key => key.toLowerCase() === syndClient.toLowerCase())];
+              console.log('Switchboard Display displaybody["data"]['+syndClient+']: ',goal);
+              console.log('sourceDisplayName: ', goal["sourceDisplayName"]);
+              console.log('logoImageName: ',goal["logoImageName"]);
+              //console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
+              var edgeObject = edgeBody["data"].find(x => x.sourceClientId === syndClient);
+              var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":goal["sourceDisplayName"],"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"includeRatingsOnlyReviews":edgeObject.edgeInfo.includeRatingsOnlyReviews,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
+              edgeArray.push(drakeEdge);
+            }
+            console.log('edgeArray: ',edgeArray);
+            res.json(edgeArray);
+          })
+          .catch(function (err) {
+              // API call failed
+              console.log('/syndicationDashboard sb2 hmac display call failed');
+              console.log('error: ',err);
+              res.json(err);
+          });
+      })
+      .catch(function (err) {
+          // API call failed
+          console.log('/syndicationDashboard sb2 hmac edges call failed');
+          console.log('error: ',err);
+          res.json(err);
+      });
+    } else {
+      console.log('There is no syndication sources so no need to make the call');
+      res.json({})
+    }
+});
+
+/*
+
     request({
       method : 'GET',
       url : 'https://sb2-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/v3/edges/to/'+clientName,
@@ -125,8 +193,10 @@ router.route('/syndicationDashboard').post(function(req,res){
         console.log('error: ',err);
         res.json(err);
       }
-      console.log('this works just as expected!');
+      
       edgeBody = body;
+*/
+/*
       request({
         method : 'GET',
         url : 'https://sb2-bazaar.prod.us-east-1.nexus.bazaarvoice.com/api/v3/displays/'+clientName,
@@ -160,11 +230,8 @@ router.route('/syndicationDashboard').post(function(req,res){
         res.json(edgeArray);
     });
     });
-  } else {
-    console.log('There is no syndication sources so no need to make the call');
-    res.json({})
-  }
-});
+*/
+
 
 // blocked dashboard
 router.route('/blockedDashboard').post(function(req,res) {
@@ -198,18 +265,19 @@ router.route('/blockedDashboard').post(function(req,res) {
   // console.log('hagopt: ',hagopt);
   rp(displaySyndOpt)
     .then(function (displayResults) {
-      console.log('****')
-      console.log('displayResults["TotalResults"]: ', displayResults["TotalResults"]);
-      console.log('****')
+      console.log('blockedDashboard call successfull');
+      //console.log('****')
+      //console.log('displayResults["TotalResults"]: ', displayResults["TotalResults"]);
+      //console.log('****')
       blockedDashboardObject['totalSyndicatedDisplay'] = displayResults["TotalResults"];
-      console.log('blockedDashboardObject: ',blockedDashboardObject);
+      //console.log('blockedDashboardObject: ',blockedDashboardObject);
       for(let i=0;i<len;i++){
           var syndClient = source["syndication"][i][0];
           var syndProduct = source["syndication"][i][1];
           console.log('syndClient: ',syndClient);
           console.log('productId: ', syndProduct);
               let hagopt = {
-                uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=newRudy&clientname='+syndClient+'&ApiVersion=5.4&filter=productid:'+syndProduct+'&limit=1&excludeFamily=true',
+                uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?appkey=narwhal&clientname='+syndClient+'&ApiVersion=5.4&filter=productid:'+syndProduct+'&limit=1&excludeFamily=true',
                 headers: {
                     'User-Agent': 'Request-Promise'
                 },
@@ -217,29 +285,34 @@ router.route('/blockedDashboard').post(function(req,res) {
               };
               rp(hagopt)
                 .then(function (hagsynd) {
-                  console.log('hagsynd["TotalResults"]: ', hagsynd["TotalResults"]);
+                  console.log('call #',i,' hagrid call for syndication sources')
+                  //console.log('hagsynd["TotalResults"]: ', hagsynd["TotalResults"]);
                   totalSyndicatedNative += hagsynd["TotalResults"];
                   blockedDashboardObject['totalSyndicatedNative'] = totalSyndicatedNative;
                   callsLeft--
-                  console.log('blockedDashboardObject: ',blockedDashboardObject,' callsLeft: ',callsLeft);
+                  //console.log('blockedDashboardObject: ',blockedDashboardObject,' callsLeft: ',callsLeft);
                   if (callsLeft<=0){
                     console.log('blockedDashboardObject res json call hit');
                     blockedDashboardObject['blockedSyndicated'] = blockedDashboardObject['totalSyndicatedNative'] - blockedDashboardObject['totalSyndicatedDisplay'];
                     console.log('callsLeft: ',callsLeft);
-                    console.log('blockedDashboardObject: ',blockedDashboardObject);
+                    //console.log('blockedDashboardObject: ',blockedDashboardObject);
                     res.json(blockedDashboardObject);
                   }
                 })
                 .catch(function (err) {
                     // API call failed
-                    console.log('/blockedDashboard hagrid call failed');
+                    console.log('/blockedDashboard hagrid call(s) failed');
                     console.log('error: ',err);
+                    res.json(err);
               });
       }
 
     })
     .catch(function (err) {
       // API call failed...
+      console.log('/blockedDashboard total displayed syndicated hagrid call failed');
+      console.log('error: ',err);
+      res.json(err);
   });
 });
 
@@ -266,12 +339,12 @@ router.route('/familyDashboard').post(function(req,res) {
     };
     rp(hagopt)
       .then(function (hagfam) {
-        console.log('hagfam["TotalResults"]: ', hagfam["TotalResults"]);
+        //console.log('hagfam["TotalResults"]: ', hagfam["TotalResults"]);
         familyDisplayObject[source["family"][i][1]]=hagfam["TotalResults"];
         totalFamilyResults += hagfam["TotalResults"];
         familyDisplayObject["total"]=totalFamilyResults;
         callsLeft--
-        console.log('familyDisplayObject: ',familyDisplayObject,' callsLeft: ',callsLeft);
+        //console.log('familyDisplayObject: ',familyDisplayObject,' callsLeft: ',callsLeft);
         if (callsLeft<=0){
           console.log('familyDashboard res json call hit');
           console.log('callsLeft: ',callsLeft);
@@ -283,6 +356,7 @@ router.route('/familyDashboard').post(function(req,res) {
           // API call failed
           console.log('/familyDashboard hagrid call failed');
           console.log('error: ',err);
+          res.json(err);
     });
   }
 });
@@ -306,13 +380,16 @@ router.route('/paginateAll').post(function(req,res){
   // console.log('hagopt: ',hagopt);
   rp(pagopt)
     .then(function (pageResults) {
-      console.log('****')
-      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
-      console.log('****')
+      //console.log('****')
+      //console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
+      //console.log('****')
       res.json(pageResults);
     })
     .catch(function (err) {
       // API call failed...
+      console.log('/paginateAll call failed');
+      console.log('error: ',err);
+      res.json(err);
   });
 });
 
@@ -335,13 +412,16 @@ router.route('/paginateDisplayableSyndicated').post(function(req,res){
   // console.log('hagopt: ',hagopt);
   rp(pagopt)
     .then(function (pageResults) {
-      console.log('****')
-      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
-      console.log('****')
+      //console.log('****')
+      //console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
+      //console.log('****')
       res.json(pageResults);
     })
     .catch(function (err) {
       // API call failed...
+      console.log('/paginateDisplayableSyndicated call failed');
+      console.log('error: ',err);
+      res.json(err);
   });
 });
 
@@ -364,13 +444,16 @@ router.route('/paginateNative').post(function(req,res){
   // console.log('hagopt: ',hagopt);
   rp(pagopt)
     .then(function (pageResults) {
-      console.log('****')
-      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
-      console.log('****')
+      // console.log('****')
+      // console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
+      // console.log('****')
       res.json(pageResults);
     })
     .catch(function (err) {
       // API call failed...
+      console.log('/paginateNative call failed');
+      console.log('error: ',err);
+      res.json(err);
   });
 });
 
@@ -393,13 +476,16 @@ router.route('/paginateFamily').post(function(req,res){
   // console.log('hagopt: ',hagopt);
   rp(pagopt)
     .then(function (pageResults) {
-      console.log('****')
-      console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
-      console.log('****')
+      // console.log('****')
+      // console.log('pageResults["TotalResults"]: ', pageResults["TotalResults"]);
+      // console.log('****')
       res.json(pageResults);
     })
     .catch(function (err) {
       // API call failed...
+      console.log('/paginateFamily call failed');
+      console.log('error: ',err);
+      res.json(err);
   });
 });
 
@@ -421,6 +507,7 @@ router.route('/blockedReviews').post(function(req,res){
     console.log('modCodes: ',syndicationObject[i]["modCodes"]);
     console.log('syndicationDelay: ',syndicationObject[i]["syndicationDelay"]);
     console.log('locales: ',syndicationObject[i]["locales"]);
+    console.log('includeRatingsOnlyReviews: ',syndicationObject[i]["includeRatingsOnlyReviews"]);
     // modcode blocked
     var hagmodopt = {
       uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=ModeratorCode:'+syndicationObject[i]["modCodes"].join()+'&attributes=moderatorCodes&limit=100',
@@ -433,11 +520,11 @@ router.route('/blockedReviews').post(function(req,res){
     rp(hagmodopt)
       .then(function (hagmod) {
         console.log('blocked Moderator Reviews');
-        console.log('hagmod: ',hagmod);
+        //console.log('hagmod: ',hagmod);
         if(hagmod["TotalResults"]>100){
           console.log('there are more than 100 modblocked reviews returned - need to loop through');
           var modloop = hagmod["TotalResults"]/100;
-          var hagmodResultsObject = hagmod["Results"];
+          //var hagmodResultsObject = hagmod["Results"];
           console.log('loop number: ',modloop);
           var modCallsLeft = modloop;
           for(let j=1;j<modloop;j++){
@@ -453,11 +540,11 @@ router.route('/blockedReviews').post(function(req,res){
               .then(function(hagmodloop){
                 hagmodResultsObject.push.apply(hagmodResultsObject, hagmodloop["Results"]);
                 modCallsLeft--
-                console.log('hagmodResultsObject: ',hagmodResultsObject,' modCallsLeft: ',modCallsLeft);
+                //console.log('hagmodResultsObject: ',hagmodResultsObject,' modCallsLeft: ',modCallsLeft);
                 if (modCallsLeft<=0){
                   console.log('end of hagmodloop hit');
                   console.log('modCallsLeft: ',modCallsLeft);
-                  console.log('hagmodResultsObject: ',hagmodResultsObject);
+                  //console.log('hagmodResultsObject: ',hagmodResultsObject);
                   blockedReviews["modBlocked"]=hagmodResultsObject;
                 }
               })
@@ -491,7 +578,7 @@ router.route('/blockedReviews').post(function(req,res){
         rp(hagdelayopt)
           .then(function (hagdelay) {
             console.log('sydication delay Reviews');
-            console.log('hagdelay: ',hagdelay);
+            //console.log('hagdelay: ',hagdelay);
             if(hagdelay["TotalResults"]>100){
               console.log('there are more than 100 delayed reviews returned - need to loop through');
               var delayloop = hagdelay["TotalResults"]/100;
@@ -511,16 +598,19 @@ router.route('/blockedReviews').post(function(req,res){
                   .then(function(hagdelayloop){
                     hagdelayResultsObject.push.apply(hagdelayResultsObject, hagdelayloop["Results"]);
                     delayCallsLeft--
-                    console.log('hagdelayResultsObject: ',hagdelayResultsObject,' delayCallsLeft: ',delayCallsLeft);
+                    //console.log('hagdelayResultsObject: ',hagdelayResultsObject,' delayCallsLeft: ',delayCallsLeft);
                     if (delayCallsLeft<=0){
                       console.log('end of hagdelayloop hit');
                       console.log('delayCallsLeft: ',delayCallsLeft);
-                      console.log('hagdelayResultsObject: ',hagdelayResultsObject);
+                      //console.log('hagdelayResultsObject: ',hagdelayResultsObject);
                       blockedReviews["syndDelayBlocked"]=hagdelayResultsObject;
                     }
                   })
                   .catch(function (err) {
                     // API call failed...
+                    console.log('/blockedReviews syndicationDelay iterate call failed');
+                    console.log('error: ',err);
+                    res.json(err);
                   });
               }
 
@@ -529,6 +619,67 @@ router.route('/blockedReviews').post(function(req,res){
               blockedReviews["syndDelayBlocked"]=hagdelay["Results"];
             }
 
+// RatingsOnlyReviews block
+        // get RatingsOnlyReviews blocked
+        // if(syndicationObject[i]["includeRatingsOnlyReviews"]){
+        //   console.log('includeRatingsOnlyReviews is true so these are not blocked');
+        // } else {
+          console.log('Hitting RatingsOnlyReviews blocked call ...');
+          var hagratonlyopt = {
+            uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=isratingsonly:true&attributes=moderatorCodes&limit=100',
+            headers: {
+                'User-Agent': 'Request-Promise'
+            },
+            json: true // Automatically parses the JSON string in the response
+          };
+          console.log('hagratonlyopt: ',hagratonlyopt);
+          rp(hagratonlyopt)
+            .then(function (hagratonly) {
+              console.log('sydication delay Reviews');
+              console.log('hagratonly: ',hagratonly);
+              if(hagratonly["TotalResults"]>100){
+                console.log('there are more than 100 ratonly reviews returned - need to loop through');
+                var ratonlyloop = hagratonly["TotalResults"]/100;
+                var hagratonlyResultsObject = hagratonly["Results"];
+                console.log('loop number: ',ratonlyloop);
+                var ratonlyCallsLeft = ratonlyloop;
+                for(let l=1;l<ratonlyloop;l++){
+                  var ratonlyloopopt = {
+                    uri: 'http://hagrid-bazaar-external.prod.us-east-1.nexus.bazaarvoice.com/data/reviews.json?apiVersion=5.4&appKey=narwhal&clientName='+syndicationObject[i]["sourceName"]+'&keyProperty=syndication&filter=productid:'+syndicationObject[i]["productId"]+'&include=products&stats=reviews&filter=isratingsonly:true&attributes=moderatorCodes&limit=100&offset='+(l*100),
+                    headers: {
+                        'User-Agent': 'Request-Promise'
+                    },
+                    json: true // Automatically parses the JSON string in the response
+                  };
+                  console.log('ratonlyloopopt: ',ratonlyloopopt);
+                  rp(ratonlyloopopt)
+                    .then(function(ratonlyloop){
+                      hagratonlyResultsObject.push.apply(hagratonlyResultsObject, ratonlyloop["Results"]);
+                      ratonlyCallsLeft--
+                      console.log('hagratonlyResultsObject: ',hagratonlyResultsObject,' ratonlyCallsLeft: ',ratonlyCallsLeft);
+                      if (ratonlyCallsLeft<=0){
+                        console.log('end of ratonlyCallsLeft hit');
+                        console.log('ratonlyCallsLeft: ',ratonlyCallsLeft);
+                        //console.log('hagdelayResultsObject: ',hagdelayResultsObject);
+                        blockedReviews["includeRatingsOnlyReviews"]=hagratonlyResultsObject;
+                      }
+                    })
+                    .catch(function (err) {
+                      // API call failed...
+                      console.log('/blockedReviews RatingsOnlyReviews iterate call failed');
+                      console.log('error: ',err);
+                      res.json(err);
+                    });
+                }
+
+              } else {
+                console.log('there are less than or equal to 100 RatingsOnlyReviews blocked reviews returned - no need for a loop');
+                blockedReviews["includeRatingsOnlyReviews"]=hagratonly["Results"];
+              }
+          
+        
+
+// end includeRatingsOnlyReviews block
 
 // start locale block code
 
@@ -546,7 +697,7 @@ router.route('/blockedReviews').post(function(req,res){
         rp(haglocaleopt)
           .then(function (haglocale) {
             console.log('blocked locale Reviews');
-            console.log('haglocale: ',haglocale);
+            //console.log('haglocale: ',haglocale);
             if(haglocale["TotalResults"]>100){
               console.log('there are more than 100 locale reviews returned - need to loop through');
               var localeloop = haglocale["TotalResults"]/100;
@@ -566,16 +717,20 @@ router.route('/blockedReviews').post(function(req,res){
                   .then(function(haglocaleloop){
                     haglocaleResultsObject.push.apply(haglocaleResultsObject, haglocaleloop["Results"]);
                     localeCallsLeft--
-                    console.log('hagdelayResultsObject: ',haglocaleResultsObject,' localeCallsLeft: ',localeCallsLeft);
+                    //console.log('hagdelayResultsObject: ',haglocaleResultsObject,' localeCallsLeft: ',localeCallsLeft);
                     if (localeCallsLeft<=0){
                       console.log('end of haglocaleloop hit');
                       console.log('localeCallsLeft: ',localeCallsLeft);
-                      console.log('haglocaleResultsObject: ',haglocaleResultsObject);
+                      //console.log('haglocaleResultsObject: ',haglocaleResultsObject);
                       blockedReviews["localeBlocked"]=haglocaleResultsObject;
                     }
                   })
                   .catch(function (err) {
                     // API call failed...
+                    console.log('/blockedReviews locale iterate call failed');
+                    console.log('error: ',err);
+                    res.json(err);
+
                   });
               }
 
@@ -585,23 +740,36 @@ router.route('/blockedReviews').post(function(req,res){
             }
 
             callsLeft--
-            console.log('blockedReviews: ',blockedReviews,' callsLeft: ',callsLeft);
+            //console.log('blockedReviews: ',blockedReviews,' callsLeft: ',callsLeft);
             if (callsLeft<=0){
               console.log('blockedReviews res json call hit');
               console.log('callsLeft: ',callsLeft);
-              console.log('blockedReviews: ',blockedReviews);
+              //console.log('blockedReviews: ',blockedReviews);
               res.json(blockedReviews);
             }
             })
           .catch(function (err) {
                 // API call failed...
+                console.log('/blockedReviews locale call failed');
+                console.log('error: ',err);
+                res.json(err);
           });
-
-
 // end locale block code
             })
           .catch(function (err) {
                 // API call failed...
+                console.log('/blockedReviews ratingonly blocked call failed');
+                console.log('error: ',err);
+                res.json(err);
+          });
+
+// end rationgonly block code
+            })
+          .catch(function (err) {
+                // API call failed...
+                console.log('/blockedReviews synd delay call failed');
+                console.log('error: ',err);
+                res.json(err);
           });
 
 
@@ -609,6 +777,9 @@ router.route('/blockedReviews').post(function(req,res){
     })
     .catch(function (err) {
           // API call failed...
+          console.log('/blockedReviews mod call failed');
+          console.log('error: ',err);
+          res.json(err);
     });
   }
 });
