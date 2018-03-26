@@ -412,7 +412,7 @@ export default class App extends React.Component {
                console.log('error: ',error);
              });
       break;
-      case type[0]==="Family":
+      case type.indexOf("Family"):
       axios.post('/paginateFamily',
                {
                   clientName:this.state.client,
