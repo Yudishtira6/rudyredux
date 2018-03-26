@@ -523,7 +523,7 @@ router.route('/blockedReviews').post(function(req,res){
         //console.log('hagmod: ',hagmod);
         if(hagmod["TotalResults"]>100){
           console.log('there are more than 100 modblocked reviews returned - need to loop through');
-          var modloop = hagmod["TotalResults"]/100;
+          var modloop = parseInt(hagmod["TotalResults"]/100)+1;
           //var hagmodResultsObject = hagmod["Results"];
           console.log('loop number: ',modloop);
           var modCallsLeft = modloop;
@@ -581,7 +581,7 @@ router.route('/blockedReviews').post(function(req,res){
             //console.log('hagdelay: ',hagdelay);
             if(hagdelay["TotalResults"]>100){
               console.log('there are more than 100 delayed reviews returned - need to loop through');
-              var delayloop = hagdelay["TotalResults"]/100;
+              var delayloop = parseInt(hagdelay["TotalResults"]/100)+1;
               var hagdelayResultsObject = hagdelay["Results"];
               console.log('loop number: ',delayloop);
               var delayCallsLeft = delayloop;
@@ -639,7 +639,7 @@ router.route('/blockedReviews').post(function(req,res){
               console.log('hagratonly: ',hagratonly);
               if(hagratonly["TotalResults"]>100){
                 console.log('there are more than 100 ratonly reviews returned - need to loop through');
-                var ratonlyloop = hagratonly["TotalResults"]/100;
+                var ratonlyloop = parseInt(hagratonly["TotalResults"]/100)+1;
                 var hagratonlyResultsObject = hagratonly["Results"];
                 console.log('loop number: ',ratonlyloop);
                 var ratonlyCallsLeft = ratonlyloop;
@@ -705,7 +705,7 @@ router.route('/blockedReviews').post(function(req,res){
             //console.log('haglocale: ',haglocale);
             if(haglocale["TotalResults"]>100){
               console.log('there are more than 100 locale reviews returned - need to loop through');
-              var localeloop = haglocale["TotalResults"]/100;
+              var localeloop = parseInt(haglocale["TotalResults"]/100)+1;
               var haglocaleResultsObject = haglocale["Results"];
               console.log('loop number: ',localeloop);
               var localeCallsLeft = localeloop;
