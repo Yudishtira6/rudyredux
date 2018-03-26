@@ -254,7 +254,8 @@ export default class App extends React.Component {
                               console.log("********BLOCKED REVIEWS SUCCEEDE!!!!",response.data);
                               self.setState({modBlocked:response.data.modBlocked,
                                              syndBlocked:response.data.syndDelayBlocked,
-                                             localeBlocked:response.data.localeBlocked
+                                             localeBlocked:response.data.localeBlocked,
+                                             ratingsBlocked:response.data.blockedRatingsOnlyReviews
                                             }, self.sortBlocked);
                            }).catch(function(error){
                              console.log('error: ',error);
@@ -484,7 +485,7 @@ export default class App extends React.Component {
                   <SyndicatedInfo data={syndicationObject} loading={this.state.loadingSyndicated} error={this.state.errorSyndicated}/>
                   <FamilyInfo data={this.state.familyObject} loading={this.state.loadingFamily} error={this.state.errorFamily} paginateFamily={this.switchReviews}/>
                   <SnapShot blockedFunction={this.closeBlocked} display={this.switchReviews} blockedLoading={this.state.snapBlockedLoading} loading={this.state.loading} data={snapShot}/>
-                  <Blocked blockedFunction={this.closeBlocked} blocked={this.state.blocked} modBlocked={this.state.modBlocked} syndBlocked={this.state.syndBlocked} localeBlocked={this.state.localeBlocked}/>
+                  <Blocked ratings={this.state.ratingsBlocked} blockedFunction={this.closeBlocked} blocked={this.state.blocked} modBlocked={this.state.modBlocked} syndBlocked={this.state.syndBlocked} localeBlocked={this.state.localeBlocked}/>
                   <Grid page={this.state.pagination} results={this.state.total} pagination={this.paginationClick} title={this.state.reviewFilter} productId={this.state.productId} data={this.state.displayingReviews}/>
                 </div>
               );

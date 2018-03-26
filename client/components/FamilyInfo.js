@@ -20,6 +20,9 @@ export default class FamilyInfo extends Component {
     //when there is family data, and the page isn't loading, and does not have errors map through the family object, and create a segment of the donut graph, and a key.
     if(this.props.data.length > 0 && !this.props.loading && !this.props.error){
      familyProducts=this.props.data.map((family,i)=>{
+       var uniqueId = function() {
+         return 'id-' + Math.random().toString(36).substr(2, 16);
+       };
         var total=family.total;
         let counter=0;
         let segments=[];
@@ -35,14 +38,17 @@ export default class FamilyInfo extends Component {
               if(totalPercentage === 0){
                 offset=25;
               }
+              var uniqueId = function() {
+                return 'id-' + Math.random().toString(36).substr(2, 16);
+              };
               //stroke dash array= first number: % of how much second number is %-100.
               //stroke dash-offset=100-total% + first dash array #.
               let startingPlace=`0 ${secondNum}`;
               totalPercentage=totalPercentage + percentage;
               let input=`${percentage} ${secondNum}`;
-              keyDisplay.push(<li><span key={key} className="key" style={{backgroundColor:colors[counter]}}></span><span onClick={this.triggerFamily} className="product">{key} ({val})</span></li>);
-              segments.push(<g key={counter} className="circle-component"><circle className="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke={colors[counter]} strokeWidth="3" strokeDasharray={input} strokeDashoffset={offset}><animate attributeType="XML" attributeName="stroke-dasharray" from={startingPlace} to={input}
-        dur="1s"/></circle></g>);
+              keyDisplay.push(<li key={uniqueId()}><span className="key" style={{backgroundColor:colors[counter]}}></span><span onClick={this.triggerFamily} className="product">{key} ({val})</span></li>);
+              segments.push(<g key={uniqueId()} className="circle-component"><circle className="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke={colors[counter]} strokeWidth="3" strokeDasharray={input} strokeDashoffset={offset}><animate attributeType="XML" attributeName="stroke-dasharray" from={startingPlace} to={input}
+              dur="1s"/></circle></g>);
               }
             counter++;
           });

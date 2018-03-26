@@ -94,7 +94,10 @@ render(){
 
   //loop through data and build out grid
   Items=this.props.data.map((review)=>{
-    return <GridLine key={review.Id} clickHandler={this.clickHandler} productId={this.props.productId} data={review}/>
+    var uniqueId = function() {
+      return 'id-' + Math.random().toString(36).substr(2, 16);
+    };
+    return <GridLine key={uniqueId()} clickHandler={this.clickHandler} productId={this.props.productId} data={review}/>
   });
   }
 return(

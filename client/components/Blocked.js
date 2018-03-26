@@ -16,20 +16,34 @@ export default class Blocked extends Component {
     let ratings;
     if(this.props.localeBlocked){
      locale=this.props.localeBlocked.map((review)=>{
+                   var uniqueId = function() {
+                      return 'id-' + Math.random().toString(36).substr(2, 16);
+                    };
         return (
-                <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of Invalid<span className="reason">LOCALE:</span> {review.ContentLocale}</p>
+                <p key={uniqueId()}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of Invalid<span className="reason">LOCALE:</span> {review.ContentLocale}</p>
                 );
       });
     }
+    // if(this.props.ratings){
+    //   ratings=this.props.ratings.map((reviews)=>{
+    //     return(<p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because it is a Ratings only review</p>);
+    //   )};
+    // }
     if(this.props.ratings){
-      ratings=this.props.ratings.map((reviews)=>{
-        return(
-        <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because it is a Ratings only review</p>
-        );
-      )};
+     locale=this.props.ratings.map((review)=>{
+       var uniqueId = function() {
+          return 'id-' + Math.random().toString(36).substr(2, 16);
+        };
+        return (
+                <p key={uniqueId()}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because it is a ratings only review</p>
+                );
+      });
     }
     if(this.props.modBlocked){
      mod=this.props.modBlocked.map((review)=>{
+       var uniqueId = function() {
+          return 'id-' + Math.random().toString(36).substr(2, 16);
+        };
         let modCode=review.ModeratorCodes.map((code)=>{
           let codeDef;
             switch(code){
@@ -104,15 +118,19 @@ export default class Blocked extends Component {
             return <span className="mod-code">{codeDef}</span>
           });
         return (
-                <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of a <span className="reason">MODERATION STOP CODE.</span> <span className="reason-codes">Codes associated with review:</span> {modCode}</p>
+                <p key={uniqueId()}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of a <span className="reason">MODERATION STOP CODE.</span> <span className="reason-codes">Codes associated with review:</span> {modCode}</p>
                 );
       });
     }
     if(this.props.syndBlocked){
+      var uniqueId = function() {
+         return 'id-' + Math.random().toString(36).substr(2, 16);
+       };
+      console.log("UNIQUE ID HERE***********",uniqueId());
      delay=this.props.syndBlocked.map((review)=>{
         var date=moment(review.SubmissionTime).format("dddd, MMMM Do YYYY, h:mm:ss a");
         return (
-                <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of <span className="reason">SYNDICATION DELAY</span>. It was submitted on {date}  </p>
+                <p key={uniqueId()}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of <span className="reason">SYNDICATION DELAY</span>. It was submitted on {date}  </p>
                 );
       });
     }
