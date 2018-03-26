@@ -68,12 +68,12 @@ router.route('/oracle').post(function(req,res){
             if ((data.products[i]['sources'][0]) === ('FAMILY')) {
               var innerFamily = [];
               family.push(innerFamily)
-              innerFamily.push((data.products[i]['client']), (data.products[i]['internalId']))
+              innerFamily.push((data.products[i]['client']), (data.products[i]['externalId']))
             }
             else if ((data.products[i]['sources'][0]) === ('ASSOCIATION') || (data.products[i]['sources'][0]) === ('UPC') || (data.products[i]['sources'][0]) === ('internal_ID')) {
               var innerSyndication = [];
               syndication.push(innerSyndication)
-              innerSyndication.push((data.products[i]['client']), (data.products[i]['internalId']))
+              innerSyndication.push((data.products[i]['client']), (data.products[i]['externalId']))
             }
             source.syndication = syndication;
             source.family = family;
