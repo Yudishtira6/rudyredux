@@ -158,7 +158,7 @@ export default class App extends React.Component {
               });
 
           //Get product information block
-          console.log("ABOUT TO RUN GET PRODUCT ROUTE***********")
+          console.log("ABOUT TO RUN GET PRODUCT ROUTE***********", this.state.client)
           axios.post('/getProduct',
             querystring.stringify({
               clientName: client,
@@ -209,10 +209,10 @@ export default class App extends React.Component {
 
       var self=this;
       //Get synication Dashboard
-      console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********", this.state.client);
+      console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********", document.getElementById('client').value.replace(/\s/g,''));
       axios.post('/syndicationDashboard',
                {
-                  clientName:self.state.client,
+                  clientName:document.getElementById('client').value.replace(/\s/g,''),
                   sourceObject: self.state.sourceObject,
                }
                ).then(function(response) {
