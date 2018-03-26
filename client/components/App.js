@@ -134,7 +134,7 @@ export default class App extends React.Component {
 
 
         //Get oracle data.
-        console.log("HITTING ORACLE ROUTE********");
+        console.log("HITTING ORACLE ROUTE********", "Client Name:", client, "ProductID", productId);
         axios.post('/oracle',
              {
                clientName: client,
@@ -161,7 +161,7 @@ export default class App extends React.Component {
 
               }).catch(function(error){
               });
-              console.log("ABOUT TO GET DASHBOARD DATA*********");
+              console.log("ABOUT TO GET DASHBOARD DATA*********", "ClientName: ", client, "Product ID :", productId);
               //Get Dashboard information
               axios.post('/dashboard',
               {
@@ -187,7 +187,7 @@ export default class App extends React.Component {
               });
 
           //Get product information block
-          console.log("ABOUT TO RUN GET PRODUCT ROUTE***********", this.state.client)
+          console.log("ABOUT TO RUN GET PRODUCT ROUTE***********", "ClientName", client, "ProductID", productId)
           axios.post('/getProduct',
             querystring.stringify({
               clientName: client,
@@ -237,7 +237,7 @@ export default class App extends React.Component {
 
       var self=this;
       //Get synication Dashboard
-      console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********", document.getElementById('client').value.replace(/\s/g,''));
+      console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********", "ClientName:", document.getElementById('client').value.replace(/\s/g,''), "source object", self.state.sourceObject);
       axios.post('/syndicationDashboard',
                {
                   clientName:document.getElementById('client').value.replace(/\s/g,''),
@@ -252,7 +252,7 @@ export default class App extends React.Component {
              });
 
             //get family dashboard data
-              console.log("ABOUT TO RUN THE FAMILY DASHBOARD************");
+              console.log("ABOUT TO RUN THE FAMILY DASHBOARD************", "clientName :",self.state.client, "Source object", self.state.sourceObject);
             axios.post('/familyDashboard',
                       {
                         clientName:self.state.client,
@@ -272,7 +272,7 @@ export default class App extends React.Component {
     getBlocked(){
                     var self=this;
                     //BOB's Blocked Calls here*******
-                    console.log("ABOUT TO RUN BLOCKED REVIEWS CALL*******");
+                    console.log("ABOUT TO RUN BLOCKED REVIEWS CALL*******", "Source object ", self.state.sourceObject, "Sydnication Object: ", self.state.syndicationObject);
                     axios.post('/blockedReviews',
                              {
                                 sourceObject:self.state.sourceObject,
@@ -288,7 +288,7 @@ export default class App extends React.Component {
                            }).catch(function(error){
                              console.log('error: ',error);
                            });
-                            console.log("ABOUT TO RUN DASHBOARD BLOCKED ROUTE***********");
+                            console.log("ABOUT TO RUN DASHBOARD BLOCKED ROUTE***********", "Source Object: ", self.state.sourceObject, "Syndication Object:", self.state.syndicationObject, "Client Name", self.state.client, "productId", self.state.productId);
                            axios.post('/blockedDashboard',
                                     {
                                        sourceObject:self.state.sourceObject,
