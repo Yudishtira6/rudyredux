@@ -58,8 +58,6 @@ export default class App extends React.Component {
                   localeBlocked:[],
                   ratingsBlocked:[],
                   blocked:false,
-
-
                   };
 
     this.getReviews=this.getReviews.bind(this);
@@ -101,6 +99,37 @@ export default class App extends React.Component {
                        syndBlocked:[],
                        localeBlocked:[],
                        ratingsBlocked:[],
+                       client:client,
+                       productId:productId,
+                       reviews:[],
+                       syndicatedReviews:[],
+                       familyReviews:[],
+                       nativeReviews:[],
+                       displayingReviews:[],
+                       ratingsOnlyReviews:[],
+                       blockedReviews:[],
+                       image:"http://moziru.com/images/narwhal-clipart-cute-4.jpg",
+                       productName:"Product name",
+                       snapNative:0,
+                       snapSyndicated:0,
+                       snapRatingOnly:0,
+                       snapStopped:0,
+                       snapFamily:0,
+                       snapTotal:0,
+                       snapDisplayableSyndicated:0,
+                       snapDisplayableNative:0,
+                       total:0,
+                       familyIds:[],
+                       clientError:'',
+                       prodError:'',
+                       errorSyndicated:false,
+                       errorFamily:false,
+                       productPageUrl:'',
+                       sourceObject:[],
+                       syndicationObject:[],
+                       familyObject:[],
+                       blocked:false,
+
                        });
 
 
@@ -171,7 +200,6 @@ export default class App extends React.Component {
               console.log("********GET PRODUCT ROUTE SUCCEEEDED!!!!!", response);
               //create product information
               e.setState({image:response.data.Results[0].ImageUrl,
-                          client:client,
                           clientError:'',
                           prodError:'',
                           productId:response.data.Results[0].Id,

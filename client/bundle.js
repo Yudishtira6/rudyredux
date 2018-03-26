@@ -51383,7 +51383,6 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       localeBlocked: [],
       ratingsBlocked: [],
       blocked: false
-
     };
 
     this.getReviews = this.getReviews.bind(this);
@@ -51424,7 +51423,38 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
         modBlocked: [],
         syndBlocked: [],
         localeBlocked: [],
-        ratingsBlocked: []
+        ratingsBlocked: [],
+        client: client,
+        productId: productId,
+        reviews: [],
+        syndicatedReviews: [],
+        familyReviews: [],
+        nativeReviews: [],
+        displayingReviews: [],
+        ratingsOnlyReviews: [],
+        blockedReviews: [],
+        image: "http://moziru.com/images/narwhal-clipart-cute-4.jpg",
+        productName: "Product name",
+        snapNative: 0,
+        snapSyndicated: 0,
+        snapRatingOnly: 0,
+        snapStopped: 0,
+        snapFamily: 0,
+        snapTotal: 0,
+        snapDisplayableSyndicated: 0,
+        snapDisplayableNative: 0,
+        total: 0,
+        familyIds: [],
+        clientError: '',
+        prodError: '',
+        errorSyndicated: false,
+        errorFamily: false,
+        productPageUrl: '',
+        sourceObject: [],
+        syndicationObject: [],
+        familyObject: [],
+        blocked: false
+
       });
 
       //Get oracle data.
@@ -51472,7 +51502,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       });
 
       //Get product information block
-      console.log("ABOUT TO RUN GET PRODUCT ROUTE***********");
+      console.log("ABOUT TO RUN GET PRODUCT ROUTE***********", this.state.client);
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/getProduct', __WEBPACK_IMPORTED_MODULE_2_querystring___default.a.stringify({
         clientName: client,
         productId: productId
@@ -51484,7 +51514,6 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
         console.log("********GET PRODUCT ROUTE SUCCEEEDED!!!!!", response);
         //create product information
         e.setState({ image: response.data.Results[0].ImageUrl,
-          client: client,
           clientError: '',
           prodError: '',
           productId: response.data.Results[0].Id,
@@ -51515,10 +51544,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
 
     var self = this;
     //Get synication Dashboard
-    console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********");
+    console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********", document.getElementById('client').value.replace(/\s/g, ''));
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/syndicationDashboard', {
-      clientName: this.state.client,
-      sourceObject: this.state.sourceObject
+      clientName: document.getElementById('client').value.replace(/\s/g, ''),
+      sourceObject: self.state.sourceObject
     }).then(function (response) {
       console.log("**********SYNDICATION DASHBOARD SUCCEEEDED!!!!!!", response);
       self.setState({ syndicationObject: response.data, loading: false, loadingSyndicated: false }, self.getBlocked);
@@ -51530,8 +51559,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     //get family dashboard data
     console.log("ABOUT TO RUN THE FAMILY DASHBOARD************");
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/familyDashboard', {
-      clientName: this.state.client,
-      sourceObject: this.state.sourceObject
+      clientName: self.state.client,
+      sourceObject: self.state.sourceObject
     }).then(function (response) {
       console.log("**********FAMILY DASHBOARD SUCCEED!!!!!");
       let familyObject = [];
@@ -51547,8 +51576,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     //BOB's Blocked Calls here*******
     console.log("ABOUT TO RUN BLOCKED REVIEWS CALL*******");
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedReviews', {
-      sourceObject: this.state.sourceObject,
-      syndicationObject: this.state.syndicationObject
+      sourceObject: self.state.sourceObject,
+      syndicationObject: self.state.syndicationObject
 
     }).then(function (response) {
       console.log("********BLOCKED REVIEWS SUCCEEDE!!!!", response.data);
@@ -51562,10 +51591,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     });
     console.log("ABOUT TO RUN DASHBOARD BLOCKED ROUTE***********");
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedDashboard', {
-      sourceObject: this.state.sourceObject,
-      syndicationObject: this.state.syndicationObject,
-      clientName: this.state.client,
-      productId: this.state.productId
+      sourceObject: self.state.sourceObject,
+      syndicationObject: self.state.syndicationObject,
+      clientName: self.state.client,
+      productId: self.state.productId
 
     }).then(function (response) {
       console.log("*********BLOCKED DASHBOARD SUCCEEEDED!!!!!!!", response.data, response.data.totalSyndicatedNative);
