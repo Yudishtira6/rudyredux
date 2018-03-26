@@ -13,12 +13,20 @@ export default class Blocked extends Component {
     let locale;
     let mod;
     let delay;
+    let ratings;
     if(this.props.localeBlocked){
      locale=this.props.localeBlocked.map((review)=>{
         return (
                 <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because of Invalid<span className="reason">LOCALE:</span> {review.ContentLocale}</p>
                 );
       });
+    }
+    if(this.props.ratings){
+      ratings=this.props.ratings.map((reviews)=>{
+        return(
+        <p key={review.Id}>* Review ID: <span className="review-number">{review.Id}</span> from {review.SourceClient} is blocked because it is a Ratings only review</p>
+        );
+      )};
     }
     if(this.props.modBlocked){
      mod=this.props.modBlocked.map((review)=>{
@@ -122,6 +130,7 @@ export default class Blocked extends Component {
                           {locale}
                           {mod}
                           {delay}
+                          {ratings}
                         </div>
                       </div>
                     );

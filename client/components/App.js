@@ -56,6 +56,7 @@ export default class App extends React.Component {
                   modBlocked:[],
                   syndBlocked:[],
                   localeBlocked:[],
+                  ratingsBlocked:[],
                   blocked:false,
 
 
@@ -99,6 +100,7 @@ export default class App extends React.Component {
                        modBlocked:[],
                        syndBlocked:[],
                        localeBlocked:[],
+                       ratingsBlocked:[],
                        });
 
 

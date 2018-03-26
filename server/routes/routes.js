@@ -150,8 +150,8 @@ router.route('/syndicationDashboard').post(function(req,res){
           var goal = displayObject[Object.keys(displayObject).find(key => key.toLowerCase() === syndClient.toLowerCase())];
           console.log('Switchboard Display body["data"]['+syndClient+']: ',goal);
           // console.log('sourceDisplayName: ', goal["sourceDisplayName"]);
-          console.log('logoImageName: ',goal["logoImageName"]);
-          console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
+          // console.log('logoImageName: ',goal["logoImageName"]);
+          // console.log('Switchboard data - using find - edgeBody["data"].find(x => x.sourceClientId === "'+syndClient+'"): ',edgeBody["data"].find(x => x.sourceClientId === syndClient));
           var edgeObject = edgeBody["data"].find(x => x.sourceClientId === syndClient);
           var drakeEdge = {"companyLogo":goal["logoImageName"],"sourceDisplayName":goal["sourceDisplayName"],"locales":edgeObject.edgeInfo.includeLocales,"modCodes":edgeObject.edgeInfo.excludedContentCodesForImport,"syndicationDelay":edgeObject.edgeInfo.syndicationDelayDays,"matchStragegy":edgeObject.edgeInfo.productMatchingStrategies, "sourceName":edgeObject.edgeInfo.sourceClientName,"productId":source["syndication"][i][1]};
           edgeArray.push(drakeEdge);
