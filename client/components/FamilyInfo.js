@@ -12,7 +12,7 @@ export default class FamilyInfo extends Component {
   triggerFamily(e){
 
     //populate the specific family product when clicking on the dashboard.
-    this.props.paginateFamily('family',e.target.innerHTML.split(' ')[0])
+    this.props.paginateFamily('family',e.target.innerHTML.split(' ')[0],e.target.innerHTML.split(' ')[0])
   }
   render() {
     var colors=["#4cc4f6","#fcb150","#12a8ab","#007aff","#e84c64","#01b08d","#e94cb9","#884ce9","#4ce9af","#4ee94c","#e9864c","#cae94c","#ad1111","#28ad11","#119dad","#8111ad","#ad11a7","#ad1166","#cff700","#f7b900","#f79600","#f7ddde"];

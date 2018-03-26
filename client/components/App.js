@@ -353,7 +353,7 @@ export default class App extends React.Component {
 
                  }
                  ).then(function(response) {
-                  self.setState({displayingReviews:response.data.Results, reviewFilter:"Family Reviews", total:response.data.TotalResults})
+                  self.setState({displayingReviews:response.data.Results, reviewFilter:`Family Reviews For ${familyId}`, total:response.data.TotalResults})
                }).catch(function(error){
 
                });
@@ -390,12 +390,6 @@ export default class App extends React.Component {
                  });
     }
   }
-  // switchTabs(tab){
-  // this.setState({activeTab:tab});
-  // }
-
-
-
 
   //handle pagination when user changes the page
   paginationClick(e,type){
@@ -418,7 +412,7 @@ export default class App extends React.Component {
                console.log('error: ',error);
              });
       break;
-      case 'Family Reviews':
+      case type[0]==="Family":
       axios.post('/paginateFamily',
                {
                   clientName:this.state.client,
