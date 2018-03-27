@@ -330,7 +330,7 @@ export default class App extends React.Component {
   //logic to filter reviews in snapshot
   switchReviews(reviews, familyId){
       var self=this;
-      this.setState({pagination:1})
+      this.setState({pagination:1, familyIdPage:familyId});
     switch(reviews) {
         case "native":
         axios.post('/paginateNative',
@@ -400,7 +400,6 @@ export default class App extends React.Component {
     var page=e + 1;
     //handle each type of review data
     var switchType=type.split(' ')[0];
-    this.setState({familyIdPage:type.split(' ')[3]});
     console.log("SWITCH TYPE HERE", switchType);
     switch(switchType){
       case 'Native':
