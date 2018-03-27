@@ -419,7 +419,7 @@ export default class App extends React.Component {
       axios.post('/paginateFamily',
                {
                   clientName:this.state.client,
-                  familyProductId:this.state.productId,
+                  familyProductId:familyId,
                   pageNumber:e
 
                }
