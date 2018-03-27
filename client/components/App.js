@@ -397,10 +397,8 @@ export default class App extends React.Component {
     //add 1 to the page because of 0 index
     var page=e + 1;
     //handle each type of review data
-    switch(type){
-      console.log("TYPE FOR PAGINATION HERE", type.split('')[0]);
-      var familyPage=type.split('')[0];
-      case 'Native Reviews':
+    switch(type.split(' ')[0]){
+      case 'Native':
       axios.post('/paginateNative',
                {
                   clientName:this.state.client,
@@ -414,7 +412,7 @@ export default class App extends React.Component {
                console.log('error: ',error);
              });
       break;
-      case familyPage:
+      case 'Family':
       axios.post('/paginateFamily',
                {
                   clientName:this.state.client,
@@ -428,7 +426,7 @@ export default class App extends React.Component {
                console.log('error: ',error);
              });
       break;
-      case 'Syndicated Reviews':
+      case 'Syndicated':
       axios.post('/paginateDisplayableSyndicated',
                {
                   clientName:this.state.client,
