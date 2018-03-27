@@ -58,6 +58,7 @@ export default class App extends React.Component {
                   localeBlocked:[],
                   ratingsBlocked:[],
                   blocked:false,
+                  familyIdPage:'',
                   };
 
     this.getReviews=this.getReviews.bind(this);
@@ -129,6 +130,7 @@ export default class App extends React.Component {
                        syndicationObject:[],
                        familyObject:[],
                        blocked:false,
+                       familyIdPage:'',
 
                        });
 
@@ -398,7 +400,7 @@ export default class App extends React.Component {
     var page=e + 1;
     //handle each type of review data
     var switchType=type.split(' ')[0];
-    var FamilyId=type.split(' ')[3];
+    this.setState({familyIdPage:type.split(' ')[3]});
     console.log("SWITCH TYPE HERE", switchType);
     switch(switchType){
       case 'Native':
@@ -419,7 +421,7 @@ export default class App extends React.Component {
       axios.post('/paginateFamily',
                {
                   clientName:this.state.client,
-                  familyProductId:familyId,
+                  familyProductId:this.state.familyIdPage,
                   pageNumber:e
 
                }
