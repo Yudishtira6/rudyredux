@@ -397,7 +397,9 @@ export default class App extends React.Component {
     //add 1 to the page because of 0 index
     var page=e + 1;
     //handle each type of review data
-    switch(type.split(' ')[0]){
+    var switchType=type.split(' ')[0];
+    console.log("SWITCH TYPE HERE", switchType);
+    switch(switchType){
       case 'Native':
       axios.post('/paginateNative',
                {
