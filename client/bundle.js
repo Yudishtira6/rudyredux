@@ -51382,7 +51382,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       syndBlocked: [],
       localeBlocked: [],
       ratingsBlocked: [],
-      blocked: false
+      blocked: false,
+      familyIdPage: ''
     };
 
     this.getReviews = this.getReviews.bind(this);
@@ -51453,12 +51454,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
         sourceObject: [],
         syndicationObject: [],
         familyObject: [],
-        blocked: false
+        blocked: false,
+        familyIdPage: ''
 
       });
 
       //Get oracle data.
-      console.log("HITTING ORACLE ROUTE********");
+      console.log("HITTING ORACLE ROUTE********", "Client Name:", client, "ProductID", productId);
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/oracle', {
         clientName: client,
         productId: productId
@@ -51478,7 +51480,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
           e.setState({ sourceObject: response.data, loadingFamily: false, snapBlockedLoading: false, loadingSyndicated: false, syndicationObject: [], familyObject: [] });
         }
       }).catch(function (error) {});
-      console.log("ABOUT TO GET DASHBOARD DATA*********");
+      console.log("ABOUT TO GET DASHBOARD DATA*********", "ClientName: ", client, "Product ID :", productId);
       //Get Dashboard information
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/dashboard', {
         clientName: client,
@@ -51502,7 +51504,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
       });
 
       //Get product information block
-      console.log("ABOUT TO RUN GET PRODUCT ROUTE***********", this.state.client);
+      console.log("ABOUT TO RUN GET PRODUCT ROUTE***********", "ClientName", client, "ProductID", productId);
       __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/getProduct', __WEBPACK_IMPORTED_MODULE_2_querystring___default.a.stringify({
         clientName: client,
         productId: productId
@@ -51544,7 +51546,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
 
     var self = this;
     //Get synication Dashboard
-    console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********", document.getElementById('client').value.replace(/\s/g, ''));
+    console.log("ABOUT TO RUN SYNDICATION DASHBOARD**********", "ClientName:", document.getElementById('client').value.replace(/\s/g, ''), "source object", self.state.sourceObject);
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/syndicationDashboard', {
       clientName: document.getElementById('client').value.replace(/\s/g, ''),
       sourceObject: self.state.sourceObject
@@ -51557,7 +51559,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     });
 
     //get family dashboard data
-    console.log("ABOUT TO RUN THE FAMILY DASHBOARD************");
+    console.log("ABOUT TO RUN THE FAMILY DASHBOARD************", "clientName :", self.state.client, "Source object", self.state.sourceObject);
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/familyDashboard', {
       clientName: self.state.client,
       sourceObject: self.state.sourceObject
@@ -51574,7 +51576,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
   getBlocked() {
     var self = this;
     //BOB's Blocked Calls here*******
-    console.log("ABOUT TO RUN BLOCKED REVIEWS CALL*******");
+    console.log("ABOUT TO RUN BLOCKED REVIEWS CALL*******", "Source object ", self.state.sourceObject, "Sydnication Object: ", self.state.syndicationObject);
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedReviews', {
       sourceObject: self.state.sourceObject,
       syndicationObject: self.state.syndicationObject
@@ -51589,7 +51591,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     }).catch(function (error) {
       console.log('error: ', error);
     });
-    console.log("ABOUT TO RUN DASHBOARD BLOCKED ROUTE***********");
+    console.log("ABOUT TO RUN DASHBOARD BLOCKED ROUTE***********", "Source Object: ", self.state.sourceObject, "Syndication Object:", self.state.syndicationObject, "Client Name", self.state.client, "productId", self.state.productId);
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/blockedDashboard', {
       sourceObject: self.state.sourceObject,
       syndicationObject: self.state.syndicationObject,
@@ -51622,7 +51624,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
   //logic to filter reviews in snapshot
   switchReviews(reviews, familyId) {
     var self = this;
-    this.setState({ pagination: 1 });
+    this.setState({ pagination: 1, familyIdPage: familyId });
     switch (reviews) {
       case "native":
         __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/paginateNative', {
@@ -51643,7 +51645,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
           pageNumber: 0
 
         }).then(function (response) {
-          self.setState({ displayingReviews: response.data.Results, reviewFilter: "Family Reviews", total: response.data.TotalResults });
+          self.setState({ displayingReviews: response.data.Results, reviewFilter: `Family Reviews For ${familyId}`, total: response.data.TotalResults });
         }).catch(function (error) {});
         break;
       case "blocked":
@@ -51674,10 +51676,6 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
         });
     }
   }
-  // switchTabs(tab){
-  // this.setState({activeTab:tab});
-  // }
-
 
   //handle pagination when user changes the page
   paginationClick(e, type) {
@@ -51685,8 +51683,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
     //add 1 to the page because of 0 index
     var page = e + 1;
     //handle each type of review data
-    switch (type) {
-      case 'Native Reviews':
+    var switchType = type.split(' ')[0];
+    console.log("SWITCH TYPE HERE", switchType);
+    switch (switchType) {
+      case 'Native':
         __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/paginateNative', {
           clientName: this.state.client,
           productId: this.state.productId,
@@ -51698,10 +51698,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
           console.log('error: ', error);
         });
         break;
-      case 'Family Reviews':
+      case 'Family':
         __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/paginateFamily', {
           clientName: this.state.client,
-          productId: this.state.productId,
+          familyProductId: this.state.familyIdPage,
           pageNumber: e
 
         }).then(function (response) {
@@ -51710,7 +51710,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_3_react___default.a.Component {
           console.log('error: ', error);
         });
         break;
-      case 'Syndicated Reviews':
+      case 'Syndicated':
         __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/paginateDisplayableSyndicated', {
           clientName: this.state.client,
           productId: this.state.productId,
@@ -58508,7 +58508,7 @@ class FamilyInfo extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   triggerFamily(e) {
 
     //populate the specific family product when clicking on the dashboard.
-    this.props.paginateFamily('family', e.target.innerHTML.split(' ')[0]);
+    this.props.paginateFamily('family', e.target.innerHTML.split(' ')[0], e.target.innerHTML.split(' ')[0]);
   }
   render() {
     var colors = ["#4cc4f6", "#fcb150", "#12a8ab", "#007aff", "#e84c64", "#01b08d", "#e94cb9", "#884ce9", "#4ce9af", "#4ee94c", "#e9864c", "#cae94c", "#ad1111", "#28ad11", "#119dad", "#8111ad", "#ad11a7", "#ad1166", "#cff700", "#f7b900", "#f79600", "#f7ddde"];
