@@ -45,7 +45,7 @@ router.route('/oracle').post(function(req,res){
     },
     json: true // Automatically parses the JSON string in the response
   };
-  console.log(' Oracle options: ',options);
+  console.log(' Oracle options: ',optio);
   rp(options)
     .then(function (data) {
       //console.log('Oracle call data',JSON.stringify(data));
